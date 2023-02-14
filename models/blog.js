@@ -10,9 +10,5 @@ const blogSchema = mongoose.Schema({
     url: String,
     likes: Number
   })
-  
-
-// TODO Virheenkäsittely tälle
-mongoose.connect(config.mongoUrl)
 
 module.exports = mongoose.model('Blog', blogSchema)
