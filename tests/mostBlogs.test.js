@@ -96,6 +96,12 @@ describe('most blogs', () => {
         expect(result).toEqual(null)
     })
 
+    test('of single blog is one with its author', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+        const expected = {author: listWithOneBlog[0].author, blogs: 1}
+        expect(result).toEqual(expected)
+    })
+
     test('of list of three blogs by same author is three', () => {
         const result = listHelper.mostBlogs(listWithBlogsWithoutLikes).blogs
         expect(result).toBe(3)
