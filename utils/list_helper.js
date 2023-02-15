@@ -58,10 +58,46 @@ const mostBlogs = (blogs) => {
     }
 }
 
+const mostLikes = (blogs) => {
+    // sama idea kuin mostBlogs
+    // mapataan reducella blogilista, mutta nyt objekteiksi
+    // sitten objektilistaan reduce, jolla lasketaan tykkäykset
+    if (blogs.length === 0) {
+        return {}
+    } else {
+        const authorLikes = blogs.reduce((rarr,item) => {
+            console.log(rarr,item)
+            return rarr.concat({
+                author: item.author,
+                likes: item.likes
+            })
+        },[])
+        const result = authorLikes.reduce(
+            (rObj,item,_,arr) => {
+                const likeCount = 
+                    arr.filter(x => x.author === item.author)
+                    .map(x => x.likes)
+                    .reduce((sum,x) => sum += x,0)
+                
+                return rObj.likes < likeCount
+                    ? rObj = { author: item.author, likes: likeCount }
+                    : rObj
+            },
+            {
+                author: authorLikes[0].author,
+                likes: authorLikes.filter(x => x.author === authorLikes[0].author)
+                .map(x => x.likes)
+                .reduce((sum,x) => sum += x,0)
+            })
+        return result
+    }
+}
+
 module.exports = {
     dummy,
     deconstructBlog,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
