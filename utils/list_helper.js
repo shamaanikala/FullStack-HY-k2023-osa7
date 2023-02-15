@@ -23,7 +23,9 @@ const favoriteBlog = (blogs) => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
     // "Getting the maximum element of an array"
     //const bloglist = blogs.map(b => deconstructBlog(b))
-    if (blogs.length === 1) {
+    if (blogs.length === 0) {
+        return null
+    } else if (blogs.length === 1) {
         return deconstructBlog(blogs[0])
     } else {
         const mostLikedBlog = blogs.reduce(
@@ -35,6 +37,10 @@ const favoriteBlog = (blogs) => {
         return deconstructBlog(mostLikedBlog)
     }
 }
+
+// const mostBlogs = (blogs) => {
+
+// }
 
 module.exports = {
     dummy,

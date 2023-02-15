@@ -110,4 +110,9 @@ describe('total likes', () => {
         const result = listHelper.totalLikes(exampleListOfBlogs)
         expect(result).toBe(7+5+12+10+0+2)
     })
+
+    test('of empty list is zero', () => {
+        const result = listHelper.totalLikes([])
+        expect(result).toBe(0)
+    })
 })

@@ -124,4 +124,9 @@ describe('favorite blog', () => {
         const result = listHelper.favoriteBlog(exampleListOfBlogs).likes
         expect(result).toBe(maximum)
       })
+
+      test('when the list is empty there are no favorite blog', () => {
+        const result = listHelper.favoriteBlog([])
+        expect(result).toEqual(null)
+      })
 })
