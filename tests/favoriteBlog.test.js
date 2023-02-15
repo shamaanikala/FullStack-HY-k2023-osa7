@@ -58,7 +58,7 @@ describe('favorite blog', () => {
           __v: 0
         },
         {
-          _id: "5a422b3a1b54a676234d17f9",
+          _id: "5a422b3a1b54a676234d17f",
           title: "Canonical string reduction",
           author: "Edsger W. Dijkstra",
           url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
@@ -92,26 +92,26 @@ describe('favorite blog', () => {
       ]
 
       test('when list has only one blog equals the blog in it', () => {
+        // https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
         const result = listHelper.favoriteBlog(listWithOneBlog)
-        //console.log(result)
-        expect(result).toEqual(listWithOneBlog[0])
+        console.log(result)
+       
+        expect(result).toEqual(listHelper.deconstructBlog(listWithOneBlog[0]))
       })
 
       test('when list has only blogs with zero likes, then any one of them can be favorite', () => {
         const result = listHelper.favoriteBlog(listWithBlogsWithoutLikes)
-        expect(result).toEqual(listWithBlogsWithoutLikes[0])
-        || expect(result).toEqual(listWithBlogsWithoutLikes[1])
-        || expect(result).toEqual(listWithBlogsWithoutLikes[2])
+        const expectedList = listWithBlogsWithoutLikes.map(b => listHelper.deconstructBlog(b))
+        expect(result).toEqual(expectedList[0])
+        || expect(result).toEqual(expectedList[1])
+        || expect(result).toEqual(expectedList[2])
       })
 
       test('when list has many blogs the favorite is the one with the most likes', () => {
         const theFavorite =  {
-            _id: "5a422b3a1b54a676234d17f9",
             title: "Canonical string reduction",
             author: "Edsger W. Dijkstra",
-            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-            likes: 12,
-            __v: 0
+            likes: 12
         }
 
         const result = listHelper.favoriteBlog(exampleListOfBlogs)

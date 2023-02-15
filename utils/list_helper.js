@@ -7,6 +7,11 @@ const totalLikes = (blogs) => {
     return result
 }
 
+const deconstructBlog = (blog) => {
+    // https://stackoverflow.com/questions/17781472/how-to-get-a-subset-of-a-javascript-objects-properties
+    return (({ title, author, likes }) => ({ title, author, likes }))(blog)
+}
+
 const favoriteBlog = (blogs) => {
     // palauttaa listan eniten tykkäyksiä saaneen blogin tiedot
     // tehtävänannossa palautetaan
@@ -17,8 +22,9 @@ const favoriteBlog = (blogs) => {
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
     // "Getting the maximum element of an array"
+    //const bloglist = blogs.map(b => deconstructBlog(b))
     if (blogs.length === 1) {
-        return blogs[0]
+        return deconstructBlog(blogs[0])
     } else {
         const mostLikedBlog = blogs.reduce(
             (tykatyin,blogi) => {
@@ -26,12 +32,13 @@ const favoriteBlog = (blogs) => {
                     ? blogi
                     : tykatyin
             },blogs[0])
-        return mostLikedBlog
+        return deconstructBlog(mostLikedBlog)
     }
 }
 
 module.exports = {
     dummy,
+    deconstructBlog,
     totalLikes,
     favoriteBlog
 }
