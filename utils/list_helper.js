@@ -38,13 +38,30 @@ const favoriteBlog = (blogs) => {
     }
 }
 
-// const mostBlogs = (blogs) => {
-
-// }
+const mostBlogs = (blogs) => {
+    if (blogs.length === 0) {
+        return null
+    } else {
+    const authors = blogs.reduce(
+        (authors,blog) => authors.concat(blog.author),[])
+    const result = authors.reduce((authorObj,x,_,a) => {
+        const count = a.filter(ai => ai === x).length
+        return authorObj.blogs < count
+            ? authorObj = { author: x, blogs : count }
+            : authorObj
+    },
+    { 
+        author : authors[0],
+        blogs : authors.filter(ai => ai === authors[0]).length
+    })
+    return result
+    }
+}
 
 module.exports = {
     dummy,
     deconstructBlog,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
