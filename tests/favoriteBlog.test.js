@@ -117,4 +117,11 @@ describe('favorite blog', () => {
         const result = listHelper.favoriteBlog(exampleListOfBlogs)
         expect(result).toEqual(theFavorite)
       })
+
+      test('when list has favorite blog its likes are equal to the maximum likes of the bloglist', () => {
+        const maximum = exampleListOfBlogs.reduce((max,item) => Math.max(max,item.likes),0)
+        console.log(maximum)
+        const result = listHelper.favoriteBlog(exampleListOfBlogs).likes
+        expect(result).toBe(maximum)
+      })
 })
