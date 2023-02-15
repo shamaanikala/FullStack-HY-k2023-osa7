@@ -107,4 +107,22 @@ describe('author with most likes', () => {
         //console.log(result)
         expect(result.likes).toBe(0)
     })
+
+    test('of example list is Edsger W. Dijkstra with 17 likes', () => {
+        const result = listHelper.mostLikes(exampleListOfBlogs)
+        const expected = {
+            author: "Edsger W. Dijkstra",
+            likes: 17
+        }
+        expect(result).toEqual(expected)
+    })
+
+    test('of example list two times is Edsger W. Dijkstra with 2*17=34 likes', () => {
+        const result = listHelper.mostLikes(exampleListOfBlogs.concat(exampleListOfBlogs))
+        const expected = {
+            author: "Edsger W. Dijkstra",
+            likes: 34
+        }
+        expect(result).toEqual(expected)
+    })
 })
