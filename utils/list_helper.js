@@ -66,7 +66,7 @@ const mostLikes = (blogs) => {
         return {}
     } else {
         const authorLikes = blogs.reduce((rarr,item) => {
-            console.log(rarr,item)
+            //console.log(rarr,item)
             return rarr.concat({
                 author: item.author,
                 likes: item.likes
