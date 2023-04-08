@@ -72,10 +72,9 @@ test('blogit palautetaan json muodossa', async () => {
 })
 
 test('sovellus palauttaa oikean määrän JSON-muotoisia blogeja', async () => {
-    await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    
+    expect(response.body).toHaveLength(initialBlogs.length)
 })
 
 afterAll(async () => {
