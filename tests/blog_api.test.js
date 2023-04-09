@@ -38,6 +38,30 @@ test('palautettavien blogien identifioivan kentä nimi on id', async () => {
     
 })
 
+test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => {
+    const newBlog = {
+        title: "Parsing Html The Cthulhu Way",
+        author: "Jeff Atwood",
+        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: 1234
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    
+    const newBlogs = await helper.blogsInDB()
+    expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
+
+    const titles = newBlogs.map(blog => blog.title)
+    expect(titles).toContain('Parsing Html The Cthulhu Way')
+})
+
+//test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän')
+
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
