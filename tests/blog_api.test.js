@@ -57,6 +57,9 @@ test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => 
 
     const titles = newBlogs.map(blog => blog.title)
     expect(titles).toContain('Parsing Html The Cthulhu Way')
+
+    const authors = newBlogs.map(blog => blog.author)
+    expect(authors).toContain('Jeff Atwood')
 })
 
 //test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän')
