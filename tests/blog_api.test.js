@@ -29,6 +29,19 @@ test('sovellus palauttaa oikean määrän JSON-muotoisia blogeja', async () => {
     expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
+test('palautettavien blogien identifioivan kentä nimi on id', async () => {
+    const response = await api.get('/api/blogs')
+    console.log(response.body)
+    const ids = response.body.map(blog => blog.id)
+    const lol = response.body.map(blog => blog._id)
+    console.log(ids)
+    console.log(lol)
+    for (let i of lol) {
+        expect(i).toBeDefined()
+    }
+    
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
