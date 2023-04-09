@@ -65,7 +65,23 @@ test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => 
     expect(urls).toContain('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
 })
 
-//test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän')
+test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän', async () => {
+    const newBlog = {
+        title: "Parsing Html The Cthulhu Way",
+        author: "Jeff Atwood",
+        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: 1234
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    
+    const newBlogs = await helper.blogsInDB()
+    expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
+})
 
 
 afterAll(async () => {
