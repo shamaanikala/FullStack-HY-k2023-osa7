@@ -31,12 +31,8 @@ test('sovellus palauttaa oikean määrän JSON-muotoisia blogeja', async () => {
 
 test('palautettavien blogien identifioivan kentä nimi on id', async () => {
     const response = await api.get('/api/blogs')
-    console.log(response.body)
     const ids = response.body.map(blog => blog.id)
-    const lol = response.body.map(blog => blog._id)
-    console.log(ids)
-    console.log(lol)
-    for (let i of lol) {
+    for (let i of ids) {
         expect(i).toBeDefined()
     }
     
