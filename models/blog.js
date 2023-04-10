@@ -16,7 +16,10 @@ const blogSchema = mongoose.Schema({
       required: [true, 'Blog title is required']
     },
     author: String,
-    url: String,
+    url: {
+      type: String,
+      required: [true, 'Blog url is required']
+    },
     likes: {
       type: Number,
       default: 0
