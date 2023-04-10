@@ -166,6 +166,18 @@ test('jos blogi ilman url-kenttää yritetään lisätä, palvelin vastaa status
         .expect(400)
 })
 
+test('jos blogi ilman title- ja url-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
+    const newBlog = {
+        //title: "Parsing Html The Cthulhu Way",
+        author: "Jeff Atwood",
+        //url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: 1234
+    }
+
+    await api.post('/api/blogs').send(newBlog)
+        .expect(400)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
