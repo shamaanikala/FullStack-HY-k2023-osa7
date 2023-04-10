@@ -11,7 +11,10 @@ mongoose.set('strictQuery',false)
 // eli default arvo ei toimi, jos annetaan null
 
 const blogSchema = mongoose.Schema({
-    title: String,
+    title: {
+      type: String,
+      required: [true, 'Blog title is required']
+    },
     author: String,
     url: String,
     likes: {
