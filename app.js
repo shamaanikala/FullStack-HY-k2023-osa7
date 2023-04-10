@@ -20,7 +20,7 @@ app.use('/api/blogs/', blogsRouter)
 
 
 const errorHandler = (error,request,response,next) => {
-    console.error(error.message)
+    logger.error(error.message)
 
     if (error.name === 'ValidationError') {
         //console.log(error.errors)
