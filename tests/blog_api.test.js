@@ -83,6 +83,26 @@ test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemm
     expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
 })
 
+test('uuden lisätyn blogin likes-kentän arvo on annettu arvo', async () => {
+    const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+    const newBlog = {
+        title: uniqueName,
+        author: "Jeff Atwood",
+        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: 1234
+    }
+
+    await api.post('/api/blogs').send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const newBlogs = await helper.blogsInDB()
+    console.log(newBlogs)
+    const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
+    console.log(selectedBlog)
+    expect(selectedBlog.likes).toBe(1234)
+})
+
 test('jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', async () => {
     const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
     const dummyBlog = {
@@ -97,7 +117,7 @@ test('jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', asy
     
     // vai etsisikö suoraan oikean blogin?
     const newBlogs = await helper.blogsInDB()
-    const selectedBlog = newBlogs.find(blog => blog.name === uniqueName)
+    const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
     expect(selectedBlog.likes).toBe(0)
 })
 
