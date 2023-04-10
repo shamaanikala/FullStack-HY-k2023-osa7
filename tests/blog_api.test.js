@@ -97,9 +97,9 @@ test('uuden lisätyn blogin likes-kentän arvo on annettu arvo', async () => {
         .expect('Content-Type', /application\/json/)
 
     const newBlogs = await helper.blogsInDB()
-    console.log(newBlogs)
+    //console.log(newBlogs)
     const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
-    console.log(selectedBlog)
+    //console.log(selectedBlog)
     expect(selectedBlog.likes).toBe(1234)
 })
 
@@ -119,6 +119,27 @@ test('jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', asy
     const newBlogs = await helper.blogsInDB()
     const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
     expect(selectedBlog.likes).toBe(0)
+})
+
+// T4.11* tarkistuksia
+// vain undefined likes saa arvon 0 defaultista mongoosen kautta
+test('jos kentälle likes annetaan null arvo, sen arvo on null', async () => {
+    const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+    const dummyBlog = {
+        title: uniqueName,
+        author: "Jeff Atwood",
+        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: null
+    }
+
+    await api.post('/api/blogs').send(dummyBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    
+    // vai etsisikö suoraan oikean blogin?
+    const newBlogs = await helper.blogsInDB()
+    const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
+    expect(selectedBlog.likes).toBe(null)
 })
 
 afterAll(async () => {
