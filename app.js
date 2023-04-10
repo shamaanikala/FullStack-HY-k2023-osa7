@@ -24,7 +24,6 @@ const errorHandler = (error,request,response,next) => {
 
     if (error.name === 'ValidationError') {
         //console.log(error.errors)
-        //console.log(Object.keys(error.errors))
         //console.log(`Required fields missing ${Object.keys(error.errors)}`)
         return response.status(400).send(`Required fields missing ${Object.keys(error.errors)}`)
     }

@@ -8,7 +8,6 @@ mongoose.set('strictQuery',false)
 //https://mongoosejs.com/docs/defaults.html
 // Note: Mongoose only applies a default if the value of the path
 // is strictly undefined.
-// eli default arvo ei toimi, jos annetaan null
 
 const blogSchema = mongoose.Schema({
     title: {

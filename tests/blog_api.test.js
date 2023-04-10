@@ -97,7 +97,6 @@ test('uuden lisätyn blogin likes-kentän arvo on annettu arvo', async () => {
         .expect('Content-Type', /application\/json/)
 
     const newBlogs = await helper.blogsInDB()
-    //console.log(newBlogs)
     const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
     //console.log(selectedBlog)
     expect(selectedBlog.likes).toBe(1234)
