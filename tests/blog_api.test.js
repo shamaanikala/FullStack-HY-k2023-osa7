@@ -142,6 +142,18 @@ test('jos kentälle likes annetaan null arvo, sen arvo on null', async () => {
     expect(selectedBlog.likes).toBe(null)
 })
 
+test('jos blogi ilman title-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
+    const newBlog = {
+        //title: "Parsing Html The Cthulhu Way",
+        author: "Jeff Atwood",
+        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+        likes: 1234
+    }
+
+    await api.post('/api/blogs').send(newBlog)
+        .expect(400)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
