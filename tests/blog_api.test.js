@@ -283,13 +283,13 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             expect(updatedFirstBlog.url).toBe(firstBlog.url)
         })
 
-        test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
+        test('blogin url:n muokkaaminen undefined epäonnistuu', async () => {
             const blogList = await helper.blogsInDB()
             const firstBlog = blogList[0]
     
             let url = firstBlog.url
     
-            url = ''
+            url = undefined
     
             await api.put(`/api/blogs/${firstBlog.id}`)
                 .send({ url })
@@ -301,6 +301,26 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             
             expect(updatedFirstBlog.url).toBe(firstBlog.url)
         })
+
+        test('blogin likejen muokkaaminen muuksi kuin lukuarvoksi epäonnistuu', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
+    
+            let likes = firstBlog.likes
+    
+            likes = 'malicious-link'
+    
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ likes })
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+            
+            expect(updatedFirstBlog.likes).toBe(firstBlog.likes)
+        })
+
     })
     describe('testit, joissa tietokantaan lisätään yksi uusi blogi ennen testejä', () => {
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
