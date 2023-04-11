@@ -22,3 +22,64 @@ Content-Type: application/json
     "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     "likes": 0
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Like oletus-testi",
+    "author": "anonyymi",
+    "url": "www.yle.fi"
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Like oletus-testi",
+    "author": "anonyymi",
+    "url": "www.yle.fi",
+    "likes": "ei luku"
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Parsing Html The Cthulhu Way",
+    "author": "Jeff Atwood",
+    "url": "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+    "likes": 1234
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Ei url",
+    "author": "anonyymi"
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "author": "ei titleä",
+     "url": "www.yle.fi"
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "author": "ei titleä eikä url"
+}
+
+###
+DELETE http://localhost:3003/api/blogs/64350d13309ac0c05e9f211e
