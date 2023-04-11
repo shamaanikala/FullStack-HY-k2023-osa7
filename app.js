@@ -22,7 +22,10 @@ app.use('/api/blogs/', blogsRouter)
 const errorHandler = (error,request,response,next) => {
     logger.error(error.message)
     //logger.error(error)
-    if (error.name === 'ValidationError') {
+    if (error.name === 'CastError') { // PUT
+        return response.status(400).send({ error: `Error while updating likes field: likes must be a number`})
+    }
+    else if (error.name === 'ValidationError') {
         //console.log(error.errors)
         if (error.errors.likes) {
             //logger.error(error.errors.likes.name) // CastError
@@ -32,9 +35,7 @@ const errorHandler = (error,request,response,next) => {
         //console.log(`Required fields missing ${Object.keys(error.errors)}`)
         return response.status(400).send({error: `Required fields missing ${Object.keys(error.errors)}`})
     }
-    if (error.name === 'CastError') { // PUT
-        return response.status(400).send({ error: `Error while updating likes field: likes must be a number`})
-    }
+    
 
     next(error)
 }

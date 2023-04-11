@@ -182,14 +182,14 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             const blogList = await helper.blogsInDB()
             const firstBlog = blogList[0]
     
-            console.log(firstBlog.id)
-            console.log(`Liket alussa: ${firstBlog.likes}`)
+            //console.log(firstBlog.id)
+            //console.log(`Liket alussa: ${firstBlog.likes}`)
     
             let { title, author, url, likes } = firstBlog
     
             likes = likes + 1
     
-            console.log({ title, author, url, likes})
+            //console.log({ title, author, url, likes})
     
             await api.put(`/api/blogs/${firstBlog.id}`)
                 .send({ title, author, url, likes })
@@ -199,72 +199,182 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             const updatedBlogList = await helper.blogsInDB()
             const updatedFirstBlog = updatedBlogList[0]
     
-            console.log(updatedFirstBlog.id)
-            console.log(`Liket lopussa: ${updatedFirstBlog.likes}`)
+            //console.log(updatedFirstBlog.id)
+            //console.log(`Liket lopussa: ${updatedFirstBlog.likes}`)
             
             expect(updatedFirstBlog.id).toBe(firstBlog.id)
             expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
         })
-    }) 
+
+        test('blogin tykkäysten määrää voidaan kasvattaa yhdellä pelkkä likes pyynnössä', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
     
+            let likes = firstBlog.likes
+    
+            likes = likes + 1
+    
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ likes })
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+            
+            expect(updatedFirstBlog.id).toBe(firstBlog.id)
+            expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
+        })
+
+        test('blogin titlen muokkaaminen tyhjäksi epäonnistuu', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
+    
+            let title = firstBlog.title
+    
+            title = ''
+            
+            // for silmukka hajottaa seuraavan describen testejä
+            // const titles = ['', null]
+
+            // for (let title of titles) {
+            //     await api.put(`/api/blogs/${firstBlog.id}`)
+            //     .send({ title })
+            //     .expect(400)
+            //     .expect('Content-Type', /application\/json/)
+            
+            //     const updatedBlogList = await helper.blogsInDB()
+            //     const updatedFirstBlog = updatedBlogList[0]
+            
+            //     expect(updatedFirstBlog.title).toBe(firstBlog.title)
+            // }
+
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ title })
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+            
+            expect(updatedFirstBlog.title).toBe(firstBlog.title)
+        })
+
+        // test('blogin titlen muokkaaminen null epäonnistuu', async () => {
+        //     const blogList = await helper.blogsInDB()
+        //     const firstBlog = blogList[0]
+    
+        //     let title = firstBlog.title
+    
+        //     title = null
+
+        //     await api.put(`/api/blogs/${firstBlog.id}`)
+        //         .send({ title })
+        //         .expect(400)
+        //         .expect('Content-Type', /application\/json/)
+            
+        //     const updatedBlogList = await helper.blogsInDB()
+        //     const updatedFirstBlog = updatedBlogList[0]
+            
+        //     expect(updatedFirstBlog.title).toBe(firstBlog.title)
+        // })
+
+        test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
+    
+            let url = firstBlog.url
+    
+            url = ''
+    
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ url })
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+            
+            expect(updatedFirstBlog.url).toBe(firstBlog.url)
+        })
+
+        test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
+    
+            let url = firstBlog.url
+    
+            url = ''
+    
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ url })
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+            
+            expect(updatedFirstBlog.url).toBe(firstBlog.url)
+        })
+    }) 
+
+    describe('testit, joihin käytetään muokattua alustusdataa', () => {
+        // beforeEach(async () => {
+        //     await Blog.deleteMany({})
+
+        //     const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+        //     const dummyBlog = {
+        //         title: uniqueName,
+        //         author: "Jeff Atwood",
+        //         url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
+        //     }
+
+        //     const blogsList = [dummyBlog].concat(helper.initialBlogs)
+
+        //     const blogObjects = blogsList.map(blog => new Blog(blog))
+        //     const promiseArray = blogObjects.map(blog => blog.save())
+        //     await Promise.all(promiseArray)
+        // })
+
+        test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
+            const newBlogId = await helper.addNewBlog()
+            const blogsAdded = await helper.blogsInDB()
+            const newTitle = blogsAdded.find(b => b.id === newBlogId).title
+            expect(newTitle).toContain('Parsing Html The Cthulhu Way')
+        })
+
+        test('blogin poisto id:n perusteella onnistuu', async () => {
+            const blogsAtStart = await helper.blogsInDB()
+            const blogToDelete = blogsAtStart[0]
+
+            uniqueTitle = blogToDelete.title
+            
+            await api.delete(`/api/blogs/${blogToDelete.id}`)
+                .expect(204) // No Content
+            
+            const blogsAtEnd = await helper.blogsInDB()
+            expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length) // eli alussa lisätty poistetaan
+
+            const titles = blogsAtEnd.map(b => b.title)
+            expect(titles).not.toContain(uniqueTitle)
+        })
+
+        // TODO olemattoman id:n poistaminen ei poista mitään ja palauttaa status
+        test('olemattoman blogin poistoyritys id:n perusteella ei poista mitään ja palauttaa statuskoodin 204', async () => {
+            const nonexistingId = await helper.nonExistingBlogId()
+
+            await api.delete(`/api/blogs/${nonexistingId}`)
+                .expect(204)
+            
+            const blogList = await helper.blogsInDB()
+            expect(blogList).toHaveLength(helper.initialBlogs.length + 1) // tässä osiossa 1 blogi lisätty
+            
+            const blogTitles = blogList.map(b => b.title)
+            const uniqueName = blogTitles[0]
+            expect(blogTitles.sort()).toEqual([uniqueName].concat(helper.initialBlogs.map(b => b.title)).sort())
+        })
+    })
 })
-
-describe('testit, joihin käytetään muokattua alustusdataa', () => {
-    beforeEach(async () => {
-        await Blog.deleteMany({})
-
-        const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-        const dummyBlog = {
-            title: uniqueName,
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-        }
-
-        const blogsList = [dummyBlog].concat(helper.initialBlogs)
-
-        const blogObjects = blogsList.map(blog => new Blog(blog))
-        const promiseArray = blogObjects.map(blog => blog.save())
-        await Promise.all(promiseArray)
-    })
-
-    test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
-        const blogsAdded = await helper.blogsInDB()
-        const titles = blogsAdded.map(b => b.title)
-        expect(titles[0]).toContain('Parsing Html The Cthulhu Way')
-    })
-
-    test('blogin poisto id:n perusteella onnistuu', async () => {
-        const blogsAtStart = await helper.blogsInDB()
-        const blogToDelete = blogsAtStart[0]
-
-        uniqueTitle = blogToDelete.title
-        
-        await api.delete(`/api/blogs/${blogToDelete.id}`)
-            .expect(204) // No Content
-        
-        const blogsAtEnd = await helper.blogsInDB()
-        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length) // eli alussa lisätty poistetaan
-
-        const titles = blogsAtEnd.map(b => b.title)
-        expect(titles).not.toContain(uniqueTitle)
-    })
-
-    // TODO olemattoman id:n poistaminen ei poista mitään ja palauttaa status
-    test('olemattoman blogin poistoyritys id:n perusteella ei poista mitään ja palauttaa statuskoodin 204', async () => {
-        const nonexistingId = await helper.nonExistingBlogId()
-
-        await api.delete(`/api/blogs/${nonexistingId}`)
-            .expect(204)
-        
-        const blogList = await helper.blogsInDB()
-        expect(blogList).toHaveLength(helper.initialBlogs.length + 1) // tässä osiossa 1 blogi lisätty
-        
-        const blogTitles = blogList.map(b => b.title)
-        const uniqueName = blogTitles[0]
-        expect(blogTitles.sort()).toEqual([uniqueName].concat(helper.initialBlogs.map(b => b.title)).sort())
-    })
-})
-
 afterAll(async () => {
     await mongoose.connection.close()
 })

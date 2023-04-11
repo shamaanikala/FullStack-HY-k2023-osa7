@@ -53,6 +53,18 @@ const nonExistingBlogId = async () => {
   return blog._id.toString()
 }
 
+const addNewBlog = async () => {
+  const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+  const blog = new Blog({
+    title: uniqueName,
+    author: "Jeff Atwood",
+    url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
+  })
+  await blog.save()
+
+  return blog._id.toString()
+}
+
 module.exports = {
-    initialBlogs, blogsInDB, nonExistingBlogId
+    initialBlogs, blogsInDB, nonExistingBlogId, addNewBlog
 }
