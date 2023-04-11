@@ -233,21 +233,6 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             let title = firstBlog.title
     
             title = ''
-            
-            // for silmukka hajottaa seuraavan describen testejä
-            // const titles = ['', null]
-
-            // for (let title of titles) {
-            //     await api.put(`/api/blogs/${firstBlog.id}`)
-            //     .send({ title })
-            //     .expect(400)
-            //     .expect('Content-Type', /application\/json/)
-            
-            //     const updatedBlogList = await helper.blogsInDB()
-            //     const updatedFirstBlog = updatedBlogList[0]
-            
-            //     expect(updatedFirstBlog.title).toBe(firstBlog.title)
-            // }
 
             await api.put(`/api/blogs/${firstBlog.id}`)
                 .send({ title })
@@ -316,8 +301,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             
             expect(updatedFirstBlog.url).toBe(firstBlog.url)
         })
-    }) 
-
+    })
     describe('testit, joissa tietokantaan lisätään yksi uusi blogi ennen testejä', () => {
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
             const newBlogId = await helper.addNewBlog()
