@@ -82,4 +82,37 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3003/api/blogs/643513a42bee589257b07bb3
+DELETE http://localhost:3003/api/blogs/643519f19a3c45c3442b2e8e
+
+###
+PUT http://localhost:3003/api/blogs/64351a57b0cfedec724f975a
+Content-Type: application/json
+
+{
+    "title": "Muokattu PUT",
+    "author": "Muokdattu PUT",
+    "url": "Muokattu PUT"
+}
+
+###
+PUT http://localhost:3003/api/blogs/64351a57b0cfedec724f975a
+Content-Type: application/json
+
+{
+    "title": "Muokattu PUT",
+    "author": "Muokdattu PUT",
+    "url": "Muokattu PUT",
+    "likes": 12
+}
+
+
+###
+PUT http://localhost:3003/api/blogs/64351a57b0cfedec724f975a
+Content-Type: application/json
+
+{
+    "title": "Muokattu PUT",
+    "author": "Muokdattu PUT",
+    "url": "Muokattu PUT",
+    "likes": "lol"
+}
