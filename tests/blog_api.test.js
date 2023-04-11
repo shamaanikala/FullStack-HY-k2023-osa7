@@ -342,6 +342,48 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             const uniqueName = blogList.find(b => b.id === newBlogId).title
             expect(blogTitles.sort()).toEqual([uniqueName].concat(helper.initialBlogs.map(b => b.title)).sort())
         })
+
+        test('uuden blogin tykkäyksiä voidaan lisätä yhdellä', async () => {
+            const newBlogId = await helper.addNewBlog()
+            const blogsAdded = await helper.blogsInDB()
+            
+            const newBlog = blogsAdded.find(b => b.id === newBlogId)
+            let likes = newBlog.likes
+    
+            likes = likes + 1
+    
+            await api.put(`/api/blogs/${newBlogId}`)
+                .send({ likes })
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedNewBlog = updatedBlogList.find(b => b.id === newBlogId)
+            
+            expect(updatedNewBlog.id).toBe(newBlog.id)
+            expect(updatedNewBlog.likes).toBe(newBlog.likes + 1)
+        })
+
+        test('uuden blogin tykkäyksiä voidaan vähentää yhdellä', async () => {
+            const newBlogId = await helper.addNewBlog()
+            const blogsAdded = await helper.blogsInDB()
+            
+            const newBlog = blogsAdded.find(b => b.id === newBlogId)
+            let likes = newBlog.likes
+    
+            likes = likes - 1
+    
+            await api.put(`/api/blogs/${newBlogId}`)
+                .send({ likes })
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedNewBlog = updatedBlogList.find(b => b.id === newBlogId)
+            
+            expect(updatedNewBlog.id).toBe(newBlog.id)
+            expect(updatedNewBlog.likes).toBe(newBlog.likes - 1)
+        })
     })
 })
 afterAll(async () => {
