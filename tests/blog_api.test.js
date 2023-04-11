@@ -260,24 +260,24 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             expect(updatedFirstBlog.title).toBe(firstBlog.title)
         })
 
-        // test('blogin titlen muokkaaminen null epäonnistuu', async () => {
-        //     const blogList = await helper.blogsInDB()
-        //     const firstBlog = blogList[0]
+        test('blogin titlen muokkaaminen null epäonnistuu', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
     
-        //     let title = firstBlog.title
+            let title = firstBlog.title
     
-        //     title = null
+            title = null
 
-        //     await api.put(`/api/blogs/${firstBlog.id}`)
-        //         .send({ title })
-        //         .expect(400)
-        //         .expect('Content-Type', /application\/json/)
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ title })
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
             
-        //     const updatedBlogList = await helper.blogsInDB()
-        //     const updatedFirstBlog = updatedBlogList[0]
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
             
-        //     expect(updatedFirstBlog.title).toBe(firstBlog.title)
-        // })
+            expect(updatedFirstBlog.title).toBe(firstBlog.title)
+        })
 
         test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
             const blogList = await helper.blogsInDB()
