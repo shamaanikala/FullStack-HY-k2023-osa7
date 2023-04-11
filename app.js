@@ -32,6 +32,9 @@ const errorHandler = (error,request,response,next) => {
         //console.log(`Required fields missing ${Object.keys(error.errors)}`)
         return response.status(400).send({error: `Required fields missing ${Object.keys(error.errors)}`})
     }
+    if (error.name === 'CastError') { // PUT
+        return response.status(400).send({ error: `Error while updating likes field: likes must be a number`})
+    }
 
     next(error)
 }
