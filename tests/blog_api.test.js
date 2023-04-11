@@ -319,23 +319,6 @@ describe('testit joihin käytetään perus alustusdataa', () => {
     }) 
 
     describe('testit, joihin käytetään muokattua alustusdataa', () => {
-        // beforeEach(async () => {
-        //     await Blog.deleteMany({})
-
-        //     const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-        //     const dummyBlog = {
-        //         title: uniqueName,
-        //         author: "Jeff Atwood",
-        //         url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-        //     }
-
-        //     const blogsList = [dummyBlog].concat(helper.initialBlogs)
-
-        //     const blogObjects = blogsList.map(blog => new Blog(blog))
-        //     const promiseArray = blogObjects.map(blog => blog.save())
-        //     await Promise.all(promiseArray)
-        // })
-
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
             const newBlogId = await helper.addNewBlog()
             const blogsAdded = await helper.blogsInDB()
@@ -344,8 +327,9 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         })
 
         test('blogin poisto id:n perusteella onnistuu', async () => {
+            const newBlogId = await helper.addNewBlog()
             const blogsAtStart = await helper.blogsInDB()
-            const blogToDelete = blogsAtStart[0]
+            const blogToDelete = blogsAtStart.find(b => b.id === newBlogId)
 
             uniqueTitle = blogToDelete.title
             
