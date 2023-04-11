@@ -318,7 +318,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         })
     }) 
 
-    describe('testit, joihin käytetään muokattua alustusdataa', () => {
+    describe('testit, joissa tietokantaan lisätään yksi uusi blogi ennen testejä', () => {
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
             const newBlogId = await helper.addNewBlog()
             const blogsAdded = await helper.blogsInDB()
@@ -346,6 +346,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         // TODO olemattoman id:n poistaminen ei poista mitään ja palauttaa status
         test('olemattoman blogin poistoyritys id:n perusteella ei poista mitään ja palauttaa statuskoodin 204', async () => {
             const nonexistingId = await helper.nonExistingBlogId()
+            const newBlogId = await helper.addNewBlog()
 
             await api.delete(`/api/blogs/${nonexistingId}`)
                 .expect(204)
@@ -354,7 +355,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             expect(blogList).toHaveLength(helper.initialBlogs.length + 1) // tässä osiossa 1 blogi lisätty
             
             const blogTitles = blogList.map(b => b.title)
-            const uniqueName = blogTitles[0]
+            const uniqueName = blogList.find(b => b.id === newBlogId).title
             expect(blogTitles.sort()).toEqual([uniqueName].concat(helper.initialBlogs.map(b => b.title)).sort())
         })
     })
