@@ -218,7 +218,20 @@ describe('testit, joihin käytetään muokattua alustusdataa', () => {
         expect(titles).not.toContain(uniqueTitle)
     })
 
-    // TODO olemattoman id:n poistaminen ei poista mitään ja palauttaa jotain
+    // TODO olemattoman id:n poistaminen ei poista mitään ja palauttaa status
+    test('olemattoman blogin poistoyritys id:n perusteella ei poista mitään ja palauttaa statuskoodin 204', async () => {
+        const nonexistingId = await helper.nonExistingBlogId()
+
+        await api.delete(`/api/blogs/${nonexistingId}`)
+            .expect(204)
+        
+        const blogList = await helper.blogsInDB()
+        expect(blogList).toHaveLength(helper.initialBlogs.length + 1) // tässä osiossa 1 blogi lisätty
+        
+        const blogTitles = blogList.map(b => b.title)
+        const uniqueName = blogTitles[0]
+        expect(blogTitles.sort()).toEqual([uniqueName].concat(helper.initialBlogs.map(b => b.title)).sort())
+    })
 })
 
 afterAll(async () => {
