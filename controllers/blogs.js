@@ -42,7 +42,7 @@ blogsRouter.put('/:id', async (request, response) => {
         request.params.id,
         {title, author, url, likes},
         { new: true, runValidators: true, context: 'query' })
-    response.json(updatedBlog)
+    response.status(200).json(updatedBlog)
 })
 
 module.exports = blogsRouter

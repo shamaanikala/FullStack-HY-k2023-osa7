@@ -176,6 +176,37 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         await api.post('/api/blogs').send(newBlog)
             .expect(400)
     })
+
+    describe('testataan blogin muokkausta PUT avulla', () => {
+        test('blogin tykkäysten määrää voidaan kasvattaa yhdellä', async () => {
+            const blogList = await helper.blogsInDB()
+            const firstBlog = blogList[0]
+    
+            console.log(firstBlog.id)
+            console.log(`Liket alussa: ${firstBlog.likes}`)
+    
+            let { title, author, url, likes } = firstBlog
+    
+            likes = likes + 1
+    
+            console.log({ title, author, url, likes})
+    
+            await api.put(`/api/blogs/${firstBlog.id}`)
+                .send({ title, author, url, likes })
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+            
+            const updatedBlogList = await helper.blogsInDB()
+            const updatedFirstBlog = updatedBlogList[0]
+    
+            console.log(updatedFirstBlog.id)
+            console.log(`Liket lopussa: ${updatedFirstBlog.likes}`)
+            
+            expect(updatedFirstBlog.id).toBe(firstBlog.id)
+            expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
+        })
+    }) 
+    
 })
 
 describe('testit, joihin käytetään muokattua alustusdataa', () => {
