@@ -12,6 +12,7 @@ mongoose.set('strictQuery',false)
 const blogSchema = mongoose.Schema({
     title: {
       type: String,
+      //minLength: [1, 'The blog has to have a title'],
       required: [true, 'Blog title is required']
     },
     author: String,

@@ -21,22 +21,27 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
     const body = request.body
+    const { title, author, url, likes } = request.body
 
     //console.log(request.body)
     //console.log(body)
 
-    const blog = {
-        title: body.title,
-        author: body.author,
-        url: body.url,
-        likes: body.likes
-    }
+    // const blog = {
+    //     title: body.title,
+    //     author: body.author,
+    //     url: body.url,
+    //     likes: body.likes
+    // }
 
     //console.log(blog)
 
     // tälle annetaan javascript-olio eikä Blog-olio
     // new parametri palauttaa muuttuneen olion kutsujalle
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    //const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    const updatedBlog = await Blog.findByIdAndUpdate(
+        request.params.id,
+        {title, author, url, likes},
+        { new: true, runValidators: true, context: 'query' })
     response.json(updatedBlog)
 })
 
