@@ -144,3 +144,13 @@ Content-Type: application/json
 {
     "title": null
 }
+
+###
+PUT http://localhost:3003/api/blogs/64351a57b0cfedec724f975a
+Content-Type: application/json
+
+{
+    "title": "Muokattu PUT",
+    "author": "Muokdattu PUT",
+    "url": ""
+}
