@@ -21,6 +21,7 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
 
+// https://mongoosejs.com/docs/validation.html#validation-errors
 const errorHandler = (error,request,response,next) => {
     logger.error(error.message)
     //logger.error(error)
@@ -33,6 +34,9 @@ const errorHandler = (error,request,response,next) => {
             //logger.error(error.errors.likes.name) // CastError
             logger.error(error.errors.likes.message)
             return response.status(400).send({error: `likes field must be a number`})
+        } else if (error.errors.username.message === 'Username must have at least 3 characters') {
+            logger.error(error.errors.username.message)
+            return response.status(400).send({ error: `Username must have at lest 3 characters (given username was: '${error.errors.username.value}')`})
         }
         //console.log(`Required fields missing ${Object.keys(error.errors)}`)
         return response.status(400).send({error: `Required fields missing ${Object.keys(error.errors)}`})
