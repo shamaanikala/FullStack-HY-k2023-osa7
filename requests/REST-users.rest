@@ -1,0 +1,21 @@
+GET http://localhost:3003/api/users
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "testaaja",
+  "name": "Testi Nimi",
+  "password": "salasana"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "name": "Ylläpitäjä",
+  "password": "salasana"
+}
