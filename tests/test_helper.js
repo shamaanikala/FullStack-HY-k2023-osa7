@@ -48,7 +48,7 @@ const blogsInDB = async () => {
 const nonExistingBlogId = async () => {
   const blog = new Blog({title: 'nonexistant', url: 'will.be.removed'})
   await blog.save()
-  await blog.remove()
+  await blog.deleteOne()
 
   return blog._id.toString()
 }
