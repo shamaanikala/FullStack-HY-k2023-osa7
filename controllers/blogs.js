@@ -36,6 +36,7 @@ blogsRouter.post('/', async (request, response) => {
     
     //console.log(decodedToken)
     
+    // tämä varmaan siirtyne middlewareen T4.20*
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }

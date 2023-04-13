@@ -19,6 +19,8 @@ usersRouter.post('/', async (request, response) => {
     // Kopioidaan mongoosen tai mongoose-unique-validator validaation virheilmoitus
     // User validation failed: username: Path `username` is required.
     // - vähintään 3 merkkiä pitkä
+    // Näitä on paljon, saisiko nämä jotenkin virheenkäsittelijä
+    // middlewaren käsittelyyn?
     if (!username && !password) {
         logger.error(`Router Thrown Custom Validator Error:`)
         logger.error('User creation failed: data missing for required `username`, `password`.')
