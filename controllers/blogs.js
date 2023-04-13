@@ -11,6 +11,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
     //const blog = new Blog(request.body)
     const body = request.body
+    // tilapäinen kovakoodattu userId T4.17
+    const dummyUsers = await User.find({})
+    //console.log(dummyUsers)
+    const dummyUserId = dummyUsers[0]._id.toString()
+    //console.log(dummyUserId)
+    body.userId = dummyUserId
     const user = await User.findById(body.userId)
 
     const blog = new Blog({
