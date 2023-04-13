@@ -42,7 +42,7 @@ const errorHandler = (error,request,response,next) => {
             return response.status(400).send({error: `title field can't be empty`})
         } else if (error.errors.username.message === 'Username must have at least 3 characters') {
             logger.error(error.errors.username.message)
-            return response.status(400).send({ error: `Username must have at lest 3 characters (given username was: '${error.errors.username.value}')`})
+            return response.status(400).send({ error: `Username must have at least 3 characters (given username was: '${error.errors.username.value}')`})
         }
         //console.log(`Required fields missing ${Object.keys(error.errors)}`)
         //return response.status(400).send({error: `Required fields missing ${Object.keys(error.errors)}`})
