@@ -239,6 +239,26 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
             const usersAtEnd = await helper.usersInDb()
             expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
+
+        test('jos sekä käyttäjänimi että salasana puuttuvat, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: undefined,
+                name: 'Tätä Ei Tarvitsisi',
+                password: null,
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            //console.log(result.body.error)
+            expect(result.body.error).toContain('User creation failed: data missing for required `username`, `password`.')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        })
     })
     
 })
