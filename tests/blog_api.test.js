@@ -52,7 +52,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
         
-        const newBlogs = await helper.blogsInDB()
+        const newBlogs = await helper.blogsInDb()
         expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
 
         const titles = newBlogs.map(blog => blog.title)
@@ -79,7 +79,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
         
-        const newBlogs = await helper.blogsInDB()
+        const newBlogs = await helper.blogsInDb()
         expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
     })
 
@@ -96,7 +96,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             .expect(201)
             .expect('Content-Type', /application\/json/)
 
-        const newBlogs = await helper.blogsInDB()
+        const newBlogs = await helper.blogsInDb()
         const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
         //console.log(selectedBlog)
         expect(selectedBlog.likes).toBe(1234)
@@ -115,7 +115,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             .expect('Content-Type', /application\/json/)
         
         // vai etsisikö suoraan oikean blogin?
-        const newBlogs = await helper.blogsInDB()
+        const newBlogs = await helper.blogsInDb()
         const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
         expect(selectedBlog.likes).toBe(0)
     })
@@ -136,7 +136,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             .expect('Content-Type', /application\/json/)
         
         // vai etsisikö suoraan oikean blogin?
-        const newBlogs = await helper.blogsInDB()
+        const newBlogs = await helper.blogsInDb()
         const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
         expect(selectedBlog.likes).toBe(null)
     })
@@ -179,7 +179,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
 
     describe('testataan blogin muokkausta PUT avulla', () => {
         test('blogin tykkäysten määrää voidaan kasvattaa yhdellä', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             //console.log(firstBlog.id)
@@ -196,7 +196,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
     
             //console.log(updatedFirstBlog.id)
@@ -207,7 +207,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         })
 
         test('blogin tykkäysten määrää voidaan kasvattaa yhdellä pelkkä likes pyynnössä', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             let likes = firstBlog.likes
@@ -219,7 +219,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
             
             expect(updatedFirstBlog.id).toBe(firstBlog.id)
@@ -227,7 +227,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         })
 
         test('blogin titlen muokkaaminen tyhjäksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             let title = firstBlog.title
@@ -239,14 +239,14 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
             
             expect(updatedFirstBlog.title).toBe(firstBlog.title)
         })
 
         test('blogin titlen muokkaaminen null epäonnistuu', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             let title = firstBlog.title
@@ -258,14 +258,14 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
             
             expect(updatedFirstBlog.title).toBe(firstBlog.title)
         })
 
         test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             let url = firstBlog.url
@@ -277,7 +277,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
             
             expect(updatedFirstBlog.url).toBe(firstBlog.url)
@@ -305,7 +305,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         // })
 
         test('blogin likejen muokkaaminen muuksi kuin lukuarvoksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
             let likes = firstBlog.likes
@@ -317,7 +317,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedFirstBlog = updatedBlogList[0]
             
             expect(updatedFirstBlog.likes).toBe(firstBlog.likes)
@@ -327,14 +327,14 @@ describe('testit joihin käytetään perus alustusdataa', () => {
     describe('testit, joissa tietokantaan lisätään yksi uusi blogi ennen testejä', () => {
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
             const newBlogId = await helper.addNewBlog()
-            const blogsAdded = await helper.blogsInDB()
+            const blogsAdded = await helper.blogsInDb()
             const newTitle = blogsAdded.find(b => b.id === newBlogId).title
             expect(newTitle).toContain('Parsing Html The Cthulhu Way')
         })
 
         test('blogin poisto id:n perusteella onnistuu', async () => {
             const newBlogId = await helper.addNewBlog()
-            const blogsAtStart = await helper.blogsInDB()
+            const blogsAtStart = await helper.blogsInDb()
             const blogToDelete = blogsAtStart.find(b => b.id === newBlogId)
 
             uniqueTitle = blogToDelete.title
@@ -342,7 +342,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             await api.delete(`/api/blogs/${blogToDelete.id}`)
                 .expect(204) // No Content
             
-            const blogsAtEnd = await helper.blogsInDB()
+            const blogsAtEnd = await helper.blogsInDb()
             expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length) // eli alussa lisätty poistetaan
 
             const titles = blogsAtEnd.map(b => b.title)
@@ -357,7 +357,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             await api.delete(`/api/blogs/${nonexistingId}`)
                 .expect(204)
             
-            const blogList = await helper.blogsInDB()
+            const blogList = await helper.blogsInDb()
             expect(blogList).toHaveLength(helper.initialBlogs.length + 1) // tässä osiossa 1 blogi lisätty
             
             const blogTitles = blogList.map(b => b.title)
@@ -367,7 +367,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
 
         test('uuden blogin tykkäyksiä voidaan lisätä yhdellä', async () => {
             const newBlogId = await helper.addNewBlog()
-            const blogsAdded = await helper.blogsInDB()
+            const blogsAdded = await helper.blogsInDb()
             
             const newBlog = blogsAdded.find(b => b.id === newBlogId)
             let likes = newBlog.likes
@@ -379,7 +379,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedNewBlog = updatedBlogList.find(b => b.id === newBlogId)
             
             expect(updatedNewBlog.id).toBe(newBlog.id)
@@ -388,7 +388,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
 
         test('uuden blogin tykkäyksiä voidaan vähentää yhdellä', async () => {
             const newBlogId = await helper.addNewBlog()
-            const blogsAdded = await helper.blogsInDB()
+            const blogsAdded = await helper.blogsInDb()
             
             const newBlog = blogsAdded.find(b => b.id === newBlogId)
             let likes = newBlog.likes
@@ -400,7 +400,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
             
-            const updatedBlogList = await helper.blogsInDB()
+            const updatedBlogList = await helper.blogsInDb()
             const updatedNewBlog = updatedBlogList.find(b => b.id === newBlogId)
             
             expect(updatedNewBlog.id).toBe(newBlog.id)

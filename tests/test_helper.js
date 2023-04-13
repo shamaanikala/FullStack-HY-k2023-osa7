@@ -1,4 +1,5 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 // https://raw.githubusercontent.com/fullstack-hy2020/misc/master/blogs_for_test.md
 const initialBlogs = [
@@ -40,7 +41,7 @@ const initialBlogs = [
       }  
 ]
 
-const blogsInDB = async () => {
+const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
@@ -65,6 +66,10 @@ const addNewBlog = async () => {
   return blog._id.toString()
 }
 
+// const usersInDb = async () => {
+//   const users = await User
+// }
+
 module.exports = {
-    initialBlogs, blogsInDB, nonExistingBlogId, addNewBlog
+    initialBlogs, blogsInDb: blogsInDb, nonExistingBlogId, addNewBlog
 }
