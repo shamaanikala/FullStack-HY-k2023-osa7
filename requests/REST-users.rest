@@ -29,3 +29,13 @@ Content-Type: application/json
   "name": "Ylläpitäjä",
   "password": "salasana"
 }
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "liian-lyhyt-salasana",
+  "name": "Ylläpitäjä",
+  "password": "lo"
+}
