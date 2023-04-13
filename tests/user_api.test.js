@@ -43,8 +43,40 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
     })
 
     test('uutta käyttäjää samalla nimellä ei voida luoda ja pyyntö palauttaa koodin 400', async () => {
-        
-        expect(null).toBe(1)
+        const usersAtStart = await helper.usersInDb()
+
+        const badNewUser = {
+            username: 'testi-root',
+            name: 'Tätä Ei Tarvitsisi',
+            password: 'salasana',
+        }
+
+        const result = await await api.post('/api/users').send(badNewUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        //console.log(result.body.error)
+        //expect(result.body)
+    })
+
+    test('uutta käyttäjää samalla nimellä ei voida luoda ja pyyntö palauttaa oikean virheilmoituksen', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const badNewUser = {
+            username: 'testi-root',
+            name: 'Tätä Ei Tarvitsisi',
+            password: 'salasana',
+        }
+
+        const result = await api.post('/api/users').send(badNewUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        //console.log(result.body.error)
+        expect(result.body.error).toContain('expected `username` to be unique')
+
+        const usersAtEnd = await helper.usersInDb()
+        expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
 })
 
