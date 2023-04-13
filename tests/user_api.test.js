@@ -78,6 +78,25 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
         const usersAtEnd = await helper.usersInDb()
         expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
+    
+    describe('uutta käyttäjää ei voi luoda', () => {
+        test('jos käyttäjänimi on alle 3 merkkiä pitkä ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            expect(null).toBe(1)
+        })
+
+        test('jos salasana on alle 3 merkkiä pitkä ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            expect(null).toBe(1)
+        })
+
+        test('jos käyttäjänimi puuttuu ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            expect(null).toBe(1)
+        })
+
+        test('jos salasana puuttuu ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            expect(null).toBe(1)
+        })
+    })
+    
 })
 
 afterAll(async () => {
