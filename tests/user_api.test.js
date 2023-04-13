@@ -81,11 +81,43 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
     
     describe('uutta käyttäjää ei voi luoda', () => {
         test('jos käyttäjänimi on alle 3 merkkiä pitkä ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
-            expect(null).toBe(1)
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: 'ab',
+                name: 'Tätä Ei Tarvitsisi',
+                password: 'salasana',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            console.log(result.body.error)
+            expect(result.body.error).toContain(`Username must have at least 3 characters (given username was: '${badNewUser.username}')`)
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
 
         test('jos salasana on alle 3 merkkiä pitkä ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
-            expect(null).toBe(1)
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: 'yksikäsitteinen',
+                name: 'Tätä Ei Tarvitsisi',
+                password: 's',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            console.log(result.body.error)
+            expect(result.body.error).toContain(`Password must have at least 3 characters`)
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
 
         test('jos käyttäjänimi puuttuu ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
