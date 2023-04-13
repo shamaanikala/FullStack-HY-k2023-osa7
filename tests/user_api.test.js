@@ -180,8 +180,64 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
             expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
 
-        test('jos salasana puuttuu, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
-            expect(null).toBe(1)
+        test('jos salasana on tyhjä merkkijono, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: 'käyttäjänimi',
+                name: 'Tätä Ei Tarvitsisi',
+                password: '',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            console.log(result.body.error)
+            expect(result.body.error).toContain('`password` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        })
+
+        test('jos salasana on undefined, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: 'käyttäjänimi',
+                name: 'Tätä Ei Tarvitsisi',
+                password: undefined,
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            console.log(result.body.error)
+            expect(result.body.error).toContain('`password` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        })
+
+        test('jos käyttäjänimi on null, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: 'käyttäjänimi',
+                name: 'Tätä Ei Tarvitsisi',
+                password: null,
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            console.log(result.body.error)
+            expect(result.body.error).toContain('`password` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
     })
     
