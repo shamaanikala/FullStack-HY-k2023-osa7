@@ -193,7 +193,7 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            console.log(result.body.error)
+            //console.log(result.body.error)
             expect(result.body.error).toContain('`password` is required')
 
             const usersAtEnd = await helper.usersInDb()
@@ -213,7 +213,7 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            console.log(result.body.error)
+            //console.log(result.body.error)
             expect(result.body.error).toContain('`password` is required')
 
             const usersAtEnd = await helper.usersInDb()
@@ -233,7 +233,7 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            console.log(result.body.error)
+            //console.log(result.body.error)
             expect(result.body.error).toContain('`password` is required')
 
             const usersAtEnd = await helper.usersInDb()

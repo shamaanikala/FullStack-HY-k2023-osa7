@@ -68,3 +68,29 @@ Content-Type: application/json
   "username": "ei-salasanaa",
   "name": "Ylläpitäjä"
 }
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "Tyhjä-pw",
+  "name": "Tyhjä Merkkijono Salasanana",
+  "password": ""
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "",
+  "name": "Tyhjä Merkkijono Salasanana sekä käyttäjätunnuksena",
+  "password": ""
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{}
