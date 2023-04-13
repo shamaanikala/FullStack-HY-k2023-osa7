@@ -30,6 +30,7 @@ blogsRouter.post('/', async (request, response) => {
     //     body.userId = dummyUserId
     // }
     //console.log(request)
+    //console.log(request.rawHeaders)
     //console.log(body)
     const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
     
