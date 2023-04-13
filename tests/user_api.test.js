@@ -93,7 +93,7 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            console.log(result.body.error)
+            //console.log(result.body.error)
             expect(result.body.error).toContain(`Username must have at least 3 characters (given username was: '${badNewUser.username}')`)
 
             const usersAtEnd = await helper.usersInDb()
@@ -113,18 +113,74 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            console.log(result.body.error)
+            //console.log(result.body.error)
             expect(result.body.error).toContain(`Password must have at least 3 characters`)
 
             const usersAtEnd = await helper.usersInDb()
             expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
 
-        test('jos käyttäjänimi puuttuu ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
-            expect(null).toBe(1)
+        test('jos käyttäjänimi on tyhjä merkkijono, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: '',
+                name: 'Tätä Ei Tarvitsisi',
+                password: 'salasana',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            //console.log(result.body.error)
+            expect(result.body.error).toContain('`username` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
         })
 
-        test('jos salasana puuttuu ja pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+        test('jos käyttäjänimi on undefined, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: undefined,
+                name: 'Tätä Ei Tarvitsisi',
+                password: 'salasana',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            //console.log(result.body.error)
+            expect(result.body.error).toContain('`username` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        })
+
+        test('jos käyttäjänimi on null, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
+            const usersAtStart = await helper.usersInDb()
+
+            const badNewUser = {
+                username: null,
+                name: 'Tätä Ei Tarvitsisi',
+                password: 'salasana',
+            }
+
+            const result = await api.post('/api/users').send(badNewUser)
+                .expect(400)
+                .expect('Content-Type', /application\/json/)
+
+            //console.log(result.body.error)
+            expect(result.body.error).toContain('`username` is required')
+
+            const usersAtEnd = await helper.usersInDb()
+            expect(usersAtEnd).toHaveLength(usersAtStart.length)
+        })
+
+        test('jos salasana puuttuu, pyyntö palauttaa koodin 400 sekä oikean virheilmoituksen', async () => {
             expect(null).toBe(1)
         })
     })
