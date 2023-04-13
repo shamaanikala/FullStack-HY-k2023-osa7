@@ -21,6 +21,31 @@ describe('kun tietokannassa on jo yksi käyttäjä', () => {
 
         expect(usersInDb).toHaveLength(1)
     })
+
+    test('uuden käyttäjän voi lisätä, kun käyttäjänimi on käyttämätön', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'mluukkai',
+            name: 'Matti Luukkainen',
+            password: 'salainen',
+        }
+
+        await api.post('/api/users').send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+        const usernames = usersAtEnd.map(u => u.username)
+        expect(usernames).toContain(newUser.username)
+    })
+
+    test('uutta käyttäjää samalla nimellä ei voida luoda ja pyyntö palauttaa koodin 400', async () => {
+        
+        expect(null).toBe(1)
+    })
 })
 
 afterAll(async () => {
