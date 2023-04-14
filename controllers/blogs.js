@@ -5,13 +5,6 @@ const User = require('../models/user')
 
 const jwt = require('jsonwebtoken')
 
-// const getTokenFrom = request => {
-//     const authorization = request.get('authorization')
-//     if (authorization && authorization.startsWith('Bearer ')) {
-//         return authorization.replace('Bearer ', '')
-//     }
-//     return null
-// }
 
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -21,24 +14,11 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
     //const blog = new Blog(request.body)
     const body = request.body
-    // tilapäinen kovakoodattu userId T4.17
-    // if (!body.userId) {
-    //     const dummyUsers = await User.find({})
-    //     //console.log(dummyUsers)
-    //     const dummyUserId = dummyUsers[0]._id.toString()
-    //     //console.log(dummyUserId)
-    //     body.userId = dummyUserId
-    // }
-    //console.log(request)
-    //console.log(request.rawHeaders)
-    //console.log(body)
-    //const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-    //console.log(request.token)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     
-    //console.log(decodedToken)
     
     // tämä varmaan siirtyne middlewareen T4.20*
+    // mutta miten tämän voisi lähettää errorHandler?
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
