@@ -7,3 +7,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
     "url": "https://overreacted.io/things-i-dont-know-as-of-2018/",
     "author": "Dan Abramov"
 }
+
+###
+DELETE http://localhost:3003/api/blogs/64395359e3c56db7f3091723
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0MzZhMTZmNDA5ODBmMzI5ZjA4YjAxMCIsImlhdCI6MTY4MTQ3NjM3Nn0.YXUGUXJP3fLA5yOVo4LWmXc5BdSXXfVuRiXhVT6uxlw

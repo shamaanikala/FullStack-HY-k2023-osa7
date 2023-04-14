@@ -47,7 +47,28 @@ blogsRouter.delete('/:id', async (request, response) => {
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
+
+    const blogId = request.params.id
+    const blogToDelete = await Blog.findById(blogId)
+
+    // blogin luoneen käyttäjän tieto on tietokannassa muodossa:
+    // user: new ObjectId("6436a10e40980f329f08b00e")
+    const blogToDeleteCreator = blogToDelete.user.toString()
+
+    const deleterId = decodedToken.id.toString()
+
+    console.log(`id token: ${decodedToken.id}`)
+    console.log(`blogToDelete creator id: ${blogToDeleteCreator}`)
+    console.log(`userid tokenista: ${deleterId}`)
+    console.log(blogToDelete)
     
+    if (blogToDeleteCreator === deleterId) {
+        console.log('Tokenin ja blogin user.id on sama -> poistetaan')
+    } else {
+        console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
+        return response.status(401).json({ error: 'UserId wrong, cannot delete blog' })
+    }
+
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
 })
