@@ -38,143 +38,158 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         
     })
 
-    test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => {
-        const newBlog = {
-            title: "Parsing Html The Cthulhu Way",
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
-
-        await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
-        
-        const newBlogs = await helper.blogsInDb()
-        expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
-
-        const titles = newBlogs.map(blog => blog.title)
-        expect(titles).toContain('Parsing Html The Cthulhu Way')
-
-        const authors = newBlogs.map(blog => blog.author)
-        expect(authors).toContain('Jeff Atwood')
-
-        const urls = newBlogs.map(blog => blog.url)
-        expect(urls).toContain('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
+    describe('ilman tokenia POST pyynnössä', () => {
+        test('uuden blogin lisääminen ei onnistu ja vastauksena on statuskoodi 400 ja oikea virheilmoitus', async () => {
+            expect(null).toBe(1)
+        })
     })
 
-    test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän', async () => {
-        const newBlog = {
-            title: "Parsing Html The Cthulhu Way",
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
-
-        await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
-        
-        const newBlogs = await helper.blogsInDb()
-        expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
+    describe('ilman kunnollista tokenia POST-pyynnössä', () => {
+        test('uuden blogin lisääminen ei onnistu ja vastauksena on statuskoodi 401 ja oikea virheilmoitus', async () => {
+            expect(null).toBe(1)
+        })
     })
 
-    test('uuden lisätyn blogin likes-kentän arvo on annettu arvo', async () => {
-        const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-        const newBlog = {
-            title: uniqueName,
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
+    describe('kun lähetys tehdään kelvollisella tokenilla', () => {
+        test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => {
+            const newBlog = {
+                title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
 
-        await api.post('/api/blogs').send(newBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+            
+            const newBlogs = await helper.blogsInDb()
+            expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
 
-        const newBlogs = await helper.blogsInDb()
-        const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
-        //console.log(selectedBlog)
-        expect(selectedBlog.likes).toBe(1234)
-    })
+            const titles = newBlogs.map(blog => blog.title)
+            expect(titles).toContain('Parsing Html The Cthulhu Way')
 
-    test('jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', async () => {
-        const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-        const dummyBlog = {
-            title: uniqueName,
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-        }
+            const authors = newBlogs.map(blog => blog.author)
+            expect(authors).toContain('Jeff Atwood')
 
-        await api.post('/api/blogs').send(dummyBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
-        
-        // vai etsisikö suoraan oikean blogin?
-        const newBlogs = await helper.blogsInDb()
-        const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
-        expect(selectedBlog.likes).toBe(0)
-    })
+            const urls = newBlogs.map(blog => blog.url)
+            expect(urls).toContain('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
+        })
 
-    // T4.11* tarkistuksia
-    // vain undefined likes saa arvon 0 defaultista mongoosen kautta
-    test('jos kentälle likes annetaan null arvo, sen arvo on null', async () => {
-        const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-        const dummyBlog = {
-            title: uniqueName,
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: null
-        }
+        test('uuden blogin lisäämisen jäkeen blogeja löytyy tietokannasta yksi enemmän', async () => {
+            const newBlog = {
+                title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
 
-        await api.post('/api/blogs').send(dummyBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
-        
-        // vai etsisikö suoraan oikean blogin?
-        const newBlogs = await helper.blogsInDb()
-        const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
-        expect(selectedBlog.likes).toBe(null)
-    })
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+            
+            const newBlogs = await helper.blogsInDb()
+            expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
+        })
 
-    test('jos blogi ilman title-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
-        const newBlog = {
-            //title: "Parsing Html The Cthulhu Way",
-            author: "Jeff Atwood",
-            url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
+        test('uuden lisätyn blogin likes-kentän arvo on annettu arvo', async () => {
+            const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+            const newBlog = {
+                title: uniqueName,
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
 
-        await api.post('/api/blogs').send(newBlog)
-            .expect(400)
-    })
+            await api.post('/api/blogs').send(newBlog)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
 
-    test('jos blogi ilman url-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
-        const newBlog = {
-            title: "Parsing Html The Cthulhu Way",
-            author: "Jeff Atwood",
-            //url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
+            const newBlogs = await helper.blogsInDb()
+            const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
+            //console.log(selectedBlog)
+            expect(selectedBlog.likes).toBe(1234)
+        })
 
-        await api.post('/api/blogs').send(newBlog)
-            .expect(400)
-    })
+        test('jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', async () => {
+            const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+            const dummyBlog = {
+                title: uniqueName,
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
+            }
 
-    test('jos blogi ilman title- ja url-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
-        const newBlog = {
-            //title: "Parsing Html The Cthulhu Way",
-            author: "Jeff Atwood",
-            //url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-            likes: 1234
-        }
+            await api.post('/api/blogs').send(dummyBlog)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+            
+            // vai etsisikö suoraan oikean blogin?
+            const newBlogs = await helper.blogsInDb()
+            const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
+            expect(selectedBlog.likes).toBe(0)
+        })
 
-        await api.post('/api/blogs').send(newBlog)
-            .expect(400)
+        // T4.11* tarkistuksia
+        // vain undefined likes saa arvon 0 defaultista mongoosen kautta
+        test('jos kentälle likes annetaan null arvo, sen arvo on null', async () => {
+            const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+            const dummyBlog = {
+                title: uniqueName,
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: null
+            }
+
+            await api.post('/api/blogs').send(dummyBlog)
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+            
+            // vai etsisikö suoraan oikean blogin?
+            const newBlogs = await helper.blogsInDb()
+            const selectedBlog = newBlogs.find(blog => blog.title === uniqueName)
+            expect(selectedBlog.likes).toBe(null)
+        })
+
+        // TODO näihin virheilmoituksen tarkistukset
+        test('jos blogi ilman title-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
+            const newBlog = {
+                //title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
+
+            await api.post('/api/blogs').send(newBlog)
+                .expect(400)
+        })
+
+        test('jos blogi ilman url-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
+            const newBlog = {
+                title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                //url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
+
+            await api.post('/api/blogs').send(newBlog)
+                .expect(400)
+        })
+
+        test('jos blogi ilman title- ja url-kenttää yritetään lisätä, palvelin vastaa statuskoodilla 400 Bad Request', async () => {
+            const newBlog = {
+                //title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                //url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
+
+            await api.post('/api/blogs').send(newBlog)
+                .expect(400)
+        })
     })
 
     describe('testataan blogin muokkausta PUT avulla', () => {
