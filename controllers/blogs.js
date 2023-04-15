@@ -62,7 +62,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
         logger.info(`DELETE request to a blog without 'user' field`)
         logger.info(`- Blog: ${blogToDelete}`)
         logger.info(`- User from token: ${deleterId}`)
-        return response.status(500).json({ error: `Unable to finish the DELETE operation: missing user information` })
+        return response.status(500).json({ error: `Unable to finish the DELETE operation: missing user information from blog` })
     }
     const blogToDeleteCreator = blogToDelete.user.toString()
     
@@ -72,7 +72,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
         logger.info(`Unauthorized DELETE`)
         logger.info(`- from userId ${deleterId}`)
         logger.info(`- to blogId ${blogId} by userId ${blogToDeleteCreator}`)
-        return response.status(401).json({ error: 'UserId wrong, cannot delete blog' })
+        return response.status(401).json({ error: 'User cannot delete blog added by other user' })
     }
 
     await Blog.findByIdAndRemove(request.params.id)
