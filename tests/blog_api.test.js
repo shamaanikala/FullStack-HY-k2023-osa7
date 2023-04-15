@@ -345,7 +345,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
     
     describe('blogin poisto id:llä', () => {
         describe('ilman kelvollista tokenia pyynnon mukana', () => {
-            test('epäonnistuu ja vastauksena on statuskoodi 400 ja oikea virheilmoitus', async () => {
+            test('epäonnistuu ja vastauksena on statuskoodi 401 ja oikea virheilmoitus', async () => {
                 const newBlogId = await helper.addNewBlog()
                 const blogsAtStart = await helper.blogsInDb()
                 const blogToDelete = blogsAtStart.find(b => b.id === newBlogId)
@@ -353,7 +353,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
                 uniqueTitle = blogToDelete.title
                 
                 const result = await api.delete(`/api/blogs/${blogToDelete.id}`)
-                    .expect(400) // Bad Request
+                    .expect(401) // Bad Request
                 
                 expect(result.body.error).toContain('token missing or invalid')
     
@@ -361,12 +361,12 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
                 expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1) // mitään ei poisteta
             })
 
-            test('palauttaa myös 400, jos id:tä ei löydy tietokannasta', async () => {
+            test('palauttaa myös 401, jos id:tä ei löydy tietokannasta', async () => {
                 const blogs = await helper.blogsInDb()
                 const dummyId = 'dummyId-1234'
 
                 const result = await api.delete(`/api/blogs/${dummyId}`)
-                    .expect(400)
+                    .expect(401)
             })
         })
 
