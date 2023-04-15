@@ -378,7 +378,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
     
             likes = likes + 1
     
-            await api.put(`/api/blogs/${firstBlog.id}`)
+            const result = await api.put(`/api/blogs/${firstBlog.id}`)
                 .send({ likes })
                 .expect(401)
         })
@@ -395,7 +395,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
                 likes = likes + 1
     
 
-                await api
+                const result = await api
                     .put(`/api/blogs/${firstBlog.id}`)
                     .auth(mockToken, { type: 'bearer'}) // tässä pitää olla bearer pienellä
                     .send({ likes })

@@ -79,16 +79,47 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
     response.status(204).end()
 })
 
-blogsRouter.put('/:id', async (request, response) => {
-    const body = request.body
+blogsRouter.put('/:id', userExtractor, async (request, response) => {
+    const blogId = request.params.id
+    const blogToEdit = await Blog.findById(blogId)
+
+    if (!blogToEdit) {
+        //console.log('Id:llä ei löydy tietokannasta blogia')
+        logger.info(`(blogsRouter: put): ${Date()}`)
+        logger.info(`PUT request done with nonexisting id: ${blogId}`)
+        return response.status(404).end()
+    }
+
+    const editor = request.user
+    const editorId = editor.id
+
+    //const body = request.body
     const { title, author, url, likes } = request.body
+
+    if (!blogToEdit.user) {
+        logger.info(`(blogsRouter: put): ${Date()}`)
+        logger.info(`PUT request to a blog without 'user' field`)
+        logger.info(`- Blog: ${blogToEdit}`)
+        logger.info(`- User from token: ${editorId}`)
+        return response.status(500).json({ error: `Unable to finish the PUT operation: missing user information from blog` })
+    }
+    const blogToEditCreator = blogToEdit.user.toString()
+    
+    if (blogToEditCreator !== editorId) {
+        //console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
+        logger.info(`(blogsRouter: put): ${Date()}`)
+        logger.info(`Unauthorized PUT`)
+        logger.info(`- from userId ${editorId}`)
+        logger.info(`- to blogId ${blogId} by userId ${blogToEditCreator}`)
+        return response.status(401).json({ error: 'User cannot edit blog added by other user' })
+    }
 
     // tälle annetaan javascript-olio eikä Blog-olio
     // new parametri palauttaa muuttuneen olion kutsujalle
     //const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     const updatedBlog = await Blog.findByIdAndUpdate(
         request.params.id,
-        {title, author, url, likes},
+        {title, author, url, likes },
         { new: true, runValidators: true, context: 'query' })
     response.status(200).json(updatedBlog)
 })
