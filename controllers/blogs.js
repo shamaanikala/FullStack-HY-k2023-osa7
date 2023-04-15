@@ -4,6 +4,8 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const jwt = require('jsonwebtoken')
+const { requestLogger } = require('../utils/middleware')
+const logger = require('../utils/logger')
 
 
 blogsRouter.get('/', async (request, response) => {
@@ -50,6 +52,19 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     const blogId = request.params.id
     const blogToDelete = await Blog.findById(blogId)
+
+    // jos yritetään deletoida olemattomalla id:llä
+    // Palautetan tällöin statuskoodi 404 vaikka kurssimateriaali ei tästä mainitse:
+    // esim StackOverflow:
+    // https://stackoverflow.com/questions/6439416/status-code-when-deleting-a-resource-using-http-delete-for-the-second-time?noredirect=1&lq=1
+    // https://stackoverflow.com/questions/42865965/what-should-be-the-response-of-get-and-delete-methods-in-rest?noredirect=1&lq=1
+    // https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete
+    if (!blogToDelete) {
+        console.log('Id:llä ei löydy tietokannasta blogia')
+        console.log(blogToDelete)
+        logger.info(`${Date()} - Delete request done with nonexisting id: ${blogId}`)
+        return response.status(404).end()
+    }
 
     // blogin luoneen käyttäjän tieto on tietokannassa muodossa:
     // user: new ObjectId("6436a10e40980f329f08b00e")

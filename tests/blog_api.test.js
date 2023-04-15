@@ -192,20 +192,30 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         })
     })
     describe('blogin poisto id:llä', () => {
-        test('epäonnistuu ilman tokenia ja vastauksena on statuskoodi 400 ja oikea virheilmoitus', async () => {
-            const newBlogId = await helper.addNewBlog()
-            const blogsAtStart = await helper.blogsInDb()
-            const blogToDelete = blogsAtStart.find(b => b.id === newBlogId)
+        describe('ilman kelvollista tokenia pyynnon mukana', () => {
+            test('epäonnistuu ja vastauksena on statuskoodi 400 ja oikea virheilmoitus', async () => {
+                const newBlogId = await helper.addNewBlog()
+                const blogsAtStart = await helper.blogsInDb()
+                const blogToDelete = blogsAtStart.find(b => b.id === newBlogId)
+    
+                uniqueTitle = blogToDelete.title
+                
+                const result = await api.delete(`/api/blogs/${blogToDelete.id}`)
+                    .expect(400) // Bad Request
+                
+                expect(result.body.error).toContain('token missing or invalid')
+    
+                const blogsAtEnd = await helper.blogsInDb()
+                expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1) // mitään ei poisteta
+            })
 
-            uniqueTitle = blogToDelete.title
-            
-            const result = await api.delete(`/api/blogs/${blogToDelete.id}`)
-                .expect(400) // Bad Request
-            
-            expect(result.body.error).toContain('token missing or invalid')
+            test('palauttaa myös 400, jos id:tä ei löydy tietokannasta', async () => {
+                const blogs = await helper.blogsInDb()
+                const dummyId = 'dummyId-1234'
 
-            const blogsAtEnd = await helper.blogsInDb()
-            expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1) // mitään ei poisteta
+                const result = await api.delete(`/api/blogs/${dummyId}`)
+                    .expect(400)
+            })
         })
 
         describe('kun kelvollinen token on pyynnon mukana', () => {
