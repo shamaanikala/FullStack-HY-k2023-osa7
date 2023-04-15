@@ -223,6 +223,10 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 expect(null).toBe(1)
             })
 
+            test('palauttaa 404 jos kyseistä blogia ei löydy tietokannasta', async () => {
+                expect(null).toBe(1)
+            })
+
             test('onistuu jos userId vastaa blogin lisääjän userId (statuscode: 402)', async () => {
                 expect(null).toBe(1)
             })
