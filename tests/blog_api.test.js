@@ -369,36 +369,8 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
         })
     })
 
-    describe('testataan blogin muokkausta PUT avulla', () => {
-        test('blogin tykkäysten määrää voidaan kasvattaa yhdellä', async () => {
-            const blogList = await helper.blogsInDb()
-            const firstBlog = blogList[0]
-    
-            //console.log(firstBlog.id)
-            //console.log(`Liket alussa: ${firstBlog.likes}`)
-    
-            let { title, author, url, likes } = firstBlog
-    
-            likes = likes + 1
-    
-            //console.log({ title, author, url, likes})
-    
-            await api.put(`/api/blogs/${firstBlog.id}`)
-                .send({ title, author, url, likes })
-                .expect(200)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-    
-            //console.log(updatedFirstBlog.id)
-            //console.log(`Liket lopussa: ${updatedFirstBlog.likes}`)
-            
-            expect(updatedFirstBlog.id).toBe(firstBlog.id)
-            expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
-        })
-
-        test('blogin tykkäysten määrää voidaan kasvattaa yhdellä pelkkä likes pyynnössä', async () => {
+    describe('olemassaolevan blogin muokkaus PUT-pyynnöllä', () => {
+        test('epäonnistuu ilman kirjautumista/tokenia ja vastauksena on statuskoodi 401', async () => {
             const blogList = await helper.blogsInDb()
             const firstBlog = blogList[0]
     
@@ -408,114 +380,233 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
     
             await api.put(`/api/blogs/${firstBlog.id}`)
                 .send({ likes })
-                .expect(200)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-            
-            expect(updatedFirstBlog.id).toBe(firstBlog.id)
-            expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
+                .expect(401)
         })
 
-        test('blogin titlen muokkaaminen tyhjäksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDb()
-            const firstBlog = blogList[0]
+        describe('ilman kelvollista kirjautumista/tokenia', () => {
+            test('ei onnistu ja vastauksena on statuskoodi 401 ja oikea virheilmoitus', async () => {
+                // kunnollisessa tokenissa on id eikä userId
+                mockToken = jwt.sign({ username: 'testi-root', userId: 'abcd'}, process.env.SECRET)
+                
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+                let likes = firstBlog.likes
     
-            let title = firstBlog.title
+                likes = likes + 1
     
-            title = ''
 
-            await api.put(`/api/blogs/${firstBlog.id}`)
-                .send({ title })
-                .expect(400)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-            
-            expect(updatedFirstBlog.title).toBe(firstBlog.title)
+                await api
+                    .put(`/api/blogs/${firstBlog.id}`)
+                    .auth(mockToken, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                    .send({ likes })
+                    .expect(401)
+                    .expect('Content-Type', /application\/json/)
+            })
         })
 
-        test('blogin titlen muokkaaminen null epäonnistuu', async () => {
-            const blogList = await helper.blogsInDb()
-            const firstBlog = blogList[0]
-    
-            let title = firstBlog.title
-    
-            title = null
+        describe('kirjautuneena ja kelvollisella tokenilla blogin tykkäysten määrää', () => {
+            // oletettavasti oikeasti menisi toisin päin, eli käyttäjä ei itse voi tykätä omasta blogistaan
+            test('ei voida kasvattaa yhdellä, jos käyttäjän tokenin id ei vastaa blogin käyttäjätietoa (401)', async () => {
+                const newBlog = await helper.addBlogWithUniqueTitle()
 
-            await api.put(`/api/blogs/${firstBlog.id}`)
-                .send({ title })
-                .expect(400)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-            
-            expect(updatedFirstBlog.title).toBe(firstBlog.title)
+                const targetBlogId = newBlog.body.id
+
+                const targetBlog = Blog.findById(targetBlogId)
+                let likes = targetBlog.likes
+
+                //console.log(likes)
+    
+                likes = likes + 1
+
+                const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
+                const token = loginResponse.body.token
+
+
+                const result = await api.put(`/api/blogs/${targetBlogId}`)
+                    .auth(token, { type: 'bearer'})
+                    .send({ likes })
+                    .expect(401)
+                
+                expect(result.body.error).toContain('User cannot edit blog added by other user')
+            })
+
+            test('palauttaa 404 jos kyseistä blogia ei löydy tietokannasta', async () => {
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const targetBlogId = await helper.nonExistingBlogId()
+
+                const result = await api.put(`/api/blogs/${targetBlogId}`)
+                    .auth(newBlog.token, { type: 'bearer'})
+                    .set({ likes: 1 })
+                    .expect(404)
+            })
+
+            test('onnistuu jos userId vastaa blogin lisääjän userId (statuscode: 204)', async () => {
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const targetBlogId = newBlog.body.id
+
+                const targetBlog = Blog.findById(targetBlogId)
+                let likes = targetBlog.likes
+
+                console.log(likes)
+    
+                likes = likes + 1
+
+                await api.put(`/api/blogs/${targetBlogId}`)
+                    .auth(newBlog.token, { type: 'bearer'})
+                    .set({ likes })
+                    .expect(200)
+            })
+
+            test('voidaan kasvattaa yhdellä', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                //console.log(firstBlog.id)
+                //console.log(`Liket alussa: ${firstBlog.likes}`)
+        
+                let { title, author, url, likes } = firstBlog
+        
+                likes = likes + 1
+        
+                //console.log({ title, author, url, likes})
+        
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ title, author, url, likes })
+                    .expect(200)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+        
+                //console.log(updatedFirstBlog.id)
+                //console.log(`Liket lopussa: ${updatedFirstBlog.likes}`)
+                
+                expect(updatedFirstBlog.id).toBe(firstBlog.id)
+                expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
+            })
+    
+            test('voidaan kasvattaa yhdellä pelkkä likes pyynnössä', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                let likes = firstBlog.likes
+        
+                likes = likes + 1
+        
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ likes })
+                    .expect(200)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+                
+                expect(updatedFirstBlog.id).toBe(firstBlog.id)
+                expect(updatedFirstBlog.likes).toBe(firstBlog.likes + 1)
+            })
+    
+            test('blogin titlen muokkaaminen tyhjäksi epäonnistuu', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                let title = firstBlog.title
+        
+                title = ''
+    
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ title })
+                    .expect(400)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+                
+                expect(updatedFirstBlog.title).toBe(firstBlog.title)
+            })
+    
+            test('blogin titlen muokkaaminen null epäonnistuu', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                let title = firstBlog.title
+        
+                title = null
+    
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ title })
+                    .expect(400)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+                
+                expect(updatedFirstBlog.title).toBe(firstBlog.title)
+            })
+    
+            test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                let url = firstBlog.url
+        
+                url = ''
+        
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ url })
+                    .expect(400)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+                
+                expect(updatedFirstBlog.url).toBe(firstBlog.url)
+            })
+    
+            // tämä testi hajosi, kun asensin mongoose 7 ja mongoose-unique-validators
+            // melko turha testi, joten kommentoidaan pois
+            // test('blogin url:n muokkaaminen undefined epäonnistuu', async () => {
+            //     const blogList = await helper.blogsInDB()
+            //     const firstBlog = blogList[0]
+        
+            //     let url = firstBlog.url
+        
+            //     url = undefined
+        
+            //     await api.put(`/api/blogs/${firstBlog.id}`)
+            //         .send({ url })
+            //         .expect(400)
+            //         .expect('Content-Type', /application\/json/)
+                
+            //     const updatedBlogList = await helper.blogsInDB()
+            //     const updatedFirstBlog = updatedBlogList[0]
+                
+            //     expect(updatedFirstBlog.url).toBe(firstBlog.url)
+            // })
+    
+            test('blogin likejen muokkaaminen muuksi kuin lukuarvoksi epäonnistuu', async () => {
+                const blogList = await helper.blogsInDb()
+                const firstBlog = blogList[0]
+        
+                let likes = firstBlog.likes
+        
+                likes = 'malicious-link'
+        
+                await api.put(`/api/blogs/${firstBlog.id}`)
+                    .send({ likes })
+                    .expect(400)
+                    .expect('Content-Type', /application\/json/)
+                
+                const updatedBlogList = await helper.blogsInDb()
+                const updatedFirstBlog = updatedBlogList[0]
+                
+                expect(updatedFirstBlog.likes).toBe(firstBlog.likes)
+            })
+    
         })
-
-        test('blogin url:n muokkaaminen tyhjäksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDb()
-            const firstBlog = blogList[0]
-    
-            let url = firstBlog.url
-    
-            url = ''
-    
-            await api.put(`/api/blogs/${firstBlog.id}`)
-                .send({ url })
-                .expect(400)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-            
-            expect(updatedFirstBlog.url).toBe(firstBlog.url)
         })
-
-        // tämä testi hajosi, kun asensin mongoose 7 ja mongoose-unique-validators
-        // melko turha testi, joten kommentoidaan pois
-        // test('blogin url:n muokkaaminen undefined epäonnistuu', async () => {
-        //     const blogList = await helper.blogsInDB()
-        //     const firstBlog = blogList[0]
-    
-        //     let url = firstBlog.url
-    
-        //     url = undefined
-    
-        //     await api.put(`/api/blogs/${firstBlog.id}`)
-        //         .send({ url })
-        //         .expect(400)
-        //         .expect('Content-Type', /application\/json/)
-            
-        //     const updatedBlogList = await helper.blogsInDB()
-        //     const updatedFirstBlog = updatedBlogList[0]
-            
-        //     expect(updatedFirstBlog.url).toBe(firstBlog.url)
-        // })
-
-        test('blogin likejen muokkaaminen muuksi kuin lukuarvoksi epäonnistuu', async () => {
-            const blogList = await helper.blogsInDb()
-            const firstBlog = blogList[0]
-    
-            let likes = firstBlog.likes
-    
-            likes = 'malicious-link'
-    
-            await api.put(`/api/blogs/${firstBlog.id}`)
-                .send({ likes })
-                .expect(400)
-                .expect('Content-Type', /application\/json/)
-            
-            const updatedBlogList = await helper.blogsInDb()
-            const updatedFirstBlog = updatedBlogList[0]
-            
-            expect(updatedFirstBlog.likes).toBe(firstBlog.likes)
-        })
-
-    })
+        
     describe('testit, joissa tietokantaan lisätään yksi uusi blogi ennen testejä', () => {
         test('uusi blogi yksikäsitteisellä nimellä löytyy tietokannasta', async () => {
             const newBlogId = await helper.addNewBlog()
