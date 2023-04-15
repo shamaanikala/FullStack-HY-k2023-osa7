@@ -48,7 +48,7 @@ const errorHandler = (error,request,response,next) => {
         if (error.message === 'jwt must be provided') {
             logger.error(`Error: ${error.name}: ${error.message}`)
             //return response.status(400).send({ error: 'The token must be provided in the header.' })
-            return response.status(400).send({ error: 'token missing or invalid' })
+            return response.status(401).send({ error: 'token missing or invalid' })
             }
         }
     
