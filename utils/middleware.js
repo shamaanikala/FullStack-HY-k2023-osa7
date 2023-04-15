@@ -16,7 +16,7 @@ const requestLogger = (request, response, next) => {
 
 
 const errorHandler = (error,request,response,next) => {
-    logger.error(error)
+    //logger.error(error)
     logger.error(error.message)
 
     //logger.error(error)
