@@ -23,7 +23,8 @@ const errorHandler = (error,request,response,next) => {
 
     //logger.error(error)
     if (error.name === 'CastError') { // PUT
-        return response.status(400).send({ error: `Error while updating likes field: likes must be a number`})
+        //return response.status(400).send({ error: `Error while updating likes field: likes must be a number`})
+        return response.status(400).send({ error: `Error: ${error.name}: ${error.message}` })
     } else if (error.name === 'ValidationError') {
         // https://mongoosejs.com/docs/validation.html#validation-errors
         //console.log(error.errors)
