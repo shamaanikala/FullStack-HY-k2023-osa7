@@ -60,9 +60,10 @@ blogsRouter.delete('/:id', async (request, response) => {
     // https://stackoverflow.com/questions/42865965/what-should-be-the-response-of-get-and-delete-methods-in-rest?noredirect=1&lq=1
     // https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete
     if (!blogToDelete) {
-        console.log('Id:llä ei löydy tietokannasta blogia')
-        console.log(blogToDelete)
-        logger.info(`${Date()} - Delete request done with nonexisting id: ${blogId}`)
+        //console.log('Id:llä ei löydy tietokannasta blogia')
+        //console.log(blogToDelete)
+        logger.info(`(blogsRouter: delete): ${Date()}`)
+        logger.info(`DELETE request done with nonexisting id: ${blogId}`)
         return response.status(404).end()
     }
 
@@ -72,17 +73,21 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     const deleterId = decodedToken.id.toString()
 
-    console.log(`id token: ${decodedToken.id}`)
-    console.log(`blogToDelete creator id: ${blogToDeleteCreator}`)
-    console.log(`userid tokenista: ${deleterId}`)
-    console.log(blogToDelete)
+    // console.log(`id token: ${decodedToken.id}`)
+    // console.log(`blogToDelete creator id: ${blogToDeleteCreator}`)
+    // console.log(`userid tokenista: ${deleterId}`)
+    // console.log(blogToDelete)
     
     if (blogToDeleteCreator !== deleterId) {
-        console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
+        //console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
+        logger.info(`(blogsRouter: delete): ${Date()}`)
+        logger.info(`Unauthorized DELETE`)
+        logger.info(`- from userId ${deleterId}`)
+        logger.info(`- to blogId ${blogId} by userId ${blogToDeleteCreator}`)
         return response.status(401).json({ error: 'UserId wrong, cannot delete blog' })
-    } else {
-        console.log('Tokenin ja blogin user.id on sama -> poistetaan')
-    }
+    } //else {
+        //console.log('Tokenin ja blogin user.id on sama -> poistetaan')
+    //}
 
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
