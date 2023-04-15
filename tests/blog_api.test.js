@@ -4,6 +4,11 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+
+// auth testit:
+// https://github.com/ladjs/supertest/issues/398#issuecomment-814172046
 
 
 describe('testit joihin käytetään perus alustusdataa', () => {
@@ -13,6 +18,25 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
         const promiseArray = blogObjects.map(blog => blog.save())
         await Promise.all(promiseArray)
+
+        // uusi user
+        await User.deleteMany({})
+        const username = 'testi-root'
+        const passwordHash = await bcrypt.hash('salaisuus',10)
+        
+        const user = new User({ username: username, passwordHash: passwordHash })
+
+        await user.save()
+
+        // login
+        const loginResponse = await api.post(`/api/login`)
+            .send({ username: username, password: 'salaisuus' })
+        
+        //console.log(loginResponse.body.token)
+
+        //agent.auth(response.accessToken, { type: 'bearer' });
+        //api.auth(loginResponse.body.token, { type: 'Bearer'})
+
     })
 
     test('blogit palautetaan json muodossa', async () => {
@@ -39,14 +63,36 @@ describe('testit joihin käytetään perus alustusdataa', () => {
     })
 
     describe('ilman tokenia POST pyynnössä', () => {
-        test('uuden blogin lisääminen ei onnistu ja vastauksena on statuskoodi 400 ja oikea virheilmoitus', async () => {
-            expect(null).toBe(1)
+        test('uuden blogin lisääminen ei onnistu ja vastauksena on statuskoodi 401', async () => {
+            const newBlog = {
+                title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
+
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(401)
+                .expect('Content-Type', /application\/json/)
         })
     })
 
     describe('ilman kunnollista tokenia POST-pyynnössä', () => {
         test('uuden blogin lisääminen ei onnistu ja vastauksena on statuskoodi 401 ja oikea virheilmoitus', async () => {
-            expect(null).toBe(1)
+            const newBlog = {
+                title: "Parsing Html The Cthulhu Way",
+                author: "Jeff Atwood",
+                url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
+                likes: 1234
+            }
+
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(401)
+                .expect('Content-Type', /application\/json/)
         })
     })
 
