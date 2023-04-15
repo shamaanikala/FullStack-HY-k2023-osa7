@@ -284,6 +284,17 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 .send(newBlog)
                 .expect(400)
         })
+
+        describe('kun blogi on lisätty järjestelmään', () => {
+            
+            test('se on lisätty käyttäjän blogilistaan', async () => {
+                expect(null).toBe(1)
+            })
+
+            test('blogin lisänneen käyttäjän id on lisätty blogiin', async () => {
+                expect(null).toBe(1)
+            })
+        })
     })
     describe('blogin poisto id:llä', () => {
         describe('ilman kelvollista tokenia pyynnon mukana', () => {
