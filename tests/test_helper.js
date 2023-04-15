@@ -93,11 +93,12 @@ const addBlogWithUniqueTitle = async () => {
   const token = loginResponse.body.token
         
   const result = await api.post('/api/blogs')
-  .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
-  .send(dummyBlog)
-  .expect(201)      
-  .expect('Content-Type', /application\/json/)
+    .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+    .send(dummyBlog)
+    .expect(201)      
+    .expect('Content-Type', /application\/json/)
 
+    result.token = token
   return result
 }
 

@@ -29,6 +29,11 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
 
         await user.save()
 
+        // toinen user
+        const passwordHash2 = await bcrypt.hash('salasana2',10)
+        const user2 = new User({ username: 'toinen-käyttäjä', passwordHash: passwordHash2 })
+        await user2.save()
+
         // login
         // aina erikseen testeissä
         //const loginResponse = await api.post(`/api/login`)
@@ -136,22 +141,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
             })
     
             test('onnistuu ja sen jäkeen blogeja löytyy tietokannasta yksi enemmän', async () => {
-                const newBlog = {
-                    title: "Parsing Html The Cthulhu Way",
-                    author: "Jeff Atwood",
-                    url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/",
-                    likes: 1234
-                }
-    
-                const loginResponse = await helper.login('testi-root','salaisuus')
-                const token = loginResponse.body.token
-    
-                await api
-                    .post('/api/blogs')
-                    .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
-                    .send(newBlog)
-                    .expect(201)
-                    .expect('Content-Type', /application\/json/)
+                await helper.addBlogWithUniqueTitle()
                 
                 const newBlogs = await helper.blogsInDb()
                 expect(newBlogs).toHaveLength(helper.initialBlogs.length + 1)
@@ -183,21 +173,9 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
             })
     
             test('onnistuu ja jos kentälle likes ei anneta arvoa, sen arvoksi asetetaan 0 (nolla)', async () => {
-                const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-                const dummyBlog = {
-                    title: uniqueName,
-                    author: "Jeff Atwood",
-                    url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-                }
-    
-                const loginResponse = await helper.login('testi-root','salaisuus')
-                const token = loginResponse.body.token
-    
-                await api.post('/api/blogs')
-                    .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
-                    .send(dummyBlog)
-                    .expect(201)
-                    .expect('Content-Type', /application\/json/)
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const uniqueName = newBlog.body.title
                 
                 // vai etsisikö suoraan oikean blogin?
                 const newBlogs = await helper.blogsInDb()
@@ -290,47 +268,15 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
             describe('kun blogi on lisätty järjestelmään', () => {
                 
                 test('se on lisätty käyttäjän blogilistaan', async () => {
-                    const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-                    const dummyBlog = {
-                        title: uniqueName,
-                        author: "Jeff Atwood",
-                        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-                    }
-        
-                    const loginResponse = await helper.login('testi-root','salaisuus')
-                    const token = loginResponse.body.token
-        
-                    const result = await api.post('/api/blogs')
-                        .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
-                        .send(dummyBlog)
-                        .expect(201)
-                        .expect('Content-Type', /application\/json/)
-                    
+                    const newBlog = await helper.addBlogWithUniqueTitle()
                     
                     const user = await User.findOne({ username: 'testi-root'})
                     const userId = user._id.toString()
-                    // console.log(userId)
-                    // console.log(result.body.user)
 
-                    expect(userId).toBe(result.body.user)
+                    expect(userId).toBe(newBlog.body.user)
                 })
     
                 test('blogin lisänneen käyttäjän id on lisätty blogiin', async () => {
-                    // const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
-                    // const dummyBlog = {
-                    //     title: uniqueName,
-                    //     author: "Jeff Atwood",
-                    //     url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
-                    // }
-        
-                    // const loginResponse = await helper.login('testi-root','salaisuus')
-                    // const token = loginResponse.body.token
-        
-                    // const result = await api.post('/api/blogs')
-                    //     .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
-                    //     .send(dummyBlog)
-                    //     .expect(201)
-                    //     .expect('Content-Type', /application\/json/)
                     const newBlog = await helper.addBlogWithUniqueTitle()
                     
                     const user = await User.findOne({ username: 'testi-root'})
@@ -372,20 +318,53 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
         })
 
         describe('kun kelvollinen token on pyynnon mukana', () => {
-            test('epäonnistuu jos userId ei vastaa lisääjän userId ja vastauksena on 400 ja oikea virheilmoitus', async () => {
-                expect(null).toBe(1)
+            test('epäonnistuu jos userId ei vastaa lisääjän userId ja vastauksena on 401 ja oikea virheilmoitus', async () => {
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const targetBlogId = newBlog.body.id
+
+                const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
+                const token = loginResponse.body.token
+
+
+                const result = await api.delete(`/api/blogs/${targetBlogId}`)
+                    .auth(token, { type: 'bearer'})
+                    .expect(401)
+                
+                expect(result.body.error).toContain('User cannot delete blog added by other user')
             })
 
             test('palauttaa 404 jos kyseistä blogia ei löydy tietokannasta', async () => {
-                expect(null).toBe(1)
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const targetBlogId = await helper.nonExistingBlogId()
+
+                const result = await api.delete(`/api/blogs/${targetBlogId}`)
+                    .auth(newBlog.token, { type: 'bearer'})
+                    .expect(404)
             })
 
-            test('onistuu jos userId vastaa blogin lisääjän userId (statuscode: 402)', async () => {
-                expect(null).toBe(1)
+            test('onistuu jos userId vastaa blogin lisääjän userId (statuscode: 204)', async () => {
+                const newBlog = await helper.addBlogWithUniqueTitle()
+
+                const targetBlogId = newBlog.body.id
+
+                await api.delete(`/api/blogs/${targetBlogId}`)
+                    .auth(newBlog.token, { type: 'bearer'})
+                    .expect(204)
             })
 
             test('jos blogilla ei ole user kenttää, vastataan statuskoodin 500 ja annetaan oikea virheilmoitus', async () => {
-                expect(null).toBe(1)
+                const newBlogId = await helper.addNewBlog()
+
+                const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
+                const token = loginResponse.body.token
+
+                const result = await api.delete(`/api/blogs/${newBlogId}`)
+                    .auth(token, { type: 'bearer' })
+                    .expect(500)
+
+                expect(result.body.error).toContain('Unable to finish the DELETE operation: missing user information from blog')
             })
         })
     })
