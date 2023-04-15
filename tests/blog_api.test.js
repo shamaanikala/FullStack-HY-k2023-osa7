@@ -290,11 +290,52 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
             describe('kun blogi on lisätty järjestelmään', () => {
                 
                 test('se on lisätty käyttäjän blogilistaan', async () => {
-                    expect(null).toBe(1)
+                    const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+                    const dummyBlog = {
+                        title: uniqueName,
+                        author: "Jeff Atwood",
+                        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
+                    }
+        
+                    const loginResponse = await helper.login('testi-root','salaisuus')
+                    const token = loginResponse.body.token
+        
+                    const result = await api.post('/api/blogs')
+                        .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                        .send(dummyBlog)
+                        .expect(201)
+                        .expect('Content-Type', /application\/json/)
+                    
+                    
+                    const user = await User.findOne({ username: 'testi-root'})
+                    const userId = user._id.toString()
+                    // console.log(userId)
+                    // console.log(result.body.user)
+
+                    expect(userId).toBe(result.body.user)
                 })
     
                 test('blogin lisänneen käyttäjän id on lisätty blogiin', async () => {
-                    expect(null).toBe(1)
+                    const uniqueName = `Parsing Html The Cthulhu Way - ${Date.now()}`
+                    const dummyBlog = {
+                        title: uniqueName,
+                        author: "Jeff Atwood",
+                        url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
+                    }
+        
+                    const loginResponse = await helper.login('testi-root','salaisuus')
+                    const token = loginResponse.body.token
+        
+                    const result = await api.post('/api/blogs')
+                        .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                        .send(dummyBlog)
+                        .expect(201)
+                        .expect('Content-Type', /application\/json/)
+                    
+                    const user = await User.findOne({ username: 'testi-root'})
+                    const userBlogs = user.blogs.map(b => b.toString())
+
+                    expect(userBlogs).toContain(result.body.id)
                 })
             })
         })
