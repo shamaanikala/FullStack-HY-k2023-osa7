@@ -62,11 +62,11 @@ blogsRouter.delete('/:id', async (request, response) => {
     console.log(`userid tokenista: ${deleterId}`)
     console.log(blogToDelete)
     
-    if (blogToDeleteCreator === deleterId) {
-        console.log('Tokenin ja blogin user.id on sama -> poistetaan')
-    } else {
+    if (blogToDeleteCreator !== deleterId) {
         console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
         return response.status(401).json({ error: 'UserId wrong, cannot delete blog' })
+    } else {
+        console.log('Tokenin ja blogin user.id on sama -> poistetaan')
     }
 
     await Blog.findByIdAndRemove(request.params.id)

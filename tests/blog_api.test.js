@@ -207,6 +207,16 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             const blogsAtEnd = await helper.blogsInDb()
             expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1) // mitään ei poisteta
         })
+
+        describe('kun kelvollinen token on pyynnon mukana', () => {
+            test('epäonnistuu jos userId ei vastaa lisääjän userId ja vastauksena on 400 ja oikea virheilmoitus', async () => {
+                expect(null).toBe(1)
+            })
+
+            test('onistuu jos userId vastaa blogin lisääjän userId (statuscode: 402)', async () => {
+                expect(null).toBe(1)
+            })
+        })
     })
 
     describe('testataan blogin muokkausta PUT avulla', () => {
