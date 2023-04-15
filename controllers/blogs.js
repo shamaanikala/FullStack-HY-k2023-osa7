@@ -69,9 +69,20 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     // blogin luoneen käyttäjän tieto on tietokannassa muodossa:
     // user: new ObjectId("6436a10e40980f329f08b00e")
+
+    // jos jostain syystä tietokannasta löytyy blogi ilman
+    // user kenttää, heittää palvelin tässä kohtaa silloin 500
+    const deleterId = decodedToken.id.toString()
+    if (!blogToDelete.user) {
+        logger.info(`(blogsRouter: delete): ${Date()}`)
+        logger.info(`DELETE request to a blog without 'user' field`)
+        logger.info(`- Blog: ${blogToDelete}`)
+        logger.info(`- User from token: ${deleterId}`)
+        return response.status(500).json({ error: `Unable to finish the DELETE operation: missing user information` })
+    }
     const blogToDeleteCreator = blogToDelete.user.toString()
 
-    const deleterId = decodedToken.id.toString()
+    //const deleterId = decodedToken.id.toString()
 
     // console.log(`id token: ${decodedToken.id}`)
     // console.log(`blogToDelete creator id: ${blogToDeleteCreator}`)
