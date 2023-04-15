@@ -44,12 +44,12 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     response.status(201).json(savedBLog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+    // const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-    if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })
-    }
+    // if (!decodedToken.id) {
+    //     return response.status(401).json({ error: 'token invalid' })
+    // }
 
     const blogId = request.params.id
     const blogToDelete = await Blog.findById(blogId)
@@ -73,7 +73,10 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     // jos jostain syystä tietokannasta löytyy blogi ilman
     // user kenttää, heittää palvelin tässä kohtaa silloin 500
-    const deleterId = decodedToken.id.toString()
+    //const deleterId = decodedToken.id.toString()
+    const deleter = request.user
+    const deleterId = deleter.id
+    
     if (!blogToDelete.user) {
         logger.info(`(blogsRouter: delete): ${Date()}`)
         logger.info(`DELETE request to a blog without 'user' field`)
