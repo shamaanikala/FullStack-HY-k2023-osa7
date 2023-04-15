@@ -6,6 +6,7 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 // auth testit:
 // https://github.com/ladjs/supertest/issues/398#issuecomment-814172046
@@ -89,8 +90,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
+            // kunnollisessa tokenissa on id eikä userId
+            mockToken = jwt.sign({ username: 'testi-root', userId: 'abcd'}, process.env.SECRET)
+
             await api
                 .post('/api/blogs')
+                .auth(mockToken, { type: 'bearer'}) // tässä pitää olla bearer pienellä
                 .send(newBlog)
                 .expect(401)
                 .expect('Content-Type', /application\/json/)
@@ -139,8 +144,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
             await api
                 .post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -158,7 +167,13 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
-            await api.post('/api/blogs').send(newBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
 
@@ -176,7 +191,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 url: "https://blog.codinghorror.com/parsing-html-the-cthulhu-way/"
             }
 
-            await api.post('/api/blogs').send(dummyBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                .send(dummyBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
             
@@ -197,7 +217,13 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: null
             }
 
-            await api.post('/api/blogs').send(dummyBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                .send(dummyBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
             
@@ -216,7 +242,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
-            await api.post('/api/blogs').send(newBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä    
+                .send(newBlog)
                 .expect(400)
         })
 
@@ -228,7 +259,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
-            await api.post('/api/blogs').send(newBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                .send(newBlog)
                 .expect(400)
         })
 
@@ -240,7 +276,12 @@ describe('testit joihin käytetään perus alustusdataa', () => {
                 likes: 1234
             }
 
-            await api.post('/api/blogs').send(newBlog)
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            const token = loginResponse.body.token
+
+            await api.post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
+                .send(newBlog)
                 .expect(400)
         })
     })
