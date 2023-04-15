@@ -230,6 +230,10 @@ describe('testit joihin käytetään perus alustusdataa', () => {
             test('onistuu jos userId vastaa blogin lisääjän userId (statuscode: 402)', async () => {
                 expect(null).toBe(1)
             })
+
+            test('jos blogilla ei ole user kenttää, vastataan statuskoodin 500 ja annetaan oikea virheilmoitus', async () => {
+                expect(null).toBe(1)
+            })
         })
     })
 
