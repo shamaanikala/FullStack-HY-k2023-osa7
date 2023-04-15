@@ -1,5 +1,8 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const supertest = require('supertest')
+const app = require('../app')
+const api = supertest(app)
 
 // https://raw.githubusercontent.com/fullstack-hy2020/misc/master/blogs_for_test.md
 const initialBlogs = [
@@ -71,10 +74,18 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const login = async (username, password) => {
+  const loginResponse = await api.post(`/api/login`)
+    .send({ username: username, password: password })
+
+    return loginResponse
+}
+
 module.exports = {
     initialBlogs,
     blogsInDb,
     nonExistingBlogId,
     addNewBlog,
-    usersInDb
+    usersInDb,
+    login
 }

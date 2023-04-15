@@ -29,14 +29,15 @@ describe('testit joihin käytetään perus alustusdataa', () => {
         await user.save()
 
         // login
-        const loginResponse = await api.post(`/api/login`)
-            .send({ username: username, password: 'salaisuus' })
+        // aina erikseen testeissä
+        //const loginResponse = await api.post(`/api/login`)
+        //    .send({ username: username, password: 'salaisuus' })
         
+        //console.log(api)
         //console.log(loginResponse.body.token)
 
         //agent.auth(response.accessToken, { type: 'bearer' });
         //api.auth(loginResponse.body.token, { type: 'Bearer'})
-
     })
 
     test('blogit palautetaan json muodossa', async () => {
@@ -98,6 +99,11 @@ describe('testit joihin käytetään perus alustusdataa', () => {
 
     describe('kun lähetys tehdään kelvollisella tokenilla', () => {
         test('uuden blogin lisäämisen jälkeen se löytyy tietokannasta', async () => {
+
+            const loginResponse = await helper.login('testi-root','salaisuus')
+            //console.log(loginResponse.body.token)
+            const token = loginResponse.body.token
+
             const newBlog = {
                 title: "Parsing Html The Cthulhu Way",
                 author: "Jeff Atwood",
@@ -107,6 +113,7 @@ describe('testit joihin käytetään perus alustusdataa', () => {
 
             await api
                 .post('/api/blogs')
+                .auth(token, { type: 'bearer'}) // tässä pitää olla bearer pienellä
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
