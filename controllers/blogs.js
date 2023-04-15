@@ -4,7 +4,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const jwt = require('jsonwebtoken')
-const { requestLogger } = require('../utils/middleware')
+const { requestLogger, userExtractor } = require('../utils/middleware')
 const logger = require('../utils/logger')
 
 
@@ -13,20 +13,21 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
     //const blog = new Blog(request.body)
     const body = request.body
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    //const decodedToken = jwt.verify(request.token, process.env.SECRET)
     
     
     // tämä varmaan siirtyne middlewareen T4.20*
     // mutta miten tämän voisi lähettää errorHandler?
-    if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })
-    }
+    // if (!decodedToken.id) {
+    //     return response.status(401).json({ error: 'token invalid' })
+    // }
     
     //const user = await User.findById(body.userId)
-    const user = await User.findById(decodedToken.id)
+    //const user = await User.findById(decodedToken.id)
+    const user = request.user
 
     const blog = new Blog({
         title: body.title,
