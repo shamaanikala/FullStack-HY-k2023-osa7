@@ -54,6 +54,8 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
+      // TODO Tarkista, että tokeni on kunnollinen ja käyttäjä löytyy
+      // oikeasti tietokannasta
       setUser(user)
     }
   }, [])
