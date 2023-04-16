@@ -44,6 +44,14 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -54,12 +62,22 @@ const App = () => {
       })
       console.log(`${username} kirjautumassa`)
       console.log(`token: ${user.token}`)
+      
+      window.localStorage.setItem(
+        'loggedBloglistUser', JSON.stringify(user)
+      )
       setUser(user)
       setUsername('')
       setPassword('')
     } catch(exception) {
       console.log('wrong credentials')
     }
+  }
+
+  const handleLogout = (event) => {
+    event.preventDefault()
+
+
   }
 
 
