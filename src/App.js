@@ -32,6 +32,12 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
+const Logout = ({ handleLogout }) => {
+  return (
+    <button type="submit" onClick={handleLogout}>logout</button>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -77,7 +83,12 @@ const App = () => {
   const handleLogout = (event) => {
     event.preventDefault()
 
-
+    if (window.localStorage.getItem('loggedBloglistUser')) {
+      console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
+      window.localStorage.removeItem('loggedBloglistUser')
+    }
+    setUser(null)
+    console.log('Käyttäjä kirjattu ulos')
   }
 
 
@@ -92,7 +103,7 @@ const App = () => {
       />}
       {user && <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
