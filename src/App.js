@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import loginService from './services/login'
 
 const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }) => {
   return(
@@ -44,6 +45,18 @@ const App = () => {
     event.preventDefault()
 
     console.log('Login käyntiin')
+    try {
+      const user = await loginService.login({
+        username, password
+      })
+      console.log(`${username} kirjautumassa`)
+      console.log(`token: ${user.token}`)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch(exception) {
+      console.log('wrong credentials')
+    }
   }
 
 
