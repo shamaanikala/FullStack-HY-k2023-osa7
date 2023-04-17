@@ -69,4 +69,35 @@ describe('jos POST-pyynnössä on kelvollinen token', () => {
             .expect(200)
             .expect('Content-Type', /application\/json/)        
     })
+
+    test('verify-token palauttaa 401, jos käyttäjä on vaihtanut username', async () => {
+        const user = { username: 'testi-root', password: 'salaisuus' }
+        const loginResponse = await helper.login(user.username, user.password)
+        const token = loginResponse.body.token
+
+        const mockUser = { username: 'toinen-käyttäjä'}
+
+        const result = await api
+            .post('/api/login/verify-token')
+            .auth(token, { type: 'bearer' }) // tässä pitää olla bearer pienellä
+            .send(mockUser)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)        
+    })
+
+    test('voiko käyttää vanhaa omaa tokenia', async () => {
+        const user = { username: 'testi-root', password: 'salaisuus' }
+        const loginResponse = await helper.login(user.username, user.password)
+        const oldToken = loginResponse.body.token
+
+        const newLoginResponse = await helper.login(user.username, user.password)
+        const token = loginResponse.body.token
+
+        const result = await api
+            .post('/api/login/verify-token')
+            .auth(oldToken, { type: 'bearer' }) // tässä pitää olla bearer pienellä
+            .send({ username: user.username })
+            .expect(401)
+            .expect('Content-Type', /application\/json/) 
+    })
 })
