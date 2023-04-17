@@ -121,8 +121,7 @@ const App = () => {
           setUser(user)
           blogService.setToken(user.token)
         } catch(exception) {
-          //console.log(exception)
-          //console.log('Poistetaan viallinen token')
+          console.log(exception)
           // jos huomataan huono token, poistetaan se localStoragesta
           logout(setUser)
         }
@@ -134,13 +133,13 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    console.log('Login käyntiin')
+    //console.log('Login käyntiin')
     try {
       const user = await loginService.login({
         username, password
       })
-      console.log(`${username} kirjautumassa`)
-      console.log(`token: ${user.token}`)
+      //console.log(`${username} kirjautumassa`)
+      //console.log(`token: ${user.token}`)
       
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
@@ -171,18 +170,18 @@ const App = () => {
   const handleCreateNew = async (event) => {
     event.preventDefault()
 
-    console.log(`create painettu, lähetetään uusi blogi:`)
-    console.log(`title: ${title}`)
-    console.log(`author: ${author}`)
-    console.log(`url: ${url}`)
+    // console.log(`create painettu, lähetetään uusi blogi:`)
+    // console.log(`title: ${title}`)
+    // console.log(`author: ${author}`)
+    // console.log(`url: ${url}`)
 
     const blogObject = { title, author, url }
-    console.log(blogObject)
+    // console.log(blogObject)
     try {
       const newBlog = await blogService
         .create(blogObject)
 
-      console.log('uusi blogi tehty')
+      //console.log('uusi blogi tehty')
       setBlogs(blogs.concat(newBlog))
       setTitle('')
       setAuthor('')
@@ -191,10 +190,6 @@ const App = () => {
       console.log('Adding new blog failed')
       console.log(exception)
     }
-
-
-
-    
   }
 
   return (
