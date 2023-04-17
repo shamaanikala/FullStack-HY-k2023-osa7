@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
 
 const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }) => {
   return(
     <>
-      <h2>log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -70,6 +70,21 @@ const CreateNewForm = ({ handleCreateNew, title, setTitle, author, setAuthor, ur
   )
 }
 
+// tyyppi joko annetaan literaalina tai
+// käytin osa2 puhelinluetteloon omaa useState tyypille
+const Notification = ({ message, type }) => {
+  console.log(type)
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={type}>
+      {message}
+    </div>
+  )
+}
+
 const Logout = ({ handleLogout }) => {
   return (
     <button type="submit" onClick={handleLogout}>logout</button>
@@ -98,6 +113,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -133,13 +150,10 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    //console.log('Login käyntiin')
     try {
       const user = await loginService.login({
         username, password
       })
-      //console.log(`${username} kirjautumassa`)
-      //console.log(`token: ${user.token}`)
       
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
@@ -149,7 +163,14 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch(exception) {
+      console.log(exception)
       console.log('wrong credentials')
+      setErrorMessage(
+        `wrong username or password`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -157,23 +178,11 @@ const App = () => {
 
   const handleLogout = (event) => {
     event.preventDefault()
-
-    // if (window.localStorage.getItem('loggedBloglistUser')) {
-    //   console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
-    //   window.localStorage.removeItem('loggedBloglistUser')
-    // }
-    // setUser(null)
-    // console.log('Käyttäjä kirjattu ulos')
     logout(setUser)
   }
 
   const handleCreateNew = async (event) => {
     event.preventDefault()
-
-    // console.log(`create painettu, lähetetään uusi blogi:`)
-    // console.log(`title: ${title}`)
-    // console.log(`author: ${author}`)
-    // console.log(`url: ${url}`)
 
     const blogObject = { title, author, url }
     // console.log(blogObject)
@@ -183,6 +192,12 @@ const App = () => {
 
       //console.log('uusi blogi tehty')
       setBlogs(blogs.concat(newBlog))
+      setNotificationMessage(
+        `a new blog ${title} by ${author} added`
+      )
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -194,15 +209,29 @@ const App = () => {
 
   return (
     <div>
-      {!user && <LoginForm 
-        handleLogin={handleLogin}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-      />}
+      {!user && <div>
+        <h2>log in to application</h2>
+        <Notification
+          message={errorMessage}
+          type={'error'}
+        />
+        <LoginForm 
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
+        </div>}
       {user && <div>
       <h2>blogs</h2>
+      <Notification
+        message={errorMessage}
+      />
+      <Notification
+          message={notificationMessage}
+          type={'blogAdded'}
+         />
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
       <CreateNewForm
