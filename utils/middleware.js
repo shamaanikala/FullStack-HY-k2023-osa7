@@ -50,8 +50,11 @@ const errorHandler = (error,request,response,next) => {
             logger.error(`Error: ${error.name}: ${error.message}`)
             //return response.status(400).send({ error: 'The token must be provided in the header.' })
             return response.status(401).send({ error: 'token missing or invalid' })
-            }
-        }
+        } else if (error.message === 'invalid signature') {
+            logger.error(`Error: ${error.name}: ${error.message}`)
+            return response.status(401).send({ error: 'token invalid' })
+        } 
+    }
     
     next(error)
 }
@@ -73,8 +76,8 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
+    console.log(`userExtractor: ${request.token}`)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    
     if (!decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' })
     }
