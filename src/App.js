@@ -119,6 +119,7 @@ const App = () => {
           await loginService.verify(
             { username: user.username },config)
           setUser(user)
+          blogService.setToken(user.token)
         } catch(exception) {
           //console.log(exception)
           //console.log('Poistetaan viallinen token')
@@ -144,6 +145,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -166,7 +168,7 @@ const App = () => {
     logout(setUser)
   }
 
-  const handleCreateNew = (event) => {
+  const handleCreateNew = async (event) => {
     event.preventDefault()
 
     console.log(`create painettu, lähetetään uusi blogi:`)
@@ -174,9 +176,25 @@ const App = () => {
     console.log(`author: ${author}`)
     console.log(`url: ${url}`)
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    const blogObject = { title, author, url }
+    console.log(blogObject)
+    try {
+      const newBlog = await blogService
+        .create(blogObject)
+
+      console.log('uusi blogi tehty')
+      setBlogs(blogs.concat(newBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (exception) {
+      console.log('Adding new blog failed')
+      console.log(exception)
+    }
+
+
+
+    
   }
 
   return (
