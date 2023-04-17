@@ -17,3 +17,14 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.logout {
+    color: black;
+    font-style: italic;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}

@@ -179,6 +179,10 @@ const App = () => {
   const handleLogout = (event) => {
     event.preventDefault()
     logout(setUser)
+    setNotificationMessage(`user logged out`)
+    setTimeout(() => {
+      setNotificationMessage(null)
+    },1500)
   }
 
   const handleCreateNew = async (event) => {
@@ -204,11 +208,19 @@ const App = () => {
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
+      setErrorMessage(`Failed to add a new blog: ${exception.response.data.error}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   return (
     <div>
+      <Notification
+          message={notificationMessage}
+          type={'logout'}
+        />
       {!user && <div>
         <h2>log in to application</h2>
         <Notification
@@ -227,6 +239,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification
         message={errorMessage}
+        type={'error'}
       />
       <Notification
           message={notificationMessage}
