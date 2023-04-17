@@ -32,11 +32,11 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-const CreateNewForm = ({ handleCreate, title, setTitle, author, setAuthor, url, setUrl }) => {
+const CreateNewForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
   return(
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleCreate}>
+      <form onSubmit={handleCreateNew}>
         <div>
           title:
           <input
@@ -95,6 +95,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -163,6 +166,18 @@ const App = () => {
     logout(setUser)
   }
 
+  const handleCreateNew = (event) => {
+    event.preventDefault()
+
+    console.log(`create painettu, lähetetään uusi blogi:`)
+    console.log(`title: ${title}`)
+    console.log(`author: ${author}`)
+    console.log(`url: ${url}`)
+
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
 
   return (
     <div>
@@ -178,6 +193,13 @@ const App = () => {
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
       <CreateNewForm
+        handleCreateNew={handleCreateNew}
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        url={url}
+        setUrl={setUrl}
       />
       
       {blogs.map(blog =>
