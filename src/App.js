@@ -38,6 +38,20 @@ const Logout = ({ handleLogout }) => {
   )
 }
 
+// tämä App ulkopuolelle, ettei valiteta
+// React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array
+// t. https://overreacted.io/a-complete-guide-to-useeffect/
+const logout = (setUser) => {
+  if (window.localStorage.getItem('loggedBloglistUser')) {
+    // if (user) {
+    //   console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
+    // }
+    window.localStorage.removeItem('loggedBloglistUser')
+  }
+  setUser(null)
+  console.log('Käyttäjä kirjattu ulos')
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -53,10 +67,25 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      // TODO Tarkista, että tokeni on kunnollinen ja käyttäjä löytyy
-      // oikeasti tietokannasta
-      setUser(user)
+      const verifyUserToken = async () => {
+        const user = JSON.parse(loggedUserJSON)
+        //console.log(`Tehdään verify ${user.username} ${user.token}`)
+        const token = `Bearer ${user.token}`
+        const config = {
+          headers: { Authorization: token}
+        }
+        try {
+          await loginService.verify(
+            { username: user.username },config)
+          setUser(user)
+        } catch(exception) {
+          //console.log(exception)
+          //console.log('Poistetaan viallinen token')
+          // jos huomataan huono token, poistetaan se localStoragesta
+          logout(setUser)
+        }
+      }
+      verifyUserToken()
     }
   }, [])
 
@@ -82,15 +111,18 @@ const App = () => {
     }
   }
 
+  
+
   const handleLogout = (event) => {
     event.preventDefault()
 
-    if (window.localStorage.getItem('loggedBloglistUser')) {
-      console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
-      window.localStorage.removeItem('loggedBloglistUser')
-    }
-    setUser(null)
-    console.log('Käyttäjä kirjattu ulos')
+    // if (window.localStorage.getItem('loggedBloglistUser')) {
+    //   console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
+    //   window.localStorage.removeItem('loggedBloglistUser')
+    // }
+    // setUser(null)
+    // console.log('Käyttäjä kirjattu ulos')
+    logout(setUser)
   }
 
 
