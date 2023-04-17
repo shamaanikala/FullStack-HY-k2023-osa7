@@ -95,7 +95,7 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
                 }
     
                 // kunnollisessa tokenissa on id eikä userId
-                mockToken = jwt.sign({ username: 'testi-root', userId: 'abcd'}, process.env.SECRET)
+                const mockToken = jwt.sign({ username: 'testi-root', userId: 'abcd'}, process.env.SECRET)
     
                 await api
                     .post('/api/blogs')
