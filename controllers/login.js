@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
-const { userExtractor } = require('../utils/middleware')
+const logger = require('../utils/logger')
 
 loginRouter.post('/', async (request, response) => {
     const { username, password } = request.body
@@ -33,11 +33,21 @@ loginRouter.post('/', async (request, response) => {
 })
 
 // oma funktio T5.2
-loginRouter.post('/verify-token', userExtractor, async (request, response) => {
-    const verifiedUser = request.user
-    if (verifiedUser) {
-        response.status(200).send({ verifiedUser })
+loginRouter.post('/verify-token', async (request, response) => {
+    const username = request.body.username
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
     }
+
+    // tarkistus, jos joku vaihtaa usernamen
+    if (username !== decodedToken.username) {
+        logger.info('login.js: verify-token: request.body.username differs from token.username!')
+        logger.info(`${username}, ${decodedToken.username}`)
+        logger.info(Date())
+        return response.status(401).json({ error: 'token invalid' })
+    }
+    return response.status(200).send({ username })
 })
 
 module.exports = loginRouter

@@ -82,14 +82,6 @@ const userExtractor = async (request, response, next) => {
         return response.status(401).json({ error: 'token invalid' })
     }
 
-    // tarkistus, jos joku vaihtaa usernamen
-    if (request.body.username !== decodedToken.username) {
-        logger.info('userExtractor: request.body.username differs from token.username!')
-        logger.info(`${request.body.username}, ${decodedToken.username}`)
-        logger.info(Date())
-        return response.status(401).json({ error: 'token invalid' })
-    }
-
     //console.log(decodedToken)
     //console.log(request.body)
     const user = await User.findById(decodedToken.id)

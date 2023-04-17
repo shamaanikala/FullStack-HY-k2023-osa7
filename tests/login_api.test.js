@@ -61,6 +61,7 @@ describe('jos POST-pyynnössä on kelvollinen token', () => {
         const user = { username: 'testi-root', password: 'salaisuus' }
         const loginResponse = await helper.login(user.username, user.password)
         const token = loginResponse.body.token
+        //console.log(loginResponse.body)
 
         const result = await api
             .post('/api/login/verify-token')
@@ -83,6 +84,7 @@ describe('jos POST-pyynnössä on kelvollinen token', () => {
             .send(mockUser)
             .expect(401)
             .expect('Content-Type', /application\/json/)        
+        
     })
 
     test('voiko käyttää vanhaa omaa tokenia', async () => {

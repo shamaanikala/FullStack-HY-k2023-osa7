@@ -31,3 +31,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
 ###
 DELETE http://localhost:3003/api/blogs/64380320a8fd026e942c6425
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0MzZhMTZmNDA5ODBmMzI5ZjA4YjAxMCIsImlhdCI6MTY4MTU1OTg3Mn0.DCmSEVR00dV9UQ1K-RHo7wN9pP0TaH7ou8ff7e11DyI
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RhYWphIiwiaWQiOiI2NDM2YTEwZTQwOTgwZjMyOWYwOGIwMGUiLCJpYXQiOjE2ODE3MjgzODB9.6LCYH0ysPKJZZjhS7GwAVko03abZvLI_7sBSscExkmk
+
+{
+    "title": "Things I Don’t Know as of 2018",
+    "url": "https://overreacted.io/things-i-dont-know-as-of-2018/",
+    "author": "Dan Abramov"
+}
