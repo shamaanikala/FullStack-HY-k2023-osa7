@@ -218,11 +218,11 @@ const App = () => {
 
   return (
     <div>
-      <Notification
+      {!user && <div>
+        <Notification
           message={notificationMessage}
           type={'logout'}
         />
-      {!user && <div>
         <h2>log in to application</h2>
         <Notification
           message={errorMessage}
