@@ -33,7 +33,7 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-const AddBlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
+const CreateNewBlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
   return(
     <div>
       <h2>create new</h2>
@@ -249,7 +249,7 @@ const App = () => {
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
       <Togglable buttonLabel="create new blog">
-        <AddBlogForm
+        <CreateNewBlogForm
           handleCreateNew={handleCreateNew}
           title={title}
           setTitle={setTitle}
