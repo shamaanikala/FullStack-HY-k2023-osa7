@@ -1,7 +1,7 @@
 // Osan 5 materiaalista
-import { useState } from "react"
+import { useState, useImperativeHandle, forwardRef } from "react"
 
-const Togglable = (props) => {
+const Togglable = forwardRef((props, ref) => {
     const [visible, setVisible] = useState(false)
 
     const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -10,6 +10,13 @@ const Togglable = (props) => {
     const toggleVisibility = () => {
         setVisible(!visible)
     }
+
+    useImperativeHandle(ref, () => {
+        // HUOM! return { } eikä () !
+        return {
+            toggleVisibility
+        }
+    })
 
     return (
         <div>
@@ -22,6 +29,6 @@ const Togglable = (props) => {
             </div>
         </div>
     )
-}
+})
 
 export default Togglable

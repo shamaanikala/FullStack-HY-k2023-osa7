@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -33,7 +33,7 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-const CreateNewBlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
+const BlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
   return(
     <div>
       <h2>create new</h2>
@@ -74,7 +74,7 @@ const CreateNewBlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor
 // tyyppi joko annetaan literaalina tai
 // käytin osa2 puhelinluetteloon omaa useState tyypille
 const Notification = ({ message, type }) => {
-  console.log(type)
+  //console.log(type)
   if (message === null) {
     return null
   }
@@ -116,6 +116,8 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
+
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -189,6 +191,10 @@ const App = () => {
   const handleCreateNew = async (event) => {
     event.preventDefault()
 
+    // Jos laittaa tähän tämän ref, niin
+    // ilmoitus onnistuneesta viestistä lagaa
+    // blogFormRef.current.toggleVisibility()
+
     const blogObject = { title, author, url }
     // console.log(blogObject)
     try {
@@ -196,6 +202,7 @@ const App = () => {
         .create(blogObject)
 
       //console.log('uusi blogi tehty')
+      blogFormRef.current.toggleVisibility()
       setBlogs(blogs.concat(newBlog))
       setNotificationMessage(
         `a new blog ${title} by ${author} added`
@@ -248,8 +255,8 @@ const App = () => {
          />
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
-      <Togglable buttonLabel="create new blog">
-        <CreateNewBlogForm
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+        <BlogForm
           handleCreateNew={handleCreateNew}
           title={title}
           setTitle={setTitle}
