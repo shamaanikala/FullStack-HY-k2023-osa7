@@ -11,12 +11,26 @@ const Togglable = forwardRef((props, ref) => {
         setVisible(!visible)
     }
 
-    useImperativeHandle(ref, () => {
-        // HUOM! return { } eikä () !
-        return {
-            toggleVisibility
-        }
-    })
+    // useImperativeHandle(ref, () => {
+    //     // HUOM! return { } eikä () !
+    //     return {
+    //         toggleVisibility
+    //     }
+
+
+    // })
+    // // tämä toimii myös
+    // lähde: https://legacy.reactjs.org/docs/hooks-reference.html#useimperativehandle
+    // miksi toimii tällä syntaksilla?
+    // vastaus: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#function_body
+    // linkin viimeinen esimerkki
+    useImperativeHandle(ref, () => ({
+        toggleVisibility
+    }))
+
+    // entä toimiiko tämä sitten
+    // ei toimi!
+    //useImperativeHandle(ref, () => toggleVisibility)
 
     return (
         <div>
