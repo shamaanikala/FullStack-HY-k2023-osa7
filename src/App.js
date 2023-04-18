@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
+import Togglable from './components/Togglable'
 
 const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }) => {
   return(
@@ -32,7 +33,7 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-const CreateNewForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
+const AddBlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
   return(
     <div>
       <h2>create new</h2>
@@ -247,15 +248,17 @@ const App = () => {
          />
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
-      <CreateNewForm
-        handleCreateNew={handleCreateNew}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-      />
+      <Togglable buttonLabel="create new blog">
+        <AddBlogForm
+          handleCreateNew={handleCreateNew}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
+      </Togglable>
       
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
