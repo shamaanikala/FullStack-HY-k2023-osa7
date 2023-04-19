@@ -5,56 +5,10 @@ import loginService from './services/login'
 import './index.css'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
+import Logout from './components/Logout'
 
-const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }) => {
-  return(
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input 
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-            />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </>
-  )
-}
-
-
-// tyyppi joko annetaan literaalina tai
-// käytin osa2 puhelinluetteloon omaa useState tyypille
-const Notification = ({ message, type }) => {
-  //console.log(type)
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className={type}>
-      {message}
-    </div>
-  )
-}
-
-const Logout = ({ handleLogout }) => {
-  return (
-    <button type="submit" onClick={handleLogout}>logout</button>
-  )
-}
 
 // tämä App ulkopuolelle, ettei valiteta
 // React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array
@@ -75,9 +29,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  // const [title, setTitle] = useState('')
-  // const [author, setAuthor] = useState('')
-  // const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
@@ -152,40 +103,6 @@ const App = () => {
     },1500)
   }
 
-  // const handleCreateNew = async (event) => {
-  //   event.preventDefault()
-
-  //   // Jos laittaa tähän tämän ref, niin
-  //   // ilmoitus onnistuneesta viestistä lagaa
-  //   // blogFormRef.current.toggleVisibility()
-
-  //   const blogObject = { title, author, url }
-  //   // console.log(blogObject)
-  //   try {
-  //     const newBlog = await blogService
-  //       .create(blogObject)
-
-  //     //console.log('uusi blogi tehty')
-  //     blogFormRef.current.toggleVisibility()
-  //     setBlogs(blogs.concat(newBlog))
-  //     setNotificationMessage(
-  //       `a new blog ${title} by ${author} added`
-  //     )
-  //     setTimeout(() => {
-  //       setNotificationMessage(null)
-  //     }, 5000)
-  //     setTitle('')
-  //     setAuthor('')
-  //     setUrl('')
-  //   } catch (exception) {
-  //     console.log('Adding new blog failed')
-  //     console.log(exception)
-  //     setErrorMessage(`Failed to add a new blog: ${exception.response.data.error}`)
-  //     setTimeout(() => {
-  //       setErrorMessage(null)
-  //     }, 5000)
-  //   }
-  // }
   const createBlog = async blogObject => {
     try {
       const newBlog = await blogService.create(blogObject)
