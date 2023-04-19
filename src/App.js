@@ -139,6 +139,36 @@ const App = () => {
     }
   }
 
+  // otetaan mallia notes toggleImportanceOf
+  const likeBlog = async id => {
+    try {
+      const blog = blogs.find(b => b.id === id)
+      const likedBlog = { ...blog, likes: blog.likes + 1 }
+      
+      const result = await blogService.like(id, likedBlog)
+      setBlogs(await blogService.getAll())
+      // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
+      //setBlogs(blogs.map(b => b.id !== id ? b : result))
+      setNotificationMessage(
+        `${user.name} liked the blog ${result.title}!`
+      )
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      console.log('Liking blog failed')
+      console.log(exception)
+      if (exception.response.data.error) {
+        setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
+      } else {
+        setErrorMessage(`Failed to like blog: ${exception}`)
+      }
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)   
+    }
+  }
+
   return (
     <div>
       {!user && <div>
@@ -176,7 +206,7 @@ const App = () => {
       </Togglable>
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} like={likeBlog} />
       )}
       </div>
     }

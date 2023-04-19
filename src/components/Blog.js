@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
 
   const [blogOpen, setBlogOpen] = useState(false)
 
@@ -10,6 +10,13 @@ const Blog = ({ blog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  // :hover voisi tehdä tämän avulla
+  // https://stackoverflow.com/questions/32125708/how-can-i-access-a-hover-state-in-reactjs
+  const blogTitle = {
+    //hover: 'underline'
+    //fontSize: 13
   }
 
   const anonymousStyle = {
@@ -34,10 +41,10 @@ const Blog = ({ blog }) => {
       </div>}
       {blogOpen &&
       <div>
-        <span onClick={toggleBlog}>{blog.title} {blog.author}</span>
+        <span onClick={toggleBlog} style={blogTitle}>{blog.title} {blog.author}</span>
           <button onClick={toggleBlog}>hide</button>
           <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
-          <div>likes {blog.likes} <button onClick={() => console.log(`blogin ${blog.title} like-nappulaa painettu`)}>like</button></div>
+          <div>likes {blog.likes} <button onClick={() => like(blog.id)}>like</button></div>
           {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
           {blog.user && <span>{blog.user.name}</span>}
       </div>
