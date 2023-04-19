@@ -36,7 +36,7 @@ const Blog = ({ blog }) => {
       <div>
         <span onClick={toggleBlog}>{blog.title} {blog.author}</span>
           <button onClick={toggleBlog}>hide</button>
-          <div>{blog.url}</div>
+          <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
           <div>likes {blog.likes} <button onClick={() => console.log(`blogin ${blog.title} like-nappulaa painettu`)}>like</button></div>
           {blog.user ? <span>{blog.user.name}</span> : <span style={anonymousStyle}>Anonymous</span>}
       </div>
