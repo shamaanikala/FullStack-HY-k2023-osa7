@@ -96,24 +96,38 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
     //const body = request.body
     const { title, author, url, likes } = request.body
 
-    if (!blogToEdit.user) {
-        logger.info(`(blogsRouter: put): ${Date()}`)
-        logger.info(`PUT request to a blog without 'user' field`)
-        logger.info(`- Blog: ${blogToEdit}`)
-        logger.info(`- User from token: ${editorId}`)
-        return response.status(500).json({ error: `Unable to finish the PUT operation: missing user information from blog` })
-    }
-    const blogToEditCreator = blogToEdit.user.toString()
-    
-    if (blogToEditCreator !== editorId) {
-        //console.log('Tokenin käyttäjällä ei ole oikeutta deletoida blogia')
-        logger.info(`(blogsRouter: put): ${Date()}`)
-        logger.info(`Unauthorized PUT`)
-        logger.info(`- from userId ${editorId}`)
-        logger.info(`- to blogId ${blogId} by userId ${blogToEditCreator}`)
-        return response.status(401).json({ error: 'User cannot edit blog added by other user' })
+    let likeAttempt = false
+    const comparison = { title: blogToEdit.title, author: blogToEdit.author, url: blogToEdit.url }
+    //console.log(comparison)
+
+    if (likes === blogToEdit.likes + 1) {
+        console.log({ title, author, url })
+        console.log({ ...comparison })
+        if ( JSON.stringify({ title, author, url }) === JSON.stringify({ ...comparison })) {
+            logger.info(`(blogsRouter: put): ${Date()}`)
+            logger.info(`Like attemp detected!`)
+            likeAttempt = true
+        }
     }
 
+    if (!likeAttempt) {
+        if (!blogToEdit.user) {
+            logger.info(`(blogsRouter: put): ${Date()}`)
+            logger.info(`PUT request to a blog without 'user' field`)
+            logger.info(`- Blog: ${blogToEdit}`)
+            logger.info(`- User from token: ${editorId}`)
+            return response.status(500).json({ error: `Unable to finish the PUT operation: missing user information from blog` })
+        }
+        const blogToEditCreator = blogToEdit.user.toString()
+        
+        if (blogToEditCreator !== editorId) {
+            logger.info(`(blogsRouter: put): ${Date()}`)
+            logger.info(`Unauthorized PUT`)
+            logger.info(`- from userId ${editorId}`)
+            logger.info(`- to blogId ${blogId} by userId ${blogToEditCreator}`)
+            return response.status(401).json({ error: 'User cannot edit blog added by other user' })
+        }
+    }
     // tälle annetaan javascript-olio eikä Blog-olio
     // new parametri palauttaa muuttuneen olion kutsujalle
     //const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
