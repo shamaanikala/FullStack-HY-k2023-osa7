@@ -34,43 +34,6 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-// const BlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
-//   return(
-//     <div>
-//       <h2>create new</h2>
-//       <form onSubmit={handleCreateNew}>
-//         <div>
-//           title:
-//           <input
-//           type="text"
-//           value={title}
-//           name="Title"
-//           onChange={({ target }) => setTitle(target.value)}
-//           />
-//         </div>
-//         <div>
-//           author:
-//           <input
-//           type="text"
-//           value={author}
-//           name="Author"
-//           onChange={({ target }) => setAuthor(target.value)}
-//           />
-//         </div>
-//         <div>
-//           url:
-//           <input
-//           type="text"
-//           value={url}
-//           name="Url"
-//           onChange={({ target }) => setUrl(target.value)}
-//           />
-//         </div>
-//         <button type="submit">create</button>
-//       </form>
-//     </div>
-//   )
-// }
 
 // tyyppi joko annetaan literaalina tai
 // käytin osa2 puhelinluetteloon omaa useState tyypille
@@ -112,9 +75,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  // const [title, setTitle] = useState('')
+  // const [author, setAuthor] = useState('')
+  // const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
@@ -189,38 +152,62 @@ const App = () => {
     },1500)
   }
 
-  const handleCreateNew = async (event) => {
-    event.preventDefault()
+  // const handleCreateNew = async (event) => {
+  //   event.preventDefault()
 
-    // Jos laittaa tähän tämän ref, niin
-    // ilmoitus onnistuneesta viestistä lagaa
-    // blogFormRef.current.toggleVisibility()
+  //   // Jos laittaa tähän tämän ref, niin
+  //   // ilmoitus onnistuneesta viestistä lagaa
+  //   // blogFormRef.current.toggleVisibility()
 
-    const blogObject = { title, author, url }
-    // console.log(blogObject)
+  //   const blogObject = { title, author, url }
+  //   // console.log(blogObject)
+  //   try {
+  //     const newBlog = await blogService
+  //       .create(blogObject)
+
+  //     //console.log('uusi blogi tehty')
+  //     blogFormRef.current.toggleVisibility()
+  //     setBlogs(blogs.concat(newBlog))
+  //     setNotificationMessage(
+  //       `a new blog ${title} by ${author} added`
+  //     )
+  //     setTimeout(() => {
+  //       setNotificationMessage(null)
+  //     }, 5000)
+  //     setTitle('')
+  //     setAuthor('')
+  //     setUrl('')
+  //   } catch (exception) {
+  //     console.log('Adding new blog failed')
+  //     console.log(exception)
+  //     setErrorMessage(`Failed to add a new blog: ${exception.response.data.error}`)
+  //     setTimeout(() => {
+  //       setErrorMessage(null)
+  //     }, 5000)
+  //   }
+  // }
+  const createBlog = async blogObject => {
     try {
-      const newBlog = await blogService
-        .create(blogObject)
-
-      //console.log('uusi blogi tehty')
+      const newBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(newBlog))
+      console.log(newBlog)
       setNotificationMessage(
-        `a new blog ${title} by ${author} added`
+        `a new blog ${newBlog.title} by ${newBlog.author} added`
       )
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
-      setErrorMessage(`Failed to add a new blog: ${exception.response.data.error}`)
+      if (exception.response.data.error) {
+        setErrorMessage(`Failed to add a new blog: ${exception.response.data.error}`)
+      } else {
+        setErrorMessage(`Failed to add a new blog: ${exception}`)
+      }
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 5000)   
     }
   }
 
@@ -257,15 +244,7 @@ const App = () => {
       <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
       
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm
-          handleCreateNew={handleCreateNew}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-        />
+        <BlogForm createBlog={createBlog} />
       </Togglable>
       
       {blogs.map(blog =>
