@@ -100,7 +100,11 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
     const comparison = { title: blogToEdit.title, author: blogToEdit.author, url: blogToEdit.url }
     //console.log(comparison)
 
-    if (likes === blogToEdit.likes + 1) {
+    // jos tykkäyksiä tulee paljon kerrallaan, voi tarkistus if (likes === blogToEdit.likes + 1) mennä hutiin
+    // lisätään jokin kynnysarvo, jota se ei saa erota
+    const likesDelta = 11
+
+    if (Math.abs(likes - blogToEdit.likes) <= likesDelta) {
         console.log({ title, author, url })
         console.log({ ...comparison })
         if ( JSON.stringify({ title, author, url }) === JSON.stringify({ ...comparison })) {
