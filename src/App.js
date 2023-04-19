@@ -108,10 +108,20 @@ const App = () => {
       const newBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleVisibility()
       console.log(newBlog)
-      setBlogs(blogs.concat(newBlog))
+      console.log(`Kun uusi blogi on lisätty, on blogin user kenttä ${newBlog.user}`)
+      // ei vain lisätä uutta blogia listaan, vaan kutsutaan backendin get / kautta sitä, jotta populate tapahtuu
+      // ja blogin user-kentän id yhdistetään käyttäjän tietoihin
+      //setBlogs(blogs.concat(newBlog))
+
       setNotificationMessage(
         `a new blog ${newBlog.title} by ${newBlog.author} added`
       )
+
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+      
+      // laitetaan tämä tänne. Menee ehkä hieman enemmän aikaa kuin 5 sekuntia, koska em. tietokantaoperaatiot vievät aikaa
+      // riittäisikö vähemmän kuin 5000 ms ?
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
