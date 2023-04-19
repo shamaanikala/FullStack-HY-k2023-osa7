@@ -1,6 +1,7 @@
 const Blog = ({blog}) => (
   <div>
-    {blog.title} {blog.author}
+    {blog.title}
+    <button onClick={() => console.log('blogin view klikattu')}>view</button> 
   </div>  
 )
 
