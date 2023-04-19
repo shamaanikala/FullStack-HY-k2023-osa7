@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }) => {
   return(
@@ -33,43 +34,43 @@ const LoginForm = ({ handleLogin, username, setUsername, password, setPassword }
   )
 }
 
-const BlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
-  return(
-    <div>
-      <h2>create new</h2>
-      <form onSubmit={handleCreateNew}>
-        <div>
-          title:
-          <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
-  )
-}
+// const BlogForm = ({ handleCreateNew, title, setTitle, author, setAuthor, url, setUrl }) => {
+//   return(
+//     <div>
+//       <h2>create new</h2>
+//       <form onSubmit={handleCreateNew}>
+//         <div>
+//           title:
+//           <input
+//           type="text"
+//           value={title}
+//           name="Title"
+//           onChange={({ target }) => setTitle(target.value)}
+//           />
+//         </div>
+//         <div>
+//           author:
+//           <input
+//           type="text"
+//           value={author}
+//           name="Author"
+//           onChange={({ target }) => setAuthor(target.value)}
+//           />
+//         </div>
+//         <div>
+//           url:
+//           <input
+//           type="text"
+//           value={url}
+//           name="Url"
+//           onChange={({ target }) => setUrl(target.value)}
+//           />
+//         </div>
+//         <button type="submit">create</button>
+//       </form>
+//     </div>
+//   )
+// }
 
 // tyyppi joko annetaan literaalina tai
 // käytin osa2 puhelinluetteloon omaa useState tyypille
