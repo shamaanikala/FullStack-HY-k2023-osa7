@@ -205,7 +205,9 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       
-      {blogs.map(blog =>
+      {// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
+       // listan järjestämisen vertailufunktio tuon avulla
+       blogs.sort((a,b)=> b.likes - a.likes).map(blog =>
         <Blog key={blog.id} blog={blog} like={likeBlog} />
       )}
       </div>
