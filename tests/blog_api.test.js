@@ -405,30 +405,60 @@ describe('Kun tietokannassa on vain alustusdataa', () => {
         })
 
         describe('kirjautuneena ja kelvollisella tokenilla blogin tykkäysten määrää', () => {
-            // oletettavasti oikeasti menisi toisin päin, eli käyttäjä ei itse voi tykätä omasta blogistaan
-            test('ei voida kasvattaa yhdellä, jos käyttäjän tokenin id ei vastaa blogin käyttäjätietoa (401)', async () => {
-                const newBlog = await helper.addBlogWithUniqueTitle()
+            describe('tykkäys (eli likes += 1)', () => {
+                // oletettavasti oikeasti menisi toisin päin, eli käyttäjä ei itse voi tykätä omasta blogistaan
+                test('ei onnistu, jos käyttäjän tokenin id ei vastaa blogin käyttäjätietoa ja lähetetään pelkkä likes kenttä (401)', async () => {
+                    const newBlog = await helper.addBlogWithUniqueTitle()
 
-                const targetBlogId = newBlog.body.id
+                    const targetBlogId = newBlog.body.id
 
-                const targetBlog = await Blog.findById(targetBlogId)
-                let likes = targetBlog.likes
+                    const targetBlog = await Blog.findById(targetBlogId)
+                    let likes = targetBlog.likes
 
-                //console.log(likes)
-    
-                likes = likes + 1
+                    //console.log(likes)
+        
+                    likes = likes + 1
 
-                const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
-                const token = loginResponse.body.token
+                    const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
+                    const token = loginResponse.body.token
 
 
-                const result = await api.put(`/api/blogs/${targetBlogId}`)
-                    .auth(token, { type: 'bearer'})
-                    .send({ likes })
-                    .expect(401)
-                
-                expect(result.body.error).toContain('User cannot edit blog added by other user')
+                    const result = await api.put(`/api/blogs/${targetBlogId}`)
+                        .auth(token, { type: 'bearer'})
+                        .send({ likes })
+                        .expect(401)
+                    
+                    expect(result.body.error).toContain('User cannot edit blog added by other user')
+                })
+
+                test('onnistuu, jos käyttäjän tokenin id ei vastaa blogin käyttäjätietoa ja lähetetään koko blogin tiedot (200)', async () => {
+                    const newBlog = await helper.addBlogWithUniqueTitle()
+
+                    const targetBlogId = newBlog.body.id
+
+                    const targetBlog = await Blog.findById(targetBlogId)
+                    let newLikes = targetBlog.likes
+
+                    //console.log(likes)
+        
+                    newLikes += 1
+
+                    const loginResponse = await helper.login('toinen-käyttäjä','salasana2')
+                    const token = loginResponse.body.token
+
+                    const { title,author,url, likes } = targetBlog
+
+                    
+                    const result = await api.put(`/api/blogs/${targetBlogId}`)
+                        .auth(token, { type: 'bearer'})
+                        .send({ title, author, url, likes: newLikes })
+                        .expect(200)
+                    
+                    expect(result.body.likes).toBe(newLikes)
+                })
             })
+            
+
 
             test('palauttaa 404 jos kyseistä blogia ei löydy tietokannasta', async () => {
                 const newBlog = await helper.addBlogWithUniqueTitle()
