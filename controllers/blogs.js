@@ -104,15 +104,16 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
     // lisätään jokin kynnysarvo, jota se ei saa erota
     const likesDelta = 11
 
-    if (Math.abs(likes - blogToEdit.likes) <= likesDelta) {
-        console.log({ title, author, url })
-        console.log({ ...comparison })
-        if ( JSON.stringify({ title, author, url }) === JSON.stringify({ ...comparison })) {
-            logger.info(`(blogsRouter: put): ${Date()}`)
+    if ( JSON.stringify({ title, author, url }) === JSON.stringify({ ...comparison })) {
+        logger.info(`(blogsRouter: put): ${Date()}`)
+        if (Math.abs(likes - blogToEdit.likes) <= likesDelta) {
             logger.info(`Like attemp detected!`)
             likeAttempt = true
+        } else {
+            logger.info(`likesDelta value ${likesDelta} overflown: ${Math.abs(likes - blogToEdit.likes)}`)
+            logger.info(`Like attemp stopped, if the cause is actual heavy amount of likes, increase the 'likesDelta' value.`)
         }
-    }
+    } 
 
     if (!likeAttempt) {
         if (!blogToEdit.user) {
