@@ -32,8 +32,16 @@ const like = async (id, blogObject) => {
   }
   console.log(`blogs.js -like : ${JSON.stringify(blogObject)}`)
 
-  const response = await axios.put(`${baseUrl}/${id}`, blogObject,config)
-  return response.data
+  try {
+    const response = await axios.put(`${baseUrl}/${id}`, blogObject,config)
+    return response.data
+  } catch (error) {
+    if (error.response.status === 404) {
+      //console.log(`blogs.js otti kiinni 404`)
+      throw error
+    }
+  }
+  
 }
 
 const remove = async id => {
