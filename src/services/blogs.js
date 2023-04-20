@@ -26,7 +26,7 @@ const create = async blogObject => {
 const like = async (id, blogObject) => {
   console.log(
     `Tykätään blogista ${blogObject.title}, tykkäyksiä: ${blogObject.likes} (id: request: ${id}, blog: ${blogObject.id})`
-    )
+  )
   const config = {
     headers: { Authorization: token },
   }
@@ -41,7 +41,7 @@ const like = async (id, blogObject) => {
       throw error
     }
   }
-  
+
 }
 
 const remove = async id => {
@@ -59,7 +59,7 @@ const remove = async id => {
       throw error
     }
   }
-  
+
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

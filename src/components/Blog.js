@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = ({ user, blog, like, remove }) => {
 
@@ -37,17 +37,17 @@ const Blog = ({ user, blog, like, remove }) => {
       {!blogOpen &&
       <div>
         <span onClick={toggleBlog}>{blog.title} {blog.author}</span>
-          <button onClick={toggleBlog}>view</button> 
+        <button onClick={toggleBlog}>view</button>
       </div>}
       {blogOpen &&
       <div>
         <span onClick={toggleBlog} style={blogTitle}>{blog.title} {blog.author}</span>
-          <button onClick={toggleBlog}>hide</button>
-          <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
-          <div>likes {blog.likes} <button onClick={() => like(blog.id)}>like</button></div>
-          {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
-          {blog.user && <span>{blog.user.name}</span>}
-          {(!blog.user || user.username === blog.user.username) && <div><button onClick={() => remove(blog.id,blog.title,blog.author)}>remove</button></div>}
+        <button onClick={toggleBlog}>hide</button>
+        <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
+        <div>likes {blog.likes} <button onClick={() => like(blog.id)}>like</button></div>
+        {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
+        {blog.user && <span>{blog.user.name}</span>}
+        {(!blog.user || user.username === blog.user.username) && <div><button onClick={() => remove(blog.id,blog.title,blog.author)}>remove</button></div>}
       </div>
       }
     </div>

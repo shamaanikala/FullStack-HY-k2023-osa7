@@ -37,7 +37,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const App = () => {
         //console.log(`Tehdään verify ${user.username} ${user.token}`)
         const token = `Bearer ${user.token}`
         const config = {
-          headers: { Authorization: token}
+          headers: { Authorization: token }
         }
         try {
           await loginService.verify(
@@ -72,7 +72,7 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-      
+
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
@@ -84,7 +84,7 @@ const App = () => {
       console.log(exception)
       console.log('wrong credentials')
       setErrorMessage(
-        `wrong username or password`
+        'wrong username or password'
       )
       setTimeout(() => {
         setErrorMessage(null)
@@ -92,12 +92,12 @@ const App = () => {
     }
   }
 
-  
+
 
   const handleLogout = (event) => {
     event.preventDefault()
     logout(setUser)
-    setNotificationMessage(`user logged out`)
+    setNotificationMessage('user logged out')
     setTimeout(() => {
       setNotificationMessage(null)
     },1500)
@@ -119,7 +119,7 @@ const App = () => {
 
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
-      
+
       // laitetaan tämä tänne. Menee ehkä hieman enemmän aikaa kuin 5 sekuntia, koska em. tietokantaoperaatiot vievät aikaa
       // riittäisikö vähemmän kuin 5000 ms ?
       setTimeout(() => {
@@ -145,7 +145,7 @@ const App = () => {
     try {
       const blog = blogs.find(b => b.id === id)
       const likedBlog = { ...blog, likes: blog.likes + 1 }
-      
+
       const result = await blogService.like(id, likedBlog)
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
@@ -163,14 +163,14 @@ const App = () => {
         setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
         //console.log(`404 otettu kiinni`)
-        setErrorMessage(`Blog was already removed from the server`)
+        setErrorMessage('Blog was already removed from the server')
         setBlogs(await blogService.getAll())
       } else {
         setErrorMessage(`Failed to like blog: ${exception}`)
       }
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)   
+      }, 5000)
     }
   }
 
@@ -179,31 +179,31 @@ const App = () => {
       try {
         console.log(`Yritetään poistaa blogi ${id}`)
         const result = await blogService.remove(id)
-  
+
         setBlogs(await blogService.getAll())
-  
+
         setNotificationMessage(
           `Removed the blog ${result}`
         )
-  
+
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
-  
+
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
           setErrorMessage(`Failed to remove blog: ${exception.response.data.error}`)
         } else if (exception.response.status === 404) {
           //console.log(`404 otettu kiinni`)
-          setErrorMessage(`Blog was already removed from the server`)
+          setErrorMessage('Blog was already removed from the server')
           setBlogs(await blogService.getAll())
         } else {
           setErrorMessage(`Failed to remove blog: ${exception}`)
         }
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)   
+        }, 5000)
       }
     }
   }
@@ -220,37 +220,37 @@ const App = () => {
           message={errorMessage}
           type={'error'}
         />
-        <LoginForm 
+        <LoginForm
           handleLogin={handleLogin}
           username={username}
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
         />
-        </div>}
+      </div>}
       {user && <div>
-      <h2>blogs</h2>
-      <Notification
-        message={errorMessage}
-        type={'error'}
-      />
-      <Notification
+        <h2>blogs</h2>
+        <Notification
+          message={errorMessage}
+          type={'error'}
+        />
+        <Notification
           message={notificationMessage}
           type={'blogAdded'}
-         />
-      <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
-      
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm createBlog={createBlog} />
-      </Togglable>
-      
-      {// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
-       // listan järjestämisen vertailufunktio tuon avulla
-       blogs.sort((a,b)=> b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} user={user} blog={blog} like={likeBlog} remove={removeBlog} />
-      )}
+        />
+        <p>{user.name} logged in <Logout handleLogout={handleLogout} /></p>
+
+        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+          <BlogForm createBlog={createBlog} />
+        </Togglable>
+
+        {// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
+          // listan järjestämisen vertailufunktio tuon avulla
+          blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+            <Blog key={blog.id} user={user} blog={blog} like={likeBlog} remove={removeBlog} />
+          )}
       </div>
-    }
+      }
     </div>
   )
 }
