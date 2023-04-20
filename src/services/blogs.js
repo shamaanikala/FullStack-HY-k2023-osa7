@@ -12,8 +12,6 @@ const getAll = () => {
 }
 
 const create = async blogObject => {
-  //console.log(blogObject)
-  //console.log(token)
   const config = {
     headers: { Authorization: token },
   }
@@ -37,7 +35,6 @@ const like = async (id, blogObject) => {
     return response.data
   } catch (error) {
     if (error.response.status === 404) {
-      //console.log(`blogs.js otti kiinni 404`)
       throw error
     }
   }
@@ -55,7 +52,6 @@ const remove = async id => {
     return response.data
   } catch (error) {
     if (error.response.status === 404) {
-      //console.log(`blogs.js otti kiinni 404`)
       throw error
     }
   }
