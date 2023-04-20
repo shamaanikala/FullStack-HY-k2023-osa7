@@ -170,31 +170,33 @@ const App = () => {
     }
   }
 
-  const removeBlog = async id => {
-    try {
-      console.log(`Yritetään poistaa blogi ${id}`)
-      const result = await blogService.remove(id)
-
-      setBlogs(await blogService.getAll())
-
-      setNotificationMessage(
-        `Removed the blog ${result}`
-      )
-
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
-
-    } catch (exception) {
-      console.log(exception)
-      if (exception.response.data.error) {
-        setErrorMessage(`Failed to remove blog: ${exception.response.data.error}`)
-      } else {
-        setErrorMessage(`Failed to remove blog: ${exception}`)
+  const removeBlog = async (id,title,author) => {
+    if (window.confirm(`Remove blog ${title} by ${author}`)) {
+      try {
+        console.log(`Yritetään poistaa blogi ${id}`)
+        const result = await blogService.remove(id)
+  
+        setBlogs(await blogService.getAll())
+  
+        setNotificationMessage(
+          `Removed the blog ${result}`
+        )
+  
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+  
+      } catch (exception) {
+        console.log(exception)
+        if (exception.response.data.error) {
+          setErrorMessage(`Failed to remove blog: ${exception.response.data.error}`)
+        } else {
+          setErrorMessage(`Failed to remove blog: ${exception}`)
+        }
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)   
       }
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)   
     }
   }
 
