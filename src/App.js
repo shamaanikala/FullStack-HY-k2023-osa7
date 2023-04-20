@@ -190,6 +190,10 @@ const App = () => {
         console.log(exception)
         if (exception.response.data.error) {
           setErrorMessage(`Failed to remove blog: ${exception.response.data.error}`)
+        } else if (exception.response.status === 404) {
+          //console.log(`404 otettu kiinni`)
+          setErrorMessage(`Blog was already removed from the server`)
+          setBlogs(await blogService.getAll())
         } else {
           setErrorMessage(`Failed to remove blog: ${exception}`)
         }
