@@ -5,7 +5,7 @@ import loginService from './services/login'
 import './index.css'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import LoginForm from './components/LoginForm'
+import LoginForm from './components/LoginForm.js'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 
@@ -135,7 +135,8 @@ const App = () => {
       }
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)   
+      }, 5000)
+      throw exception
     }
   }
 

@@ -7,15 +7,25 @@ const BlogForm = ({ createBlog }) => {
 
     const createNewBlog = async event => {
         event.preventDefault()
-        await createBlog({
-            title,
-            author,
-            url
-        })
+        try {
+            await createBlog({
+                title,
+                author,
+                url
+            })
 
-        setTitle('')
-        setAuthor('')
-        setUrl('')
+            setTitle('')
+            setAuthor('')
+            setUrl('')
+        } catch (error) {
+            console.log('lmaolol')
+            if (error.message) {
+                console.log(error.message)
+            }
+        }
+        
+        
+        
     }
 
     return (
