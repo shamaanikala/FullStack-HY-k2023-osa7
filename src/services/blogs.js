@@ -36,5 +36,9 @@ const like = async (id, blogObject) => {
   return response.data
 }
 
+const remove = async id => {
+  console.log(`services/blogs.js : remove ${id}`)
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, setToken, create, like }
+export default { getAll, setToken, create, like, remove }

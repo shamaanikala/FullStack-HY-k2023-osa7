@@ -170,6 +170,14 @@ const App = () => {
     }
   }
 
+  const removeBlog = async id => {
+    try {
+      console.log(`Yritetään poistaa blogi ${id}`)
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
   return (
     <div>
       {!user && <div>
@@ -209,7 +217,7 @@ const App = () => {
       {// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
        // listan järjestämisen vertailufunktio tuon avulla
        blogs.sort((a,b)=> b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} like={likeBlog} />
+        <Blog key={blog.id} user={user} blog={blog} like={likeBlog} remove={removeBlog} />
       )}
       </div>
     }
