@@ -12,6 +12,11 @@ const Blog = ({ user, blog, like, remove }) => {
     marginBottom: 5
   }
 
+  const expanded = {
+    marginLeft: 5,
+    marginBottom: 5
+  }
+
   // :hover voisi tehdä tämän avulla
   // https://stackoverflow.com/questions/32125708/how-can-i-access-a-hover-state-in-reactjs
   const blogTitle = {
@@ -40,7 +45,7 @@ const Blog = ({ user, blog, like, remove }) => {
         <button onClick={toggleBlog}>view</button>
       </div>}
       {blogOpen &&
-      <div>
+      <div style={expanded}>
         <span onClick={toggleBlog} style={blogTitle}>{blog.title} {blog.author}</span>
         <button onClick={toggleBlog}>hide</button>
         <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
