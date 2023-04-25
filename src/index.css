@@ -101,14 +101,82 @@ div.removeDiv {
     margin-right:5px;
 }
 
-div.closed {
+
+div.blogBox {
     padding-bottom: 10px !important;
+    transition: background-color 0.5s;
 }
+
+span.blogTitle:hover {
+    cursor: pointer;
+}
+
+div.blogBox:hover {
+    background-color: lightsteelblue;
+}
+
+/* div.opened {
+    background-color: lightsteelblue;
+} */
+/* div > div.opened {
+    background-color: lightgoldenrodyellow;
+    border-radius: 10px;
+    border-style: none;
+    margin-left: 20px;
+    margin-right: 10%;
+} */
+
+/* likebox */
+/* div.blogUrl + div {
+    background-color: lightgrey;
+    margin-left: 20px;
+    border-radius: 5px;
+    /* margin-right: 60%; */
+    /* padding-left: 0px;
+    padding-right: 5px; */
+/* } */ 
+/* div.opened > div.blogBox {
+    transition: background-color 0.5s;
+} */
+
+/* div.opened > div.blogBox:hover {
+    background-color: lightskyblue !important; 
+    background-color: red;
+} */
 
 /* like button */
 /* valitaan div.opened jälkeläisen div.blogUrl vain ensimmäinen sisarus
 josta valitaan button */
+
 div.opened > div.blogUrl + div > button {
     margin-left: 13px;
+    /* joko margin-left  */
+       /* tai margin-left: 0px ja float right*/ 
+    /*margin-left: 0px;
+     float: right; */
     /* padding: 0px 50px 0px 5px; */
+    /* /* transition: background-color 0s, padding 0.5s, font-size 0s, border-radius 0s;
+    transition-timing-function: ease-in-out;
+    transition-duration: 10ms; */
 }
+
+/*
+div.opened > div.blogUrl + div > button {
+    margin-left: 13px;
+    /* joko margin-left  */
+    /* tai margin-left: 0px ja float right*/ 
+    /*margin-left: 0px;
+     float: right; */
+    /* padding: 0px 50px 0px 5px; */
+    /* transition: background-color 0s, padding 0.5s, font-size 0s, border-radius 0s;
+    transition-timing-function: ease-in-out;
+    transition-duration: 10ms;
+}
+
+div.opened > div.blogUrl + div > button:active {
+    background-color: gold;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 50px;
+    border-style: none;
+} */

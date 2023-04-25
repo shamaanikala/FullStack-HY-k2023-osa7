@@ -42,9 +42,9 @@ const Blog = ({ user, blog, like, remove }) => {
   }
 
   return (
-    <div style={blogStyle} className="closed">
+    <div className="blogBox" style={blogStyle}>
       {!blogOpen &&
-      <div>
+      <div className="closed">
         <span onClick={toggleBlog} style={blogTitle} className='blogTitle'>{blog.title}</span> <span className='blogAuthor'> {blog.author}</span>
         <button onClick={toggleBlog}>view</button>
       </div>}
