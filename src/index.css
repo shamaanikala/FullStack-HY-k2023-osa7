@@ -33,3 +33,16 @@
     font-style: italic;
     /*font-family: 'Courier New', Courier, monospace;*/
 }
+
+/* TÄMÄ LÖYTYY Blog.js */
+/*
+.blogTitle span {
+    text-decoration: underline;
+    font-weight: bold;
+}
+*/
+
+.blogAuthor {
+    font-style: italic;
+    margin-right: 8px;
+}

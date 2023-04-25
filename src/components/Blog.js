@@ -20,8 +20,8 @@ const Blog = ({ user, blog, like, remove }) => {
   // :hover voisi tehdä tämän avulla
   // https://stackoverflow.com/questions/32125708/how-can-i-access-a-hover-state-in-reactjs
   const blogTitle = {
-    //hover: 'underline'
-    //fontSize: 13
+    textDecoration: 'underline',
+    fontWeight: 'bold'
   }
 
   const anonymousStyle = {
@@ -41,12 +41,12 @@ const Blog = ({ user, blog, like, remove }) => {
     <div style={blogStyle}>
       {!blogOpen &&
       <div>
-        <span onClick={toggleBlog}>{blog.title} {blog.author}</span>
+        <span onClick={toggleBlog} style={blogTitle} className='blogTitle'>{blog.title}</span> <span className='blogAuthor'> {blog.author}</span>
         <button onClick={toggleBlog}>view</button>
       </div>}
       {blogOpen &&
       <div className="opened" style={opened}>
-        <span onClick={toggleBlog} style={blogTitle}>{blog.title} {blog.author}</span>
+        <span onClick={toggleBlog} style={blogTitle} className='blogTitle'>{blog.title}</span> <span className='blogAuthor'>{blog.author}</span>
         <button onClick={toggleBlog}>hide</button>
         <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
         <div>likes {blog.likes} <button onClick={() => like(blog.id)}>like</button></div>
