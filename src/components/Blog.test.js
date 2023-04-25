@@ -24,7 +24,7 @@ describe('kun blogista näytetään vain vähän tietoja', () => {
 
     const container = render(<Blog blog={blog} />).container
 
-    screen.debug()
+    //screen.debug()
 
     // elementtiä ei löydy, joten querySelector palauttaa null
     const element = container.querySelector('.expanded')
@@ -59,13 +59,46 @@ describe('kun blogin tietot näyttävää nappia on painettu', () => {
     ).container
   })
 
-  test('blogin url, liket ja käyttäjä näytetään', async () => {
+  test('blogin lisätiedot näytetään', async () => {
     const user = userEvent.setup()
     const button = screen.getByText('view')
     await user.click(button)
 
+    //screen.debug()
+
     const expanded = container.querySelector('.expanded')
     expect(expanded).toBeDefined()
+  })
+
+  test('blogin url näytetään', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const url = screen.getByText('https://',{ exact: false })
+
+    expect(url).toHaveTextContent('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
+  })
+
+  test('blogin likejen määrä näytetään', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    // laitetaan exact: false, koska tuo löytyy välilyönnillä "likes "
+    const likes = await screen.findByText('likes',{ exact: false })
+
+    expect(likes).toHaveTextContent('3')
+  })
+
+  test('blogin lisänneen käyttäjän nimi näytetään', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const blogUser = screen.getByText('Testi Nimi')
+
+    expect(blogUser).toBeDefined()
   })
 
   test.todo('painettaessa piilotus-nappulaa, näkyy enää vain blogin title ja kirjoittaja')
