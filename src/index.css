@@ -6,6 +6,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+    position: fixed;
 }
 
 .error {
@@ -16,6 +17,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+    position: fixed;
 }
 
 .logout {
@@ -45,4 +47,68 @@
 .blogAuthor {
     font-style: italic;
     margin-right: 8px;
+}
+
+div:has(> div.opened) {
+    border-style: dotted !important;
+    border-radius: 15px;
+    margin-top: 5px;
+    /*background-color: aquamarine;*/
+}
+
+/* div.opened > div + div {
+    padding-left: 25px;
+    margin-top: 5px;
+} */
+
+/* likes, url */
+div.opened > div + div, .blogUrl   {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 25px
+}
+
+div.opened > div > button {
+    /* padding-left: 0px !important; */
+}
+
+/* has ei toimi oletuksena firefox */
+div:has(> button.removeButton) {
+    border-top-style: dashed;
+    border-color: gray;
+    border-width: 1px;
+    margin-top: 15px;
+    padding-top: 5px;
+    /* border-top-right-radius: 30px; */
+    /* width: 10%; */
+    padding-left: 5px;
+    /* background-color: aliceblue; */
+    /* -webkit-border-top-right-radius: 30px; */
+    margin-right:5px;
+}
+
+div.removeDiv {
+    border-top-style: dashed;
+    border-color: gray;
+    border-width: 1px;
+    margin-top: 15px;
+    padding-top: 5px;
+    /* border-top-right-radius: 30px; */
+    /* width: 10%; */
+    padding-left: 5px;
+    /* background-color: aliceblue; */
+    /* -webkit-border-top-right-radius: 30px; */
+    margin-right:5px;
+}
+
+div.closed {
+    padding-bottom: 10px !important;
+}
+
+/* like button */
+/* valitaan div.opened jälkeläisen div.blogUrl vain ensimmäinen sisarus
+josta valitaan button */
+div.opened > div.blogUrl + div > button {
+    margin-left: 13px;
+    /* padding: 0px 50px 0px 5px; */
 }
