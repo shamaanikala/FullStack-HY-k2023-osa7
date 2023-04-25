@@ -62,7 +62,25 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
         logger.info(`DELETE request to a blog without 'user' field`)
         logger.info(`- Blog: ${blogToDelete}`)
         logger.info(`- User from token: ${deleterId}`)
-        return response.status(500).json({ error: `Unable to finish the DELETE operation: missing user information from blog` })
+
+        // väliaikaiset adminit ilman useria tietokannassa olevien
+        // blogien poistoon
+        const loppuvat = 'Tue Apr 25 2023 17:20:57 GMT+0300 (Eastern European Summer Time)'
+        const loppuvatms = Date.parse(loppuvat)
+
+        if (request.user.username === 'root' && (loppuvatms - Date.now() >= 0)) {
+            logger.info(`Temporary admin rights granted to user ${request.user.username}`)
+            logger.info(`Allowing the removal of a blog without user field.`)
+            logger.info(`Admin rights expire: ${loppuvat}`)
+            logger.info(`Adding temporary user field to the blog`)
+            console.log(blogToDelete._doc)
+            console.log({ ...blogToDelete._doc, user : deleterId })
+            blogToDelete._doc = { ...blogToDelete._doc, user : deleterId }
+            logger.info(`blogToDelete object: ${blogToDelete}`)
+        } else {
+            return response.status(500).json({ error: `Unable to finish the DELETE operation: missing user information from blog` })
+        }
+        
     }
     const blogToDeleteCreator = blogToDelete.user.toString()
     
