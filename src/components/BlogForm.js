@@ -5,6 +5,14 @@ const BlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  // jos haluaa placeholder tekstin kursiivilla, ei voi tehdä näin
+  // vaan pitää tehdä erillinen tyylitiedosto
+  // const blogFormStyle = {
+  //   placeHolder : {
+  //     fontStyle: 'italic'
+  //   }
+  // }
+
   const createNewBlog = async event => {
     event.preventDefault()
     try {
@@ -18,7 +26,6 @@ const BlogForm = ({ createBlog }) => {
       setAuthor('')
       setUrl('')
     } catch (error) {
-      console.log('lmaolol')
       if (error.message) {
         console.log(error.message)
       }
@@ -29,7 +36,7 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div className="blogForm">
       <h2>create new</h2>
       <form onSubmit={createNewBlog}>
         <div>
@@ -38,6 +45,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={title}
             onChange={event => setTitle(event.target.value)}
+            placeholder='Type blog title...'
           />
         </div>
         <div>
@@ -46,6 +54,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={author}
             onChange={event => setAuthor(event.target.value)}
+            placeholder='Type blog author...'
           />
         </div>
         <div>
@@ -54,6 +63,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={url}
             onChange={event => setUrl(event.target.value)}
+            placeholder='Type blog url...'
           />
         </div>
         <button type="submit">create</button>

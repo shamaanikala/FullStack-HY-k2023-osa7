@@ -28,3 +28,8 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.blogForm input::placeholder {
+    font-style: italic;
+    /*font-family: 'Courier New', Courier, monospace;*/
+}
