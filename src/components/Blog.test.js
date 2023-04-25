@@ -27,7 +27,7 @@ describe('kun blogista näytetään vain vähän tietoja', () => {
     //screen.debug()
 
     // elementtiä ei löydy, joten querySelector palauttaa null
-    const element = container.querySelector('.expanded')
+    const element = container.querySelector('.opened')
     //console.log(element)
     expect(element).toBeNull()
   })
@@ -66,8 +66,8 @@ describe('kun blogin tietot näyttävää nappia on painettu', () => {
 
     //screen.debug()
 
-    const expanded = container.querySelector('.expanded')
-    expect(expanded).toBeDefined()
+    const opened = container.querySelector('.opened')
+    expect(opened).not.toBeNull()
   })
 
   test('blogin url näytetään', async () => {
@@ -101,7 +101,19 @@ describe('kun blogin tietot näyttävää nappia on painettu', () => {
     expect(blogUser).toBeDefined()
   })
 
-  test.todo('painettaessa piilotus-nappulaa, näkyy enää vain blogin title ja kirjoittaja')
+  test('painettaessa piilotus-nappulaa, näkyy enää vain blogin title ja kirjoittaja', async () => {
+    const user = userEvent.setup()
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    expect(container.querySelector('.opened')).not.toBeNull()
+
+    const hideButton = screen.getByText('hide')
+    await user.click(hideButton)
+
+    const opened = container.querySelector('.opened')
+    expect(opened).toBeNull()
+  })
 })
 
 test.todo('blogin otsikko toimii samoin kuin view/hide -nappula')
