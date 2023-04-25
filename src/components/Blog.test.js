@@ -116,4 +116,39 @@ describe('kun blogin tietot näyttävää nappia on painettu', () => {
   })
 })
 
-test.todo('blogin otsikko toimii samoin kuin view/hide -nappula')
+test('blogin otsikko toimii samoin kuin view/hide -nappula', async () => {
+  const mockBlogUser = {
+    username: 'testaaja',
+    name: 'Testi Nimi',
+    id: '6436a10e40980f329f08b00e'
+  }
+
+  const mockBlog = {
+    title: 'Parsing Html The Cthulhu Way Jeff Atwood',
+    url: 'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/',
+    likes: 3,
+    user: {
+      username: 'testaaja',
+      name: 'Testi Nimi',
+      id: '6436a10e40980f329f08b00e'
+    }
+  }
+
+  let { container } = render(<Blog blog={mockBlog} user={mockBlogUser} />)
+  const element = screen.getByText('Parsing Html The Cthulhu Way Jeff Atwood', { exact: false })
+
+  expect(container.querySelector('.opened')).toBeNull()
+
+
+  const user = userEvent.setup()
+  await user.click(element)
+
+  expect(container.querySelector('.opened')).toHaveClass('opened')
+  expect(container.querySelector('.opened')).not.toBeNull()
+
+  // piilotetaan vielä
+  const openedElement = screen.getByText('Parsing Html The Cthulhu Way Jeff Atwood', { exact: false })
+  await user.click(openedElement)
+
+  expect(container.querySelector('.opened')).toBeNull()
+})
