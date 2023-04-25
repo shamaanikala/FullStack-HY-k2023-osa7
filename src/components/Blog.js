@@ -12,7 +12,7 @@ const Blog = ({ user, blog, like, remove }) => {
     marginBottom: 5
   }
 
-  const expanded = {
+  const opened = {
     marginLeft: 5,
     marginBottom: 5
   }
@@ -45,7 +45,7 @@ const Blog = ({ user, blog, like, remove }) => {
         <button onClick={toggleBlog}>view</button>
       </div>}
       {blogOpen &&
-      <div style={expanded}>
+      <div className="opened" style={opened}>
         <span onClick={toggleBlog} style={blogTitle}>{blog.title} {blog.author}</span>
         <button onClick={toggleBlog}>hide</button>
         <div><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
