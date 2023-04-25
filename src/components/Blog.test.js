@@ -24,8 +24,6 @@ describe('kun blogista näytetään vain vähän tietoja', () => {
 
     const container = render(<Blog blog={blog} />).container
 
-    //screen.debug()
-
     // elementtiä ei löydy, joten querySelector palauttaa null
     const element = container.querySelector('.opened')
     //console.log(element)
@@ -160,11 +158,7 @@ describe('kun blogin tiedot on avattu', () => {
   }
 
   const likeBlog = jest.fn()
-
-  // render(<Blog blog={mockBlog} user={mockBlogUser} like={likeBlog} />)
-
   const user = userEvent.setup()
-  // const viewButton = screen.getByText('view')
 
   test('blogin like-nappi toimii', async () => {
     render(<Blog blog={mockBlog} user={mockBlogUser} like={likeBlog} />)
