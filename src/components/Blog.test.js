@@ -100,10 +100,6 @@ describe('kun blogin tietot näyttävää nappia on painettu', () => {
     const opened = container.querySelector('.opened')
     expect(opened).toBeNull()
   })
-
-  test('komponentin like-nappi toimii', async () => {
-
-  })
 })
 
 test('blogin otsikko toimii samoin kuin view/hide -nappula', async () => {
@@ -142,4 +138,44 @@ test('blogin otsikko toimii samoin kuin view/hide -nappula', async () => {
   await user.click(openedElement)
 
   expect(container.querySelector('.opened')).toBeNull()
+})
+
+describe('kun blogin tiedot on avattu', () => {
+  const mockBlogUser = {
+    username: 'testaaja',
+    name: 'Testi Nimi',
+    id: '6436a10e40980f329f08b00e'
+  }
+
+  const mockBlog = {
+    title: 'Parsing Html The Cthulhu Way',
+    author: 'Jeff Atwood',
+    url: 'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/',
+    likes: 3,
+    user: {
+      username: 'testaaja',
+      name: 'Testi Nimi',
+      id: '6436a10e40980f329f08b00e'
+    }
+  }
+
+  const likeBlog = jest.fn()
+
+  // render(<Blog blog={mockBlog} user={mockBlogUser} like={likeBlog} />)
+
+  const user = userEvent.setup()
+  // const viewButton = screen.getByText('view')
+
+  test('blogin like-nappi toimii', async () => {
+    render(<Blog blog={mockBlog} user={mockBlogUser} like={likeBlog} />)
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    const likeButton = screen.getByText('like')
+
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(likeBlog.mock.calls).toHaveLength(2)
+  })
 })
