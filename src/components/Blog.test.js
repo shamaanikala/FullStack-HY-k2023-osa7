@@ -120,7 +120,7 @@ test('blogin otsikko toimii samoin kuin view/hide -nappula', async () => {
   }
 
   let { container } = render(<Blog blog={mockBlog} user={mockBlogUser} />)
-  const element = screen.getByText('Parsing Html The Cthulhu Way Jeff Atwood', { exact: false })
+  const element = screen.getByText('Parsing Html The Cthulhu Way', { exact: false })
 
   expect(container.querySelector('.opened')).toBeNull()
 
@@ -132,7 +132,7 @@ test('blogin otsikko toimii samoin kuin view/hide -nappula', async () => {
   expect(container.querySelector('.opened')).not.toBeNull()
 
   // piilotetaan vielä
-  const openedElement = screen.getByText('Parsing Html The Cthulhu Way Jeff Atwood', { exact: false })
+  const openedElement = screen.getByText('Parsing Html The Cthulhu Way', { exact: false })
   await user.click(openedElement)
 
   expect(container.querySelector('.opened')).toBeNull()

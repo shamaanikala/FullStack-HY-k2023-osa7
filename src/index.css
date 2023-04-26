@@ -68,9 +68,9 @@ div.opened > div + div, .blogUrl   {
     padding-left: 25px
 }
 
-div.opened > div > button {
+/* div.opened > div > button {
     /* padding-left: 0px !important; */
-}
+/* } */
 
 /* has ei toimi oletuksena firefox */
 div:has(> button.removeButton) {
