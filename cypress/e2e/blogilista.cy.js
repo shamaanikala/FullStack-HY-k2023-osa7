@@ -1,6 +1,12 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+    const user = {
+      name: 'Matti Meikäläinen',
+      username: 'mmeika',
+      password: 'salasana'
+    }
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
     cy.visit('')
   })
 
@@ -22,13 +28,18 @@ describe('Blog app', function() {
       .should('have.text', 'login')
   })
 
-  // describe('Login',function() {
-  //   it('succeeds with correct credentials', function() {
-  //     // ...
-  //   })
+  describe('Login',function() {
+    it.only('succeeds with correct credentials', function() {
+      cy.get('#username').type('mmeika')
+      cy.get('#password').type('salasana')
+      cy.contains('login').click()
+
+      cy.contains('blogs')
+      cy.contains('Matti Meikäläinen logged in')
+    })
 
   //   it('fails with wrong credentials', function() {
   //     // ...
   //   })
-  // })
+  })
 })
