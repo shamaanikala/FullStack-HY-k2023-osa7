@@ -1,7 +1,7 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    cy.visit('http://localhost:3000')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+    cy.visit('')
   })
 
   it('Login form is shown', function() {
@@ -21,4 +21,14 @@ describe('Blog app', function() {
       .get('button')
       .should('have.text', 'login')
   })
+
+  // describe('Login',function() {
+  //   it('succeeds with correct credentials', function() {
+  //     // ...
+  //   })
+
+  //   it('fails with wrong credentials', function() {
+  //     // ...
+  //   })
+  // })
 })
