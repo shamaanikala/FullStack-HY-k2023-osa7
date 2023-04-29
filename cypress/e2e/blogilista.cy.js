@@ -74,6 +74,12 @@ describe('Blog app', function() {
 
       cy.contains('a new blog Parsing Html The Cthulhu Way by Jeff Atwood added')
       cy.contains('Parsing Html The Cthulhu Way')
+
+      cy.get('.closed')
+        .should('have.descendants','span').as('titleSpan')
+      cy.get('@titleSpan').get('span')
+        .should('have.class','blogTitle')
+        .and('contain', 'Parsing Html The Cthulhu Way')
     })
   })
 })
