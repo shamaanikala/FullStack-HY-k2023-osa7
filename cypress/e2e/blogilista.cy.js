@@ -63,7 +63,7 @@ describe('Blog app', function() {
       cy.contains('login').click()
     })
 
-    it.only('A blog can be created', function () {
+    it('A blog can be created', function () {
       cy.contains('create new blog').click()
 
       cy.get('#title').type('Parsing Html The Cthulhu Way')
@@ -80,6 +80,29 @@ describe('Blog app', function() {
       cy.get('@titleSpan').get('span')
         .should('have.class','blogTitle')
         .and('contain', 'Parsing Html The Cthulhu Way')
+    })
+
+    describe.only('when blog exists', function () {
+      beforeEach(function () {
+        cy.contains('create new blog').click()
+
+        cy.get('#title').type('Blog title')
+        cy.get('#author').type('Blog Author')
+        cy.get('#url').type('http://localhost:3000')
+
+        cy.get('#createButton').click()
+      })
+      it('can be opened from view-button to show more information', function () {
+        cy.contains('view').click()
+
+        cy.contains('likes')
+      })
+      it('can be opened from title to show more information', function () {
+        cy.get('.blogTitle').click()
+
+        cy.contains('likes')
+      })
+      it('can be liked')
     })
   })
 })
