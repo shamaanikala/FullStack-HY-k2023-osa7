@@ -82,7 +82,7 @@ describe('Blog app', function() {
         .and('contain', 'Parsing Html The Cthulhu Way')
     })
 
-    describe.only('when blog exists', function () {
+    describe('when blog exists', function () {
       beforeEach(function () {
         cy.contains('create new blog').click()
 
@@ -107,6 +107,7 @@ describe('Blog app', function() {
           cy.contains('view').click()
         })
         it('can be liked', function () {
+          // https://docs.cypress.io/faq/questions/using-cypress-faq#How-do-I-get-an-elements-text-contents
           cy.get('#likes')
             .invoke('text')
             .then(initialLikes => {
@@ -116,6 +117,28 @@ describe('Blog app', function() {
                 .invoke('text')
                 .should(finalLikes => {
                   expect(Number(finalLikes)).to.eq(Number(initialLikes)+1)
+                })
+            })
+        })
+        it('can be liked twice', function () {
+          cy.get('#likes')
+            .invoke('text')
+            .then(initialLikes => {
+              cy.contains('like').click()
+              //cy.contains('like').click() // löytää ilmoituksen "liked"
+              //cy.wait(2000)
+
+              // ei käytetä cy.wait() vaan odotetaan elementin muutosta
+              cy.get('#likes')
+                .invoke('text')
+                .should('not.eq',initialLikes)
+
+              cy.get('button').contains('like').click()
+
+              cy.get('#likes')
+                .invoke('text')
+                .should(finalLikes => {
+                  expect(Number(finalLikes)).to.eq(Number(initialLikes)+2)
                 })
             })
         })
