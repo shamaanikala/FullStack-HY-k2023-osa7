@@ -102,7 +102,24 @@ describe('Blog app', function() {
 
         cy.contains('likes')
       })
-      it('can be liked')
+      describe.only('and the blog is opened for more information', function ()  {
+        beforeEach(function () {
+          cy.contains('view').click()
+        })
+        it('can be liked', function () {
+          cy.get('#likes')
+            .invoke('text')
+            .then(initialLikes => {
+              cy.contains('like').click()
+
+              cy.get('#likes')
+                .invoke('text')
+                .should(finalLikes => {
+                  expect(Number(finalLikes)).to.eq(Number(initialLikes)+1)
+                })
+            })
+        })
+      })
     })
   })
 })

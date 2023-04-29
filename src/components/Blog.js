@@ -53,7 +53,7 @@ const Blog = ({ user, blog, like, remove }) => {
         <span onClick={toggleBlog} style={blogTitle} className='blogTitle'>{blog.title}</span> <span className='blogAuthor'>{blog.author}</span>
         <button onClick={toggleBlog}>hide</button>
         <div className="blogUrl"><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></div>
-        <div>likes {blog.likes} <button onClick={() => like(blog.id)}>like</button></div>
+        <div>likes <span id="likes">{blog.likes}</span> <button onClick={() => like(blog.id)}>like</button></div>
         {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
         {blog.user && <span>{blog.user.name}</span>}
         {(!blog.user || user.username === blog.user.username) && <div className="removeDiv"><button className="removeButton" onClick={() => remove(blog.id,blog.title,blog.author)}>remove</button></div>}
