@@ -38,7 +38,7 @@ describe('Blog app', function() {
       cy.contains('Matti Meikäläinen logged in')
     })
 
-    it.only('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function() {
       cy.get('#username').type('mmeika')
       cy.get('#password').type('väärä-salasana')
       cy.contains('login').click()
@@ -53,6 +53,27 @@ describe('Blog app', function() {
         .should('not.contain', 'Matti Meikäläinen')
         .and('not.contain', 'logged in')
         .and('contain', 'log in to application')
+    })
+  })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('mmeika')
+      cy.get('#password').type('salasana')
+      cy.contains('login').click()
+    })
+
+    it.only('A blog can be created', function () {
+      cy.contains('create new blog').click()
+
+      cy.get('#title').type('Parsing Html The Cthulhu Way')
+      cy.get('#author').type('Jeff Atwood')
+      cy.get('#url').type('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
+
+      cy.get('#createButton').click()
+
+      cy.contains('a new blog Parsing Html The Cthulhu Way by Jeff Atwood added')
+      cy.contains('Parsing Html The Cthulhu Way')
     })
   })
 })
