@@ -82,13 +82,11 @@ describe('Blog app', function() {
 
     describe('when blog exists', function () {
       beforeEach(function () {
-        cy.contains('create new blog').click()
-
-        cy.get('#title').type('Blog title')
-        cy.get('#author').type('Blog Author')
-        cy.get('#url').type('http://localhost:3000')
-
-        cy.get('#createButton').click()
+        cy.createBlog({
+          title: 'Blog title',
+          author: 'Blog author',
+          url: 'http://localhost:3000'
+        })
       })
       it('can be opened from view-button to show more information', function () {
         cy.contains('view').click()
@@ -100,7 +98,7 @@ describe('Blog app', function() {
 
         cy.contains('likes')
       })
-      describe.only('and the blog is opened for more information', function ()  {
+      describe('and the blog is opened for more information', function ()  {
         beforeEach(function () {
           cy.contains('view').click()
         })
