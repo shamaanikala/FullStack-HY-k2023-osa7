@@ -1,13 +1,14 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
-    const user = {
-      name: 'Matti Meikäläinen',
-      username: 'mmeika',
-      password: 'salasana'
-    }
-    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
-    cy.visit('')
+    // const user = {
+    //   name: 'Matti Meikäläinen',
+    //   username: 'mmeika',
+    //   password: 'salasana'
+    // }
+    // cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+    // cy.visit('')
+    cy.createUser({ username: 'mmeika', name: 'Matti Meikäläinen', password: 'salasana' })
   })
 
   it('Login form is shown', function() {
@@ -138,7 +139,7 @@ describe('Blog app', function() {
                 })
             })
         })
-        it.only('can be removed by the user', function () {
+        it('can be removed by the user', function () {
           cy.get('.removeButton').click()
 
           cy.get('.blogAdded')
