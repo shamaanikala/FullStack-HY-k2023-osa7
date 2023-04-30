@@ -152,6 +152,12 @@ describe('Blog app', function() {
             .and('not.contain', 'Blog author')
             .and('not.contain', 'view')
         })
+
+        it.only('can only be removed by the user who created it', function () {
+          cy.contains('logout').click()
+          // luo uusi käyttäjä
+          // nyt loggaa sisään uudella käyttäjällä
+        })
       })
     })
   })
