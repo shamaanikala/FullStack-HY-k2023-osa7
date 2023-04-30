@@ -138,6 +138,19 @@ describe('Blog app', function() {
                 })
             })
         })
+        it.only('can be removed by the user', function () {
+          cy.get('.removeButton').click()
+
+          cy.get('.blogAdded')
+            .should('contain', 'Removed the blog')
+            .and('have.css', 'color', 'rgb(0, 128, 0)')
+            .and('have.css', 'border-style', 'solid')
+
+          cy.get('html')
+            .should('not.contain', 'Blog title')
+            .and('not.contain', 'Blog author')
+            .and('not.contain', 'view')
+        })
       })
     })
   })
