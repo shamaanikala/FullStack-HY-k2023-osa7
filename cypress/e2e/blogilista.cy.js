@@ -155,8 +155,13 @@ describe('Blog app', function() {
 
         it.only('can only be removed by the user who created it', function () {
           cy.contains('logout').click()
-          // luo uusi käyttäjä
-          // nyt loggaa sisään uudella käyttäjällä
+          cy.createUser({ username: 'mluukkai', name: 'Matti Luukkainen', password: 'salainen' })
+          cy.login({ username: 'mluukkai', password: 'salainen' })
+          cy.contains('view').click()
+
+          cy.get('.blogUser')
+            .should('not.contain','Matti Luukkainen')
+          cy.get('.removeButton').should('not.exist')
         })
       })
     })
