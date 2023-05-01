@@ -57,7 +57,7 @@ Cypress.Commands.add('createUser', ({ username, name, password }) => {
 
 Cypress.Commands.add('likeBlog', (blogTitle) => {
   cy.contains(blogTitle).parent()
-    .find('button').contains('view').click()
+    .find('button').contains('like')
     .then(() => {
       cy.get('#likes')
         .invoke('text')
