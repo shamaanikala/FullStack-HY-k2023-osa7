@@ -58,12 +58,12 @@ Cypress.Commands.add('createUser', ({ username, name, password }) => {
 Cypress.Commands.add('likeBlog', (blogTitle) => {
   cy.contains(blogTitle).parent()
     .find('button').contains('like')
-    .then(() => {
-      cy.get('#likes')
+    .then((blog) => {
+      cy.get(blog).parent().find('span#likes')
         .invoke('text')
         .then(initialLikes => {
-          cy.get('button').contains('like').click()
-          cy.get('#likes')
+          cy.get(blog).parent().find('button').contains('like').click()
+          cy.get(blog).parent().find('span#likes')
             .invoke('text')
             .should('not.eq', initialLikes)
         })

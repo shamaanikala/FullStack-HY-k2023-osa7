@@ -167,10 +167,6 @@ describe('Blog app', function() {
       })
 
       describe('blogs are ordered by likes', function () {
-        it.only('testataan omaa like komentoa', function () {
-          cy.likeBlog('A Good Blog')
-        })
-
         it('when one blog within blogs without likes is liked, it is first', function () {
           cy.contains('The Best Blog')
             .parent().find('button').click()
@@ -183,30 +179,39 @@ describe('Blog app', function() {
         })
         it('with two likes a blog will be the first from top', function () {
           cy.contains('The Best Blog').parent().find('button').click()
-
-          cy.get('#likes')
-            .invoke('text')
-            .then(initialLikes => {
-              cy.get('button').contains('like').click() // get('button') jottei klikata ilmoitusta
-              cy.get('#likes')
-                .invoke('text')
-                .should('not.eq',initialLikes)
-            })
+          cy.likeBlog('The Best Blog')
           cy.contains('hide').click()
 
-          cy.contains('A Better Blog').parent().find('button').click()
-          cy.get('#likes')
-            .invoke('text')
-            .then(initialLikes => {
-              cy.get('button').contains('like').click()
-              cy.get('#likes')
-                .invoke('text')
-                .should('not.eq',initialLikes)
+          cy.contains('A Better Blog').parent()
+            .find('button').contains('view').click()
 
-              cy.get('button').contains('like').click()
-            })
-          cy.likeBlog()
+          cy.likeBlog('A Better Blog')
+          cy.likeBlog('A Better Blog')
+
           cy.get('span.blogTitle').eq(0).should('contain','A Better Blog')
+        })
+        it.only('with many more likes the blogs are ordered correctly', function () {
+          //cy.contains('view').click({ multiple: true }) vain yksi
+          // avataan kaikki
+          cy.get('button#viewBlogButton')
+            .then((buttons) => {
+              for (let i=0;i<buttons.length;i++) {
+                buttons.eq(i).click()
+              }
+            })
+          cy.likeBlog('A Better Blog')
+          for (let i=0;i<1;i++) {
+            cy.likeBlog('A Better Blog')
+          }
+          for (let i=0;i<1;i++) {
+            cy.likeBlog('Blog title')
+            cy.likeBlog('A Good Blog')
+            cy.likeBlog('A Better Blog')
+            cy.likeBlog('The Best Blog')
+          }
+          // for (let i=0;i<5;i++) {
+          //   cy.likeBlog('The Best Blog')
+          // }
         })
       })
     })
