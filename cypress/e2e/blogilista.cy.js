@@ -1,13 +1,6 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
-    // const user = {
-    //   name: 'Matti Meikäläinen',
-    //   username: 'mmeika',
-    //   password: 'salasana'
-    // }
-    // cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
-    // cy.visit('')
     cy.createUser({ username: 'mmeika', name: 'Matti Meikäläinen', password: 'salasana' })
   })
 
@@ -153,7 +146,7 @@ describe('Blog app', function() {
             .and('not.contain', 'view')
         })
 
-        it.only('can only be removed by the user who created it', function () {
+        it('can only be removed by the user who created it', function () {
           cy.contains('logout').click()
           cy.createUser({ username: 'mluukkai', name: 'Matti Luukkainen', password: 'salainen' })
           cy.login({ username: 'mluukkai', password: 'salainen' })
@@ -162,6 +155,58 @@ describe('Blog app', function() {
           cy.get('.blogUser')
             .should('not.contain','Matti Luukkainen')
           cy.get('.removeButton').should('not.exist')
+        })
+      })
+    })
+    describe('when several blogs exist', function () {
+      beforeEach(function () {
+        cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'http://localhost:3000' })
+        cy.createBlog({ title: 'A Good Blog', author: 'Author A', url: 'http://localhost:3000' })
+        cy.createBlog({ title: 'The Best Blog', author: 'Author B', url: 'http://localhost:3000' })
+        cy.createBlog({ title: 'A Better Blog', author: 'Author C', url: 'http://localhost:3000' })
+      })
+
+      describe('blogs are ordered by likes', function () {
+        it.only('testataan omaa like komentoa', function () {
+          cy.likeBlog('A Good Blog')
+        })
+
+        it('when one blog within blogs without likes is liked, it is first', function () {
+          cy.contains('The Best Blog')
+            .parent().find('button').click()
+
+          cy.contains('like').click()
+          cy.contains('hide').click()
+
+          // cy.get('.blogBox > span.blogTitle')
+          cy.get('span.blogTitle').eq(0).should('contain','The Best Blog')
+        })
+        it('with two likes a blog will be the first from top', function () {
+          cy.contains('The Best Blog').parent().find('button').click()
+
+          cy.get('#likes')
+            .invoke('text')
+            .then(initialLikes => {
+              cy.get('button').contains('like').click() // get('button') jottei klikata ilmoitusta
+              cy.get('#likes')
+                .invoke('text')
+                .should('not.eq',initialLikes)
+            })
+          cy.contains('hide').click()
+
+          cy.contains('A Better Blog').parent().find('button').click()
+          cy.get('#likes')
+            .invoke('text')
+            .then(initialLikes => {
+              cy.get('button').contains('like').click()
+              cy.get('#likes')
+                .invoke('text')
+                .should('not.eq',initialLikes)
+
+              cy.get('button').contains('like').click()
+            })
+          cy.likeBlog()
+          cy.get('span.blogTitle').eq(0).should('contain','A Better Blog')
         })
       })
     })
