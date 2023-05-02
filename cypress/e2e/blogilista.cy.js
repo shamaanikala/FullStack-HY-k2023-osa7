@@ -217,17 +217,6 @@ describe('Blog app', function () {
           }
         })
         it.only('with many more likes the blogs are ordered correctly (random)', function () {
-          //cy.contains('view').click({ multiple: true }) vain yksi
-
-          // haetaan blogien otiskot palvelimelta
-          // cy.request('GET', `${Cypress.env('BACKEND')}/blogs`)
-          //   .then((response) => {
-          //     const blogTitles = response.body.map(b => b.title)
-          //     for (let i = 0; i < blogTitles.length; i++) {
-          //       cy.get('.blogTitle').eq(i).invoke('text').should('be.oneOf', blogTitles)
-          //     }
-          //   })
-
           // avataan kaikki
           cy.get('button#viewBlogButton')
             .then((buttons) => {
@@ -273,19 +262,6 @@ describe('Blog app', function () {
                 cy.get('.blogTitle').eq(i).invoke('text').should('equal', blogsInLikesOrder[i].title)
               }
             })
-          // cy.likeBlog('A Better Blog')
-          // for (let i=0;i<1;i++) {
-          //   cy.likeBlog('A Better Blog')
-          // }
-          // for (let i=0;i<1;i++) {
-          //   cy.likeBlog('Blog title')
-          //   cy.likeBlog('A Good Blog')
-          //   cy.likeBlog('A Better Blog')
-          //   cy.likeBlog('The Best Blog')
-          // }
-          // for (let i=0;i<5;i++) {
-          //   cy.likeBlog('The Best Blog')
-          // }
         })
       })
     })
