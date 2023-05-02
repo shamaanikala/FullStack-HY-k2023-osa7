@@ -216,7 +216,7 @@ describe('Blog app', function () {
               .should('contain', predefinedOrder[i])
           }
         })
-        it.only('with many more likes the blogs are ordered correctly (random)', function () {
+        it('with many more likes the blogs are ordered correctly (random)', function () {
           // avataan kaikki
           cy.get('button#viewBlogButton')
             .then((buttons) => {
@@ -242,14 +242,6 @@ describe('Blog app', function () {
                   cy.likeBlog(title)
                   // tarkistetaan järjrestys saman tien
                   cy.checkLikesOrder()
-                  // cy.request('GET', `${Cypress.env('BACKEND')}/blogs`)
-                  //   .then((response) => {
-                  //     const blogsInLikesOrder = response.body.sort((a, b) => b.likes - a.likes)
-                  //     cy.log(blogsInLikesOrder)
-                  //     for (let i = 0; i < blogsInLikesOrder.length; i++) {
-                  //       cy.get('.blogTitle').eq(i).invoke('text').should('equal', blogsInLikesOrder[i].title)
-                  //     }
-                  //   })
                 }
               }
             })
@@ -270,14 +262,6 @@ describe('Blog app', function () {
               }
             })
           cy.checkLikesOrder()
-          // cy.request('GET', `${Cypress.env('BACKEND')}/blogs`)
-          //   .then((response) => {
-          //     const blogsInLikesOrder = response.body.sort((a, b) => b.likes - a.likes)
-          //     cy.log(blogsInLikesOrder)
-          //     for (let i = 0; i < blogsInLikesOrder.length; i++) {
-          //       cy.get('.blogTitle').eq(i).invoke('text').should('equal', blogsInLikesOrder[i].title)
-          //     }
-          //   })
         })
       })
     })
