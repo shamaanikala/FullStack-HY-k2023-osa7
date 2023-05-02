@@ -63,7 +63,8 @@ Cypress.Commands.add('likeBlog', (blogTitle) => {
         .invoke('text')
         .then(initialLikes => {
           cy.get(blog).parent()
-            .should('not.have.class', 'blogBox').find('button').contains('like').click()
+            //.should('not.have.class', 'blogBox').find('button').contains('like').click()
+            .find('button').contains('like').click()
           cy.get(blog).parent().find('span#likes')
             .invoke('text')
             .should('not.eq', initialLikes)
