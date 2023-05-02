@@ -56,13 +56,27 @@ Cypress.Commands.add('createUser', ({ username, name, password }) => {
 })
 
 Cypress.Commands.add('likeBlog', (blogTitle) => {
-  cy.contains(blogTitle).parent()
+  // cy.contains(blogTitle).parent()
+  //   .find('button').contains('like')
+  //   .then((blog) => {
+  //     cy.get(blog).parent().find('span#likes')
+  //       .invoke('text')
+  //       .then(initialLikes => {
+  //         cy.get(blog).parent()
+  //           .should('not.have.class','blogBox').find('button').contains('like').click()
+  //         cy.get(blog).parent().find('span#likes')
+  //           .invoke('text')
+  //           .should('not.eq', initialLikes)
+  //       })
+  //   })
+  cy.get('.blogBox').contains(blogTitle).siblings()
     .find('button').contains('like')
     .then((blog) => {
       cy.get(blog).parent().find('span#likes')
         .invoke('text')
         .then(initialLikes => {
-          cy.get(blog).parent().find('button').contains('like').click()
+          cy.get(blog).parent()
+            .should('not.have.class', 'blogBox').find('button').contains('like').click()
           cy.get(blog).parent().find('span#likes')
             .invoke('text')
             .should('not.eq', initialLikes)
