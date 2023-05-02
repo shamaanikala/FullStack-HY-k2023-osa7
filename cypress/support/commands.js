@@ -56,6 +56,18 @@ Cypress.Commands.add('createUser', ({ username, name, password }) => {
 })
 
 Cypress.Commands.add('likeBlog', (blogTitle) => {
+  // oma log
+  // eslint-disable-next-line no-unused-vars
+  const log = Cypress.log({
+    name: 'likeBlog',
+    displayName: 'likeBlog',
+    message: `Like blog ${blogTitle}`,
+    consoleProps: () => {
+      return {
+        BlogTitle: blogTitle
+      }
+    }
+  })
   cy.get('.blogBox').contains(blogTitle).siblings()
     .find('button').contains('like')
     .then((blog) => {
@@ -70,6 +82,7 @@ Cypress.Commands.add('likeBlog', (blogTitle) => {
             .should('not.eq', initialLikes)
         })
     })
+
 })
 
 Cypress.Commands.add('checkLikesOrder', () => {

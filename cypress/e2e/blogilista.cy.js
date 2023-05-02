@@ -228,7 +228,7 @@ describe('Blog app', function () {
               .should('contain', predefinedOrder[i])
           }
         })
-        it.only('with many more likes the blogs are ordered correctly (random)', function () {
+        it('with many more likes the blogs are ordered correctly (random)', function () {
           // avataan kaikki
           cy.get('button#viewBlogButton')
             .then((buttons) => {
