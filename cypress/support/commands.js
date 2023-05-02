@@ -70,3 +70,14 @@ Cypress.Commands.add('likeBlog', (blogTitle) => {
         })
     })
 })
+
+Cypress.Commands.add('checkLikesOrder', () => {
+  cy.request('GET', `${Cypress.env('BACKEND')}/blogs`)
+    .then((response) => {
+      const blogsInLikesOrder = response.body.sort((a, b) => b.likes - a.likes)
+      cy.log(blogsInLikesOrder)
+      for (let i = 0; i < blogsInLikesOrder.length; i++) {
+        cy.get('.blogTitle').eq(i).invoke('text').should('equal', blogsInLikesOrder[i].title)
+      }
+    })
+})
