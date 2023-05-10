@@ -8,23 +8,18 @@ import {
   useNavigate
 } from 'react-router-dom'
 
-const Notification = ({ message }) => {
-  console.log(message)
-  if (!message) {
+const Notification = ({ notification }) => {
+  if (!notification) {
     return null
   }
   return (
     <div>
-      {message}
+      {notification}
     </div>
   )
 }
 
 const Menu = ({ notification }) => {
-  console.log(notification)
-  console.log(typeof(notification))
-  const message = notification.message
-  console.log(message)
   const padding = {
     paddingRight: 5
   }
@@ -35,7 +30,7 @@ const Menu = ({ notification }) => {
         <Link style={padding} to="/create">create new</Link>
         <Link style={padding} to="/about">about</Link>
       </div>
-      {message && <div><Notification message={message} /></div>}
+      {notification && <div><Notification notification={notification} /></div>}
     </>
   )
 }
@@ -148,7 +143,7 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState({ message: null, id: 0 })
+  const [notification, setNotification] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -174,15 +169,10 @@ const App = () => {
     ? anecdoteById(Number(match.params.id))
     : null
 
-  const showAnecdoteCreatedNotification = (message) => {
-    const currentId = notification.id
-    setNotification({ message, id: currentId + 1 })
-    console.log(`Notifikaatio: ${message}, ${currentId}`)
-    //setNotification({ message, id:  })
+  const showAnecdoteCreatedNotification = (notification) => {
+    setNotification(notification)
     setTimeout(() => {
-      notification.id >= currentId
-        ? setNotification({ message: null, id: notification.id })
-        : setNotification(notification)
+      setNotification(null)
     }, 5000)
   }
 
