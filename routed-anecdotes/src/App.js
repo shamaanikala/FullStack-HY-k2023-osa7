@@ -86,12 +86,9 @@ const Footer = () => (
 const CreateNew = (props) => {
   // napataan spread syntaksilla reset pois tieltä,
   // ellei keksitä jotain tapaa exportata se erikseen
-  // kehitetään tällainen oma näennäisanonyymi notaatio
-  // minkälainen on Haskellissa.
-  // Voiko JavaScriptissä tehdä samoin kuin _ ?
-  const { reset: _, ...contentField } = useField('text')
-  const { reset: __, ...authorField } = useField('text')
-  const { reset: ___, ...infoField } = useField('text')
+  const { reset: resetContent, ...contentField } = useField('text')
+  const { reset: resetAuthor, ...authorField } = useField('text')
+  const { reset: resetInfo, ...infoField } = useField('text')
 
   const navigate = useNavigate()
 
@@ -115,12 +112,9 @@ const CreateNew = (props) => {
 
   const handleReset = (e) => {
     console.log(e)
-    contentField.reset()
-    authorField.reset()
-    infoField.reset()
-    //resetContent()
-    // resetAuthor()
-    // resetInfo()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   // https://react.dev/reference/react-dom/components/common#common-props
