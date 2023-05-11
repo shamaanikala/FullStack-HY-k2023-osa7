@@ -15,6 +15,12 @@ const useField = (type) => {
   }
 }
 
+const getCountry = async (fullName) => {
+  const apiURL = `https://restcountries.com/v3.1/name/${fullName}?fullText=true`
+  const response = await axios.get(apiURL)
+  return response.data
+}
+
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
@@ -54,6 +60,7 @@ const App = () => {
   const fetch = (e) => {
     e.preventDefault()
     setName(nameInput.value)
+    getCountry(nameInput.value)
   }
 
   return (
