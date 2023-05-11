@@ -92,6 +92,7 @@ const CreateNew = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(e)
     const content = contentField.value
     const author = authorField.value
     const info = infoField.value
@@ -107,10 +108,20 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
+  const handleReset = (e) => {
+    console.log(e)
+    contentField.onReset()
+    authorField.onReset()
+    infoField.onReset()
+  }
+
+  // https://react.dev/reference/react-dom/components/common#common-props
+  // onReset={} on olemeassa
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
           <input name='content' {...contentField} />
@@ -124,6 +135,7 @@ const CreateNew = (props) => {
           <input name='info' {...infoField} />
         </div>
         <button>create</button>
+        <button type='reset'>reset</button>
       </form>
     </div>
   )
