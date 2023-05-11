@@ -84,9 +84,11 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const contentField = useField('text')
-  const authorField = useField('text')
-  const infoField = useField('text')
+  // napataan spread syntaksilla reset pois tieltä,
+  // ellei keksitä jotain tapaa exportata se erikseen
+  const { reset: resetContent, ...contentField } = useField('text')
+  const { reset: resetAuthor, ...authorField } = useField('text')
+  const { reset: resetInfo, ...infoField } = useField('text')
 
   const navigate = useNavigate()
 
@@ -110,9 +112,9 @@ const CreateNew = (props) => {
 
   const handleReset = (e) => {
     console.log(e)
-    contentField.onReset()
-    authorField.onReset()
-    infoField.onReset()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   // https://react.dev/reference/react-dom/components/common#common-props
