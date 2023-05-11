@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 import {
   Routes,
@@ -144,6 +144,9 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState(null)
+  // notifikaation piilotus viitteen avulla
+  // Osa5 käytti Togglablessa
+  const notificationRef = useRef(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -169,12 +172,22 @@ const App = () => {
     ? anecdoteById(Number(match.params.id))
     : null
 
+  // https://react.dev/learn/referencing-values-with-refs
+  // täältä setInterval esimerkin mukaisesti ref setTimeoutin id
   const showAnecdoteCreatedNotification = (notification) => {
+    console.log('näytetään ilmoitus: ', notification)
+    clearTimeout(notificationRef.current)
     setNotification(notification)
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    notificationRef.current = setTimeout(() =>
+      hideNotification(notification),5000)
   }
+
+  const hideNotification = (notification) => {
+    console.log('piiloitetaan ilmoitus: ', notification)
+    clearTimeout(notificationRef.current)
+    setNotification(null)
+  }
+
 
   return (
     <div>
