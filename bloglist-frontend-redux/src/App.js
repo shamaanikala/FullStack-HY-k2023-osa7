@@ -15,6 +15,8 @@ import {
   hideNotification,
   setError,
   hideError,
+  setNotificationTimeout,
+  // setErrorTimeout
 } from './reducers/notificationReducer'
 
 const App = () => {
@@ -29,6 +31,18 @@ const App = () => {
   const dispatch = useDispatch()
   const notificationReducerMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
+  const notificationTimeout = useSelector(state => state.messageId)
+  // const errorTimeout = useSelector(state => state.errorId)
+
+  const showNotification = message => {
+    clearTimeout(notificationTimeout)
+    dispatch(setNotification(message))
+    dispatch(
+      setNotificationTimeout(
+        setTimeout(() => dispatch(hideNotification()), 5000)
+      )
+    )
+  }
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -154,14 +168,15 @@ const App = () => {
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
-      dispatch(
-        setNotification(`${user.name} liked the blog ${result.title}! 👍`)
-      )
-      //setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
-      setTimeout(() => {
-        //setNotificationMessage(null)
-        dispatch(hideNotification())
-      }, 5000)
+      // dispatch(
+      //   setNotification(`${user.name} liked the blog ${result.title}! 👍`)
+      // )
+      // //setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
+      // setTimeout(() => {
+      //   //setNotificationMessage(null)
+      //   dispatch(hideNotification())
+      // }, 5000)
+      showNotification(`${user.name} liked the blog ${result.title}! 👍`)
     } catch (exception) {
       console.log('Liking blog failed')
       console.log('piilotetaan redux notifikaatio')
