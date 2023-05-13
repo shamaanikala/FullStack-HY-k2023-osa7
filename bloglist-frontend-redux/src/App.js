@@ -9,6 +9,12 @@ import LoginForm from './components/LoginForm.js'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setNotification,
+  hideNotification,
+} from './reducers/notificationReducer'
+
 // tämä App ulkopuolelle, ettei valiteta
 // React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array
 // t. https://overreacted.io/a-complete-guide-to-useeffect/
@@ -32,6 +38,10 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null)
 
   const blogFormRef = useRef()
+
+  // eslint-disable-next-line no-unused-vars
+  const dispatch = useDispatch()
+  const notificationReducerMessage = useSelector(state => state.message)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -145,9 +155,11 @@ const App = () => {
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
-      setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
+      dispatch(setNotification(`${user.name} liked the blog ${result.title}!`))
+      //setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
       setTimeout(() => {
-        setNotificationMessage(null)
+        //setNotificationMessage(null)
+        dispatch(hideNotification())
       }, 5000)
     } catch (exception) {
       console.log('Liking blog failed')
@@ -219,6 +231,10 @@ const App = () => {
           <h2>blogs</h2>
           <Notification message={errorMessage} type={'error'} />
           <Notification message={notificationMessage} type={'blogAdded'} />
+          <Notification
+            message={notificationReducerMessage}
+            type={'blogAdded'}
+          />
           <p>
             {user.name} logged in <Logout handleLogout={handleLogout} />
           </p>

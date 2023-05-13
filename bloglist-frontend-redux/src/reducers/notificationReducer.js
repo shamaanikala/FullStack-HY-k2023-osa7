@@ -1,17 +1,31 @@
 const initialState = {
-  message: '',
-  type: null,
+  message: null,
 }
 
 const notificationReducer = (state = initialState, action) => {
   console.log('notificationReducer: action: ', action)
   switch (action.type) {
     case 'SHOW':
-      return { message: action.payload.message, type: action.payload.type }
+      return { message: action.payload.message }
     case 'HIDE':
-      return { message: '', type: null }
+      return { message: null }
     default:
       return state
+  }
+}
+
+export const setNotification = message => {
+  return {
+    type: 'SHOW',
+    payload: {
+      message,
+    },
+  }
+}
+
+export const hideNotification = () => {
+  return {
+    type: 'HIDE',
   }
 }
 
