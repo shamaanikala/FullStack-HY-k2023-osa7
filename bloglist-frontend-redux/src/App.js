@@ -34,20 +34,20 @@ const App = () => {
   const notificationTimeout = useSelector(state => state.messageId)
   const errorTimeout = useSelector(state => state.errorId)
 
-  const showNotification = message => {
+  const showNotification = (message, duration = 5000) => {
     clearTimeout(notificationTimeout)
     dispatch(setNotification(message))
     dispatch(
       setNotificationTimeout(
-        setTimeout(() => dispatch(hideNotification()), 5000)
+        setTimeout(() => dispatch(hideNotification()), duration)
       )
     )
   }
 
-  const showError = message => {
+  const showError = (message, duration = 5000) => {
     clearTimeout(errorTimeout)
     dispatch(setError(message))
-    dispatch(setErrorTimeout(setTimeout(() => dispatch(hideError()), 5000)))
+    dispatch(setErrorTimeout(setTimeout(() => dispatch(hideError()), duration)))
   }
 
   useEffect(() => {
