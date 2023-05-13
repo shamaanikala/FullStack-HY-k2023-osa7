@@ -24,12 +24,12 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  // const [notificationMessage, setNotificationMessage] = useState(null)
 
   const blogFormRef = useRef()
 
   const dispatch = useDispatch()
-  const notificationReducerMessage = useSelector(state => state.message)
+  const notificationMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
   const notificationTimeout = useSelector(state => state.messageId)
   const errorTimeout = useSelector(state => state.errorId)
@@ -114,10 +114,11 @@ const App = () => {
   const handleLogout = event => {
     event.preventDefault()
     logout(setUser)
-    setNotificationMessage('user logged out')
-    setTimeout(() => {
-      setNotificationMessage(null)
-    }, 1500)
+    showNotification('user logged out', 1500)
+    // setNotificationMessage('user logged out')
+    // setTimeout(() => {
+    //   setNotificationMessage(null)
+    // }, 1500)
   }
 
   const createBlog = async blogObject => {
@@ -132,18 +133,25 @@ const App = () => {
       // ja blogin user-kentän id yhdistetään käyttäjän tietoihin
       //setBlogs(blogs.concat(newBlog))
 
-      setNotificationMessage(
-        `a new blog ${newBlog.title} by ${newBlog.author} added`
+      showNotification(
+        `a new blog ${newBlog.title} by ${newBlog.author} added`,
+        10000
       )
+      // setNotificationMessage(
+      //   `a new blog ${newBlog.title} by ${newBlog.author} added`
+      // )
 
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
 
       // TODO tehdään tähän sama juttu kuin tykkäyksessä, että näytetään ensin alustava notifikaatio ja päivitetään
       // awaitin jälkeen sen mukaan, mitä palvelin vastaa
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+      showNotification(
+        `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
+      )
+      // setTimeout(() => {
+      //   setNotificationMessage(null)
+      // }, 5000)
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
@@ -215,11 +223,12 @@ const App = () => {
 
         setBlogs(await blogService.getAll())
 
-        setNotificationMessage(`Removed the blog ${result}`)
+        showNotification(`Removed the blog ${result}`)
+        // setNotificationMessage(`Removed the blog ${result}`)
 
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
+        // setTimeout(() => {
+        //   setNotificationMessage(null)
+        // }, 5000)
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
@@ -261,10 +270,6 @@ const App = () => {
           <div className="notificationBox">
             <Notification message={errorMessage} type={'error'} />
             <Notification message={notificationMessage} type={'blogAdded'} />
-            <Notification
-              message={notificationReducerMessage}
-              type={'blogAdded'}
-            />
           </div>
           <p>
             {user.name} logged in <Logout handleLogout={handleLogout} />
