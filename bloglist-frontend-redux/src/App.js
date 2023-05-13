@@ -16,7 +16,7 @@ import {
   setError,
   hideError,
   setNotificationTimeout,
-  // setErrorTimeout
+  setErrorTimeout,
 } from './reducers/notificationReducer'
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
   const notificationReducerMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
   const notificationTimeout = useSelector(state => state.messageId)
-  // const errorTimeout = useSelector(state => state.errorId)
+  const errorTimeout = useSelector(state => state.errorId)
 
   const showNotification = message => {
     clearTimeout(notificationTimeout)
@@ -42,6 +42,12 @@ const App = () => {
         setTimeout(() => dispatch(hideNotification()), 5000)
       )
     )
+  }
+
+  const showError = message => {
+    clearTimeout(errorTimeout)
+    dispatch(setError(message))
+    dispatch(setErrorTimeout(setTimeout(() => dispatch(hideError()), 5000)))
   }
 
   useEffect(() => {
@@ -89,10 +95,11 @@ const App = () => {
     } catch (exception) {
       console.log(exception)
       console.log('wrong credentials')
-      dispatch(setError('wrong username or password'))
-      setTimeout(() => {
-        dispatch(hideError())
-      }, 5000)
+      showError('wrong username or password')
+      // dispatch(setError('wrong username or password'))
+      // setTimeout(() => {
+      //   dispatch(hideError())
+      // }, 5000)
     }
   }
 
@@ -141,15 +148,17 @@ const App = () => {
       console.log('Adding new blog failed')
       console.log(exception)
       if (exception.response.data.error) {
-        dispatch(
-          setError(`Failed to add a new blog: ${exception.response.data.error}`)
-        )
+        showError(`Failed to add a new blog: ${exception.response.data.error}`)
+        // dispatch(
+        //   setError(`Failed to add a new blog: ${exception.response.data.error}`)
+        // )
       } else {
-        dispatch(setError(`Failed to add a new blog: ${exception}`))
+        showError(`Failed to add a new blog: ${exception}`)
+        // dispatch(setError(`Failed to add a new blog: ${exception}`))
       }
-      setTimeout(() => {
-        dispatch(hideError())
-      }, 5000)
+      // setTimeout(() => {
+      //   dispatch(hideError())
+      // }, 5000)
       throw exception
     }
   }
@@ -249,12 +258,14 @@ const App = () => {
       {user && (
         <div>
           <h2>blogs</h2>
-          <Notification message={errorMessage} type={'error'} />
-          <Notification message={notificationMessage} type={'blogAdded'} />
-          <Notification
-            message={notificationReducerMessage}
-            type={'blogAdded'}
-          />
+          <div className="notificationBox">
+            <Notification message={errorMessage} type={'error'} />
+            <Notification message={notificationMessage} type={'blogAdded'} />
+            <Notification
+              message={notificationReducerMessage}
+              type={'blogAdded'}
+            />
+          </div>
           <p>
             {user.name} logged in <Logout handleLogout={handleLogout} />
           </p>

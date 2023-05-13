@@ -1,3 +1,9 @@
+.notificationBox {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+}
+
 .blogAdded {
   color: green;
   background: lightgrey;
@@ -6,7 +12,7 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  position: sticky;
+  /* position: fixed; */
 }
 
 .error {
@@ -17,7 +23,8 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  position: sticky;
+  margin-top: 10px;
+  /* position: fixed; */
 }
 
 .logout {
