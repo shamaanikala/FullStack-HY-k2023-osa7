@@ -20,7 +20,9 @@ const notificationReducer = (state = initialState, action) => {
         message: action.payload.message,
       }
     case 'HIDE':
-      return { ...state, message: null }
+      return state.messageId === action.payload.timeoutId
+        ? { ...state, message: null }
+        : state
     case 'TIMEOUT':
       return {
         ...state,
@@ -32,7 +34,9 @@ const notificationReducer = (state = initialState, action) => {
         errorMessage: action.payload.errorMessage,
       }
     case 'HIDE_ERROR':
-      return { ...state, errorMessage: null }
+      return state.errorId === action.payload.timeoutId
+        ? { ...state, errorMessage: null }
+        : state
     case 'TIMEOUT_ERROR':
       return {
         ...state,
@@ -52,9 +56,12 @@ export const setNotification = message => {
   }
 }
 
-export const hideNotification = () => {
+export const hideNotification = timeoutId => {
   return {
     type: 'HIDE',
+    payload: {
+      timeoutId,
+    },
   }
 }
 
@@ -67,13 +74,17 @@ export const setError = errorMessage => {
   }
 }
 
-export const hideError = () => {
+export const hideError = timeoutId => {
   return {
     type: 'HIDE_ERROR',
+    payload: {
+      timeoutId,
+    },
   }
 }
 
 export const setNotificationTimeout = timeout => {
+  console.log('setNotificationTimeout', timeout)
   return {
     type: 'TIMEOUT',
     payload: {
@@ -83,6 +94,7 @@ export const setNotificationTimeout = timeout => {
 }
 
 export const setErrorTimeout = timeout => {
+  console.log('setErrorTimeOut', timeout)
   return {
     type: 'TIMEOUT_ERROR',
     payload: {

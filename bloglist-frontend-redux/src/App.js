@@ -31,23 +31,25 @@ const App = () => {
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
-  const notificationTimeout = useSelector(state => state.messageId)
-  const errorTimeout = useSelector(state => state.errorId)
+  // const notificationTimeout = useSelector(state => state.messageId)
+  // const errorTimeout = useSelector(state => state.errorId)
 
   const showNotification = (message, duration = 5000) => {
-    clearTimeout(notificationTimeout)
+    // clearTimeout(notificationTimeout)
+    // console.log('clearTImeout', notificationTimeout)
     dispatch(setNotification(message))
-    dispatch(
-      setNotificationTimeout(
-        setTimeout(() => dispatch(hideNotification()), duration)
-      )
+    const timeoutId = setTimeout(
+      () => dispatch(hideNotification(timeoutId)),
+      duration
     )
+    dispatch(setNotificationTimeout(timeoutId))
   }
 
   const showError = (message, duration = 5000) => {
-    clearTimeout(errorTimeout)
+    // clearTimeout(errorTimeout)
     dispatch(setError(message))
-    dispatch(setErrorTimeout(setTimeout(() => dispatch(hideError()), duration)))
+    const timeoutId = setTimeout(() => dispatch(hideError(timeoutId)), duration)
+    dispatch(setErrorTimeout(timeoutId))
   }
 
   useEffect(() => {
@@ -178,9 +180,10 @@ const App = () => {
       const likedBlog = { ...blog, likes: blog.likes + 1 }
 
       // näytetään alustava notifikaatio
-      dispatch(
-        setNotification(`${user.name} liked the blog ${likedBlog.title}!`)
-      )
+      // dispatch(
+      //   setNotification(`${user.name} liked the blog ${likedBlog.title}!`)
+      // )
+      showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
       const result = await blogService.like(id, likedBlog)
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
