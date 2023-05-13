@@ -17,28 +17,15 @@ import {
   hideError,
 } from './reducers/notificationReducer'
 
-// tämä App ulkopuolelle, ettei valiteta
-// React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array
-// t. https://overreacted.io/a-complete-guide-to-useeffect/
-// const logout = setUser => {
-//   if (window.localStorage.getItem('loggedBloglistUser')) {
-//     window.localStorage.removeItem('loggedBloglistUser')
-//   }
-//   setUser(null)
-//   console.log('Käyttäjä kirjattu ulos')
-// }
-
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  // const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
   const blogFormRef = useRef()
 
-  // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch()
   const notificationReducerMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
@@ -89,9 +76,7 @@ const App = () => {
       console.log(exception)
       console.log('wrong credentials')
       dispatch(setError('wrong username or password'))
-      // setErrorMessage('wrong username or password')
       setTimeout(() => {
-        // setErrorMessage(null)
         dispatch(hideError())
       }, 5000)
     }
@@ -133,8 +118,8 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
 
-      // laitetaan tämä tänne. Menee ehkä hieman enemmän aikaa kuin 5 sekuntia, koska em. tietokantaoperaatiot vievät aikaa
-      // riittäisikö vähemmän kuin 5000 ms ?
+      // TODO tehdään tähän sama juttu kuin tykkäyksessä, että näytetään ensin alustava notifikaatio ja päivitetään
+      // awaitin jälkeen sen mukaan, mitä palvelin vastaa
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
@@ -142,17 +127,14 @@ const App = () => {
       console.log('Adding new blog failed')
       console.log(exception)
       if (exception.response.data.error) {
-        //setErrorMessage(
         dispatch(
           setError(`Failed to add a new blog: ${exception.response.data.error}`)
         )
       } else {
         dispatch(setError(`Failed to add a new blog: ${exception}`))
-        // setErrorMessage(`Failed to add a new blog: ${exception}`)
       }
       setTimeout(() => {
         dispatch(hideError())
-        // setErrorMessage(null)
       }, 5000)
       throw exception
     }
@@ -164,7 +146,7 @@ const App = () => {
       const blog = blogs.find(b => b.id === id)
       const likedBlog = { ...blog, likes: blog.likes + 1 }
 
-      // tähän jo tykkäysviestin dispatch
+      // näytetään alustava notifikaatio
       dispatch(
         setNotification(`${user.name} liked the blog ${likedBlog.title}!`)
       )
@@ -189,18 +171,14 @@ const App = () => {
         dispatch(
           setError(`Failed to like blog: ${exception.response.data.error}`)
         )
-        // setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
         dispatch(setError('Blog was already removed from the server'))
-        // setErrorMessage('Blog was already removed from the server')
         setBlogs(await blogService.getAll())
       } else {
         dispatch(setError(`Failed to like blog: ${exception}`))
-        // setErrorMessage(`Failed to like blog: ${exception}`)
       }
       setTimeout(() => {
         dispatch(hideError())
-        // setErrorMessage(null)
       }, 5000)
     }
   }
@@ -224,20 +202,14 @@ const App = () => {
           dispatch(
             setError(`Failed to remove blog: ${exception.response.data.error}`)
           )
-          // setErrorMessage(
-          //   `Failed to remove blog: ${exception.response.data.error}`
-          // )
         } else if (exception.response.status === 404) {
           dispatch(setError('Blog was already removed from the server'))
-          // setErrorMessage('Blog was already removed from the server')
           setBlogs(await blogService.getAll())
         } else {
           dispatch(setError(`Failed to remove blog: ${exception}`))
-          // setErrorMessage(`Failed to remove blog: ${exception}`)
         }
         setTimeout(() => {
           dispatch(hideError())
-          // setErrorMessage(null)
         }, 5000)
       }
     }
