@@ -20,16 +20,13 @@ import {
 // tämä App ulkopuolelle, ettei valiteta
 // React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array
 // t. https://overreacted.io/a-complete-guide-to-useeffect/
-const logout = setUser => {
-  if (window.localStorage.getItem('loggedBloglistUser')) {
-    // if (user) {
-    //   console.log(`Löydettiin kirjautunut käyttäjä ${user.username}`)
-    // }
-    window.localStorage.removeItem('loggedBloglistUser')
-  }
-  setUser(null)
-  console.log('Käyttäjä kirjattu ulos')
-}
+// const logout = setUser => {
+//   if (window.localStorage.getItem('loggedBloglistUser')) {
+//     window.localStorage.removeItem('loggedBloglistUser')
+//   }
+//   setUser(null)
+//   console.log('Käyttäjä kirjattu ulos')
+// }
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -98,6 +95,14 @@ const App = () => {
         dispatch(hideError())
       }, 5000)
     }
+  }
+
+  const logout = setUser => {
+    if (window.localStorage.getItem('loggedBloglistUser')) {
+      window.localStorage.removeItem('loggedBloglistUser')
+    }
+    setUser(null)
+    console.log('Käyttäjä kirjattu ulos')
   }
 
   const handleLogout = event => {
