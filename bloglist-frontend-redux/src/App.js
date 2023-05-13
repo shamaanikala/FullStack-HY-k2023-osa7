@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   setNotification,
   hideNotification,
+  setError,
+  hideError,
 } from './reducers/notificationReducer'
 
 // tämä App ulkopuolelle, ettei valiteta
@@ -34,7 +36,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  // const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
   const blogFormRef = useRef()
@@ -42,6 +44,7 @@ const App = () => {
   // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch()
   const notificationReducerMessage = useSelector(state => state.message)
+  const errorMessage = useSelector(state => state.errorMessage)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -88,9 +91,11 @@ const App = () => {
     } catch (exception) {
       console.log(exception)
       console.log('wrong credentials')
-      setErrorMessage('wrong username or password')
+      dispatch(setError('wrong username or password'))
+      // setErrorMessage('wrong username or password')
       setTimeout(() => {
-        setErrorMessage(null)
+        // setErrorMessage(null)
+        dispatch(hideError())
       }, 5000)
     }
   }
@@ -132,14 +137,17 @@ const App = () => {
       console.log('Adding new blog failed')
       console.log(exception)
       if (exception.response.data.error) {
-        setErrorMessage(
-          `Failed to add a new blog: ${exception.response.data.error}`
+        //setErrorMessage(
+        dispatch(
+          setError(`Failed to add a new blog: ${exception.response.data.error}`)
         )
       } else {
-        setErrorMessage(`Failed to add a new blog: ${exception}`)
+        dispatch(setError(`Failed to add a new blog: ${exception}`))
+        // setErrorMessage(`Failed to add a new blog: ${exception}`)
       }
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(hideError())
+        // setErrorMessage(null)
       }, 5000)
       throw exception
     }
@@ -173,15 +181,21 @@ const App = () => {
       dispatch(hideNotification())
       console.log(exception)
       if (exception.response.data.error) {
-        setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
+        dispatch(
+          setError(`Failed to like blog: ${exception.response.data.error}`)
+        )
+        // setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
-        setErrorMessage('Blog was already removed from the server')
+        dispatch(setError('Blog was already removed from the server'))
+        // setErrorMessage('Blog was already removed from the server')
         setBlogs(await blogService.getAll())
       } else {
-        setErrorMessage(`Failed to like blog: ${exception}`)
+        dispatch(setError(`Failed to like blog: ${exception}`))
+        // setErrorMessage(`Failed to like blog: ${exception}`)
       }
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(hideError())
+        // setErrorMessage(null)
       }, 5000)
     }
   }
@@ -202,17 +216,23 @@ const App = () => {
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
-          setErrorMessage(
-            `Failed to remove blog: ${exception.response.data.error}`
+          dispatch(
+            setError(`Failed to remove blog: ${exception.response.data.error}`)
           )
+          // setErrorMessage(
+          //   `Failed to remove blog: ${exception.response.data.error}`
+          // )
         } else if (exception.response.status === 404) {
-          setErrorMessage('Blog was already removed from the server')
+          dispatch(setError('Blog was already removed from the server'))
+          // setErrorMessage('Blog was already removed from the server')
           setBlogs(await blogService.getAll())
         } else {
-          setErrorMessage(`Failed to remove blog: ${exception}`)
+          dispatch(setError(`Failed to remove blog: ${exception}`))
+          // setErrorMessage(`Failed to remove blog: ${exception}`)
         }
         setTimeout(() => {
-          setErrorMessage(null)
+          dispatch(hideError())
+          // setErrorMessage(null)
         }, 5000)
       }
     }
