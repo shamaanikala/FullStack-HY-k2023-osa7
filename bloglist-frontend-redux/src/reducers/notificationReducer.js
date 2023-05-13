@@ -43,12 +43,11 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const setNotification = (message, timeout) => {
+export const setNotification = message => {
   return {
     type: 'SHOW',
     payload: {
       message,
-      timeout,
     },
   }
 }
@@ -59,12 +58,11 @@ export const hideNotification = () => {
   }
 }
 
-export const setError = (errorMessage, timeout) => {
+export const setError = errorMessage => {
   return {
     type: 'SHOW_ERROR',
     payload: {
       errorMessage,
-      timeout,
     },
   }
 }
