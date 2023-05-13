@@ -5,17 +5,21 @@ const initialState = {
 
 const notificationReducer = (state = initialState, action) => {
   console.log(
-    `notificationReducer ${action.type}: action: ${JSON.stringify(action)} `
+    `notificationReducer ${action.type}: action: ${JSON.stringify(
+      action
+    )}, state: `,
+    state
   )
   switch (action.type) {
     case 'SHOW':
-      return { message: action.payload.message, ...state }
+      // ensin ...state, jos on { ...state }, niin tuo ylikirjoittaa kaikki staten arvoilla
+      return { ...state, message: action.payload.message }
     case 'HIDE':
-      return { message: null, ...state }
+      return { ...state, message: null }
     case 'SHOW_ERROR':
-      return { errorMessage: action.payload.errorMessage, ...state }
+      return { ...state, errorMessage: action.payload.errorMessage }
     case 'HIDE_ERROR':
-      return { errorMessage: null, ...state }
+      return { ...state, errorMessage: null }
     default:
       return state
   }
