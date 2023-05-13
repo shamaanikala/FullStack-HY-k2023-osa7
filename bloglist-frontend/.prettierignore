@@ -1,0 +1,6 @@
+build
+coverage
+# eslintignore
+node_modules
+build
+.eslintrc.js
