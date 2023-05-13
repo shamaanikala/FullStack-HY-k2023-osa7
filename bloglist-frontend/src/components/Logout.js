@@ -1,6 +1,8 @@
 const Logout = ({ handleLogout }) => {
   return (
-    <button type="submit" onClick={handleLogout}>logout</button>
+    <button type="submit" onClick={handleLogout}>
+      logout
+    </button>
   )
 }
 

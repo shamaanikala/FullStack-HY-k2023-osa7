@@ -19,7 +19,7 @@ const BlogForm = ({ createBlog }) => {
       await createBlog({
         title,
         author,
-        url
+        url,
       })
 
       setTitle('')
@@ -30,9 +30,6 @@ const BlogForm = ({ createBlog }) => {
         console.log(error.message)
       }
     }
-
-
-
   }
 
   return (
@@ -40,36 +37,38 @@ const BlogForm = ({ createBlog }) => {
       <h2>create new</h2>
       <form onSubmit={createNewBlog}>
         <div>
-                    title:
+          title:
           <input
             type="text"
             value={title}
             id="title"
             onChange={event => setTitle(event.target.value)}
-            placeholder='Type blog title...'
+            placeholder="Type blog title..."
           />
         </div>
         <div>
-                    author:
+          author:
           <input
             type="text"
             value={author}
             id="author"
             onChange={event => setAuthor(event.target.value)}
-            placeholder='Type blog author...'
+            placeholder="Type blog author..."
           />
         </div>
         <div>
-                    url:
+          url:
           <input
             type="text"
             value={url}
             id="url"
             onChange={event => setUrl(event.target.value)}
-            placeholder='Type blog url...'
+            placeholder="Type blog url..."
           />
         </div>
-        <button id="createButton" type="submit">create</button>
+        <button id="createButton" type="submit">
+          create
+        </button>
       </form>
     </div>
   )

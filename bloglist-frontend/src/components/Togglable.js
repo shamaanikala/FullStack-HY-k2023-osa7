@@ -18,7 +18,6 @@ const Togglable = forwardRef((props, ref) => {
   //         toggleVisibility
   //     }
 
-
   // })
   // // tämä toimii myös
   // lähde: https://legacy.reactjs.org/docs/hooks-reference.html#useimperativehandle
@@ -26,7 +25,7 @@ const Togglable = forwardRef((props, ref) => {
   // vastaus: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#function_body
   // linkin viimeinen esimerkki
   useImperativeHandle(ref, () => ({
-    toggleVisibility
+    toggleVisibility,
   }))
 
   // entä toimiiko tämä sitten
@@ -47,7 +46,7 @@ const Togglable = forwardRef((props, ref) => {
 })
 
 Togglable.propTypes = {
-  buttonLabel: PropTypes.string.isRequired
+  buttonLabel: PropTypes.string.isRequired,
 }
 
 Togglable.displayName = 'Togglable'

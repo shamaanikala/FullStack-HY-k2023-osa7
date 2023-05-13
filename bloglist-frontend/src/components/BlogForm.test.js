@@ -20,7 +20,10 @@ test('<BlogForm /> -lomake toimii ja lähettää oikeat tiedot', async () => {
 
   await user.type(titleInput, 'Parsing Html The Cthulhu Way')
   await user.type(authorInput, 'Jeff Atwood')
-  await user.type(urlInput, 'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
+  await user.type(
+    urlInput,
+    'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/'
+  )
   await user.click(createButton)
 
   //console.log(createBlog.mock.calls)
@@ -37,7 +40,7 @@ test('<BlogForm /> -lomake toimii ja lähettää oikeat tiedot', async () => {
   const mockBlog = {
     title: 'Parsing Html The Cthulhu Way',
     author: 'Jeff Atwood',
-    url: 'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/'
+    url: 'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/',
   }
 
   expect(createBlog.mock.calls).toHaveLength(1)

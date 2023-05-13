@@ -6,11 +6,15 @@ const login = async credentials => {
   return response.data
 }
 
-const verify = async (userWithToken,config) => {
+const verify = async (userWithToken, config) => {
   // console.log(userWithToken)
   // console.log(`Lähetetään verify-token ${userWithToken}`)
   // console.log(userWithToken)
-  const response = await axios.post(`${baseUrl}/verify-token`, userWithToken,config)
+  const response = await axios.post(
+    `${baseUrl}/verify-token`,
+    userWithToken,
+    config
+  )
   return response.data
 }
 

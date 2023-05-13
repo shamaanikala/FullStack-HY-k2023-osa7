@@ -8,16 +8,12 @@ const Notification = ({ message, type }) => {
     return null
   }
 
-  return (
-    <div className={type}>
-      {message}
-    </div>
-  )
+  return <div className={type}>{message}</div>
 }
 
 Notification.propTypes = {
   //message: PropTypes.string.isRequired, // ei voi ossa isRequired, jos null
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 }
 
 export default Notification

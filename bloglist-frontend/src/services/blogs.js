@@ -31,14 +31,13 @@ const like = async (id, blogObject) => {
   console.log(`blogs.js -like : ${JSON.stringify(blogObject)}`)
 
   try {
-    const response = await axios.put(`${baseUrl}/${id}`, blogObject,config)
+    const response = await axios.put(`${baseUrl}/${id}`, blogObject, config)
     return response.data
   } catch (error) {
     if (error.response.status === 404) {
       throw error
     }
   }
-
 }
 
 const remove = async id => {
@@ -48,14 +47,13 @@ const remove = async id => {
   console.log(`blogs.js -remove : ${id}`)
 
   try {
-    const response = await axios.delete(`${baseUrl}/${id}`,config)
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
     return response.data
   } catch (error) {
     if (error.response.status === 404) {
       throw error
     }
   }
-
 }
 
 //// eslint-disable-next-line import/no-anonymous-default-export
