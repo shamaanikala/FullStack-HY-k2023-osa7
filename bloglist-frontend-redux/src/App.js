@@ -151,11 +151,17 @@ const App = () => {
       const blog = blogs.find(b => b.id === id)
       const likedBlog = { ...blog, likes: blog.likes + 1 }
 
+      // tähän jo tykkäysviestin dispatch
+      dispatch(
+        setNotification(`${user.name} liked the blog ${likedBlog.title}!`)
+      )
       const result = await blogService.like(id, likedBlog)
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
-      dispatch(setNotification(`${user.name} liked the blog ${result.title}!`))
+      dispatch(
+        setNotification(`${user.name} liked the blog ${result.title}! 👍`)
+      )
       //setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
       setTimeout(() => {
         //setNotificationMessage(null)
@@ -163,6 +169,8 @@ const App = () => {
       }, 5000)
     } catch (exception) {
       console.log('Liking blog failed')
+      console.log('piilotetaan redux notifikaatio')
+      dispatch(hideNotification())
       console.log(exception)
       if (exception.response.data.error) {
         setErrorMessage(`Failed to like blog: ${exception.response.data.error}`)
