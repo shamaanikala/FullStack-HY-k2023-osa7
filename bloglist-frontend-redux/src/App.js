@@ -24,19 +24,14 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  // const [notificationMessage, setNotificationMessage] = useState(null)
 
   const blogFormRef = useRef()
 
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
-  // const notificationTimeout = useSelector(state => state.messageId)
-  // const errorTimeout = useSelector(state => state.errorId)
 
   const showNotification = (message, duration = 5000) => {
-    // clearTimeout(notificationTimeout)
-    // console.log('clearTImeout', notificationTimeout)
     dispatch(setNotification(message))
     const timeoutId = setTimeout(
       () => dispatch(hideNotification(timeoutId)),
@@ -46,7 +41,6 @@ const App = () => {
   }
 
   const showError = (message, duration = 5000) => {
-    // clearTimeout(errorTimeout)
     dispatch(setError(message))
     const timeoutId = setTimeout(() => dispatch(hideError(timeoutId)), duration)
     dispatch(setErrorTimeout(timeoutId))
@@ -98,10 +92,6 @@ const App = () => {
       console.log(exception)
       console.log('wrong credentials')
       showError('wrong username or password')
-      // dispatch(setError('wrong username or password'))
-      // setTimeout(() => {
-      //   dispatch(hideError())
-      // }, 5000)
     }
   }
 
@@ -117,10 +107,6 @@ const App = () => {
     event.preventDefault()
     logout(setUser)
     showNotification('user logged out', 1500)
-    // setNotificationMessage('user logged out')
-    // setTimeout(() => {
-    //   setNotificationMessage(null)
-    // }, 1500)
   }
 
   const createBlog = async blogObject => {
@@ -139,36 +125,19 @@ const App = () => {
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
         10000
       )
-      // setNotificationMessage(
-      //   `a new blog ${newBlog.title} by ${newBlog.author} added`
-      // )
-
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
-
-      // TODO tehdään tähän sama juttu kuin tykkäyksessä, että näytetään ensin alustava notifikaatio ja päivitetään
-      // awaitin jälkeen sen mukaan, mitä palvelin vastaa
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
       )
-      // setTimeout(() => {
-      //   setNotificationMessage(null)
-      // }, 5000)
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
       if (exception.response.data.error) {
         showError(`Failed to add a new blog: ${exception.response.data.error}`)
-        // dispatch(
-        //   setError(`Failed to add a new blog: ${exception.response.data.error}`)
-        // )
       } else {
         showError(`Failed to add a new blog: ${exception}`)
-        // dispatch(setError(`Failed to add a new blog: ${exception}`))
       }
-      // setTimeout(() => {
-      //   dispatch(hideError())
-      // }, 5000)
       throw exception
     }
   }
@@ -180,22 +149,11 @@ const App = () => {
       const likedBlog = { ...blog, likes: blog.likes + 1 }
 
       // näytetään alustava notifikaatio
-      // dispatch(
-      //   setNotification(`${user.name} liked the blog ${likedBlog.title}!`)
-      // )
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
       const result = await blogService.like(id, likedBlog)
       setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
-      // dispatch(
-      //   setNotification(`${user.name} liked the blog ${result.title}! 👍`)
-      // )
-      // //setNotificationMessage(`${user.name} liked the blog ${result.title}!`)
-      // setTimeout(() => {
-      //   //setNotificationMessage(null)
-      //   dispatch(hideNotification())
-      // }, 5000)
       showNotification(`${user.name} liked the blog ${result.title}! 👍`)
     } catch (exception) {
       console.log('Liking blog failed')
@@ -227,11 +185,6 @@ const App = () => {
         setBlogs(await blogService.getAll())
 
         showNotification(`Removed the blog ${result}`)
-        // setNotificationMessage(`Removed the blog ${result}`)
-
-        // setTimeout(() => {
-        //   setNotificationMessage(null)
-        // }, 5000)
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
