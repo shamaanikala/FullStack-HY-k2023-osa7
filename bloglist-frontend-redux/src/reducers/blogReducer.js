@@ -2,8 +2,10 @@ import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
   // console.log(`blogRducer: state: ${JSON.stringify(state)}`, action)
+  console.log(`blogReducer: type: ${action.type}`)
   switch (action.type) {
     case 'NEW_BLOG':
+      //console.log([...state, action.payload])
       return [...state, action.payload]
     case 'SET_BLOGS':
       return action.payload
@@ -27,11 +29,15 @@ export const initializeBlogs = () => async dispatch => {
 export const addBlog = newBlog => async dispatch => {
   console.log('appendBlogs', newBlog)
   console.log('lähetetään', newBlog)
-  const response = await blogService.create(newBlog)
-  console.log('response: ', response)
+  const addedBlog = await blogService.get(
+    (
+      await blogService.create(newBlog)
+    ).id
+  )
+  console.log('addedBlog', addedBlog)
   dispatch({
     type: 'NEW_BLOG',
-    payload: response,
+    payload: addedBlog,
   })
 }
 

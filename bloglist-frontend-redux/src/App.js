@@ -49,8 +49,6 @@ const App = () => {
 
   const blogs = useSelector(state => state.blogs)
 
-  //const
-
   useEffect(() => {
     // blogService.getAll().then(blogs => setBlogs(blogs))
     dispatch(initializeBlogs())

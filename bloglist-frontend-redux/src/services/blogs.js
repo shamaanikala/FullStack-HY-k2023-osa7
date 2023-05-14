@@ -7,14 +7,15 @@ const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
 }
 
+// tätä ei ole backendissä toteutettu
 const get = async id => {
-  const response = await axios.get(`${baseUrl}/${id}`)
-  return response.data
+  const response = await axios.get(`${baseUrl}`)
+  return response.data.find(blog => blog.id === id)
 }
 
 const create = async blogObject => {
