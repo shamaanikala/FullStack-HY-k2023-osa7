@@ -1,6 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
+// TODO token pois täältä -> login.js ?
 let token = null
 const setToken = newToken => {
   token = `Bearer ${newToken}`

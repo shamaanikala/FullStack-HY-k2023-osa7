@@ -3,7 +3,8 @@ import blogService from '../services/blogs'
 const blogReducer = (state = [], action) => {
   console.log(`blogRducer: state: ${JSON.stringify(state)}`, action)
   switch (action.type) {
-    //case 'NEW_BLOG':
+    case 'NEW_BLOG':
+      return [...state, action.payload]
     case 'SET_BLOGS':
       return action.payload
     default:
@@ -20,6 +21,16 @@ export const initializeBlogs = () => async dispatch => {
   dispatch({
     type: 'SET_BLOGS',
     payload: blogs,
+  })
+}
+
+export const addBlog = newBlog => async dispatch => {
+  console.log('appendBlogs', newBlog)
+  const response = await blogService.create(newBlog)
+
+  dispatch({
+    type: 'NEW_BLOG',
+    payload: response.data,
   })
 }
 

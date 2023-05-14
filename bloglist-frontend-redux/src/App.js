@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
+import blogService from './services/blogs' // token tulee myös täältä vielä!
 import loginService from './services/login'
 import './index.css'
 import Togglable from './components/Togglable'
@@ -18,7 +18,7 @@ import {
   setNotificationTimeout,
   setErrorTimeout,
 } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import { addBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -54,7 +54,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
     dispatch(initializeBlogs())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -118,6 +118,7 @@ const App = () => {
   const createBlog = async blogObject => {
     try {
       const newBlog = await blogService.create(blogObject)
+      dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
