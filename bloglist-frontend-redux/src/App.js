@@ -18,6 +18,7 @@ import {
   setNotificationTimeout,
   setErrorTimeout,
 } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -46,8 +47,13 @@ const App = () => {
     dispatch(setErrorTimeout(timeoutId))
   }
 
+  const blogsRedux = useSelector(state => state.blogs)
+
+  //const
+
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -184,6 +190,8 @@ const App = () => {
       }
     }
   }
+
+  console.log(blogsRedux)
 
   return (
     <div>
