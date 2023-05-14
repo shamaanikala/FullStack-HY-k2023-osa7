@@ -60,6 +60,7 @@ const remove = async id => {
     if (error.response.status === 404) {
       throw error
     }
+    throw error
   }
 }
 
