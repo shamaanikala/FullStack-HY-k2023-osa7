@@ -167,7 +167,7 @@ const App = () => {
     if (window.confirm(`Remove blog ${title} by ${author}`)) {
       try {
         console.log(`Yritetään poistaa blogi ${id}`)
-        dispatch(removeBlog(id))
+        await dispatch(removeBlog(id))
         showNotification(`Removed the blog ${title}`)
       } catch (exception) {
         console.log(exception)

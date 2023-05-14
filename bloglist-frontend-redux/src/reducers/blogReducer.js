@@ -55,8 +55,12 @@ export const likeBlog = (id, targetBlog) => async dispatch => {
 }
 
 export const removeBlog = id => async dispatch => {
-  const response = await blogService.remove(id)
-  console.log('blogReducer.removeBlog', id, response)
+  await blogService.remove(id).catch(error => {
+    if (error.response.status === 404) {
+      dispatch(initializeBlogs())
+    }
+    throw error
+  })
   dispatch({
     type: 'REMOVE_BLOG',
     payload: id,
