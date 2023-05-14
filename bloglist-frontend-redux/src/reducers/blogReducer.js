@@ -1,12 +1,14 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-  // console.log(`blogRducer: state: ${JSON.stringify(state)}`, action)
   console.log(`blogReducer: type: ${action.type}`)
   switch (action.type) {
     case 'NEW_BLOG':
-      //console.log([...state, action.payload])
       return [...state, action.payload]
+    case 'LIKE_BLOG': {
+      const liked = action.payload
+      return state.map(b => (b.id !== liked.id ? b : liked))
+    }
     case 'SET_BLOGS':
       return action.payload
     default:
@@ -27,8 +29,6 @@ export const initializeBlogs = () => async dispatch => {
 }
 
 export const addBlog = newBlog => async dispatch => {
-  console.log('appendBlogs', newBlog)
-  console.log('lähetetään', newBlog)
   const response = await blogService.create(newBlog)
   const addedBlog = await blogService.get(response.id)
   // const addedBlog = await blogService.get(
@@ -36,10 +36,18 @@ export const addBlog = newBlog => async dispatch => {
   //     await blogService.create(newBlog)
   //   ).id
   // )
-  console.log('addedBlog', addedBlog)
   dispatch({
     type: 'NEW_BLOG',
     payload: addedBlog,
+  })
+}
+
+export const likeBlog = (id, targetBlog) => async dispatch => {
+  const response = await blogService.like(id, targetBlog)
+  console.log(`likeBlog dispatching: ${response}`)
+  dispatch({
+    type: 'LIKE_BLOG',
+    payload: response,
   })
 }
 

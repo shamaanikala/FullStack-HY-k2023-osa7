@@ -18,7 +18,7 @@ import {
   setNotificationTimeout,
   setErrorTimeout,
 } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs } from './reducers/blogReducer'
+import { addBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -116,7 +116,7 @@ const App = () => {
       const newBlog = { ...blogObject }
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
-        10000
+        5000
       )
       dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
@@ -138,19 +138,19 @@ const App = () => {
     }
   }
 
-  const likeBlog = async id => {
+  const handleLike = async id => {
     try {
       const blog = blogs.find(b => b.id === id)
       const likedBlog = { ...blog, likes: blog.likes + 1 }
 
       // näytetään alustava notifikaatio
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
-      const result = await blogService.like(id, likedBlog)
-      console.log(blogs)
+      //const result = await blogService.like(id, likedBlog)
       // setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
-      showNotification(`${user.name} liked the blog ${result.title}! 👍`)
+      dispatch(likeBlog(id, likedBlog))
+      showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`)
     } catch (exception) {
       console.log('Liking blog failed')
       // pakotetaan tykkäysilmoitus piiloon force=true
@@ -231,7 +231,7 @@ const App = () => {
                   key={blog.id}
                   user={user}
                   blog={blog}
-                  like={likeBlog}
+                  like={handleLike}
                   remove={removeBlog}
                 />
               ))

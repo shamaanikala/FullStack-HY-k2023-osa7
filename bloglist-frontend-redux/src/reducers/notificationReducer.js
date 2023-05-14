@@ -6,12 +6,7 @@ const initialState = {
 }
 
 const notificationReducer = (state = initialState, action) => {
-  console.log(
-    `notificationReducer ${action.type}: action: ${JSON.stringify(
-      action
-    )}, state: `,
-    state
-  )
+  console.log(`notificationReducer: ${action.type}`)
   switch (action.type) {
     case 'SHOW':
       // ensin ...state, jos on { ...state }, niin tuo ylikirjoittaa kaikki staten arvoilla
@@ -92,7 +87,7 @@ export const hideError = timeoutId => {
 }
 
 export const setNotificationTimeout = timeout => {
-  console.log('setNotificationTimeout', timeout)
+  //console.log('setNotificationTimeout', timeout)
   return {
     type: 'TIMEOUT',
     payload: {
@@ -102,7 +97,7 @@ export const setNotificationTimeout = timeout => {
 }
 
 export const setErrorTimeout = timeout => {
-  console.log('setErrorTimeOut', timeout)
+  //console.log('setErrorTimeOut', timeout)
   return {
     type: 'TIMEOUT_ERROR',
     payload: {
