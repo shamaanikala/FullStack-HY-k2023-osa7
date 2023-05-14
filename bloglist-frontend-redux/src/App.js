@@ -47,7 +47,7 @@ const App = () => {
     dispatch(setErrorTimeout(timeoutId))
   }
 
-  const blogsRedux = useSelector(state => state.blogs)
+  // const blogsRedux = useSelector(state => state.blogs)
 
   //const
 
@@ -117,7 +117,8 @@ const App = () => {
 
   const createBlog = async blogObject => {
     try {
-      const newBlog = await blogService.create(blogObject)
+      //const newBlog = await blogService.create(blogObject)
+      const newBlog = { ...blogObject }
       dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
       showNotification(
@@ -132,6 +133,8 @@ const App = () => {
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
+      dispatch(hideNotification(null, true)) // params: timeoutId, force
+      showError(`Failed to add a new blog: ${exception}`)
       if (exception.response.data.error) {
         showError(`Failed to add a new blog: ${exception.response.data.error}`)
       } else {
@@ -192,7 +195,7 @@ const App = () => {
     }
   }
 
-  console.log(blogsRedux)
+  // console.log(blogsRedux)
 
   return (
     <div>

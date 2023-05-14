@@ -1,7 +1,7 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-  console.log(`blogRducer: state: ${JSON.stringify(state)}`, action)
+  // console.log(`blogRducer: state: ${JSON.stringify(state)}`, action)
   switch (action.type) {
     case 'NEW_BLOG':
       return [...state, action.payload]
