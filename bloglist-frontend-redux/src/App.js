@@ -30,7 +30,6 @@ const App = () => {
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
-  // const notificationMessageId = useSelector(state => state.messageId)
 
   const showNotification = (message, duration = 5000) => {
     dispatch(setNotification(message))
@@ -114,14 +113,6 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       blogFormRef.current.toggleVisibility()
-      console.log(newBlog)
-      console.log(
-        `Kun uusi blogi on lisätty, on blogin user kenttä ${newBlog.user}`
-      )
-      // ei vain lisätä uutta blogia listaan, vaan kutsutaan backendin get / kautta sitä, jotta populate tapahtuu
-      // ja blogin user-kentän id yhdistetään käyttäjän tietoihin
-      //setBlogs(blogs.concat(newBlog))
-
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
         10000
@@ -143,7 +134,6 @@ const App = () => {
     }
   }
 
-  // otetaan mallia notes toggleImportanceOf
   const likeBlog = async id => {
     try {
       const blog = blogs.find(b => b.id === id)
@@ -184,18 +174,13 @@ const App = () => {
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
-          dispatch(
-            setError(`Failed to remove blog: ${exception.response.data.error}`)
-          )
+          showError(`Failed to remove blog: ${exception.response.data.error}`)
         } else if (exception.response.status === 404) {
-          dispatch(setError('Blog was already removed from the server'))
+          showError('Blog was already removed from the server')
           setBlogs(await blogService.getAll())
         } else {
-          dispatch(setError(`Failed to remove blog: ${exception}`))
+          showError(`Failed to remove blog: ${exception}`)
         }
-        setTimeout(() => {
-          dispatch(hideError())
-        }, 5000)
       }
     }
   }
