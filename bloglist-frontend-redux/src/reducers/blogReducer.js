@@ -40,7 +40,13 @@ export const addBlog = newBlog => async dispatch => {
 }
 
 export const likeBlog = (id, targetBlog) => async dispatch => {
-  await blogService.like(id, targetBlog)
+  await blogService.like(id, targetBlog).catch(error => {
+    console.error('likeBlog', error)
+    if (error.response.status === 404) {
+      dispatch(initializeBlogs())
+    }
+    throw error
+  })
   const likedBlog = await blogService.get(id)
   dispatch({
     type: 'LIKE_BLOG',

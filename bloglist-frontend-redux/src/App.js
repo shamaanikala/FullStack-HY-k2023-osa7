@@ -146,7 +146,7 @@ const App = () => {
 
       // näytetään alustava notifikaatio
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
-      dispatch(likeBlog(id, likedBlog))
+      await dispatch(likeBlog(id, likedBlog))
       showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`)
     } catch (exception) {
       console.log('Liking blog failed')
