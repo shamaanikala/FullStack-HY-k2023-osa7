@@ -18,7 +18,12 @@ import {
   setNotificationTimeout,
   setErrorTimeout,
 } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
+import {
+  addBlog,
+  initializeBlogs,
+  likeBlog,
+  removeBlog,
+} from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -120,10 +125,6 @@ const App = () => {
       )
       dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
-      // tätä ei enää tarvitse
-      // showNotification(
-      //   `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
-      // )
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
@@ -145,10 +146,6 @@ const App = () => {
 
       // näytetään alustava notifikaatio
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
-      //const result = await blogService.like(id, likedBlog)
-      // setBlogs(await blogService.getAll())
-      // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
-      //setBlogs(blogs.map(b => b.id !== id ? b : result))
       dispatch(likeBlog(id, likedBlog))
       showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`)
     } catch (exception) {
@@ -160,29 +157,24 @@ const App = () => {
         showError(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
         showError('Blog was already removed from the server')
-        // setBlogs(await blogService.getAll())
       } else {
         showError(`Failed to like blog: ${exception}`)
       }
     }
   }
 
-  const removeBlog = async (id, title, author) => {
+  const handleRemove = async (id, title, author) => {
     if (window.confirm(`Remove blog ${title} by ${author}`)) {
       try {
         console.log(`Yritetään poistaa blogi ${id}`)
-        const result = await blogService.remove(id)
-
-        // setBlogs(await blogService.getAll())
-
-        showNotification(`Removed the blog ${result}`)
+        dispatch(removeBlog(id))
+        showNotification(`Removed the blog ${title}`)
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
           showError(`Failed to remove blog: ${exception.response.data.error}`)
         } else if (exception.response.status === 404) {
           showError('Blog was already removed from the server')
-          // setBlogs(await blogService.getAll())
         } else {
           showError(`Failed to remove blog: ${exception}`)
         }
@@ -232,7 +224,7 @@ const App = () => {
                   user={user}
                   blog={blog}
                   like={handleLike}
-                  remove={removeBlog}
+                  remove={handleRemove}
                 />
               ))
           }

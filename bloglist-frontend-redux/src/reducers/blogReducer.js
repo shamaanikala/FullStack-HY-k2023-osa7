@@ -9,6 +9,8 @@ const blogReducer = (state = [], action) => {
       const liked = action.payload
       return state.map(b => (b.id !== liked.id ? b : liked))
     }
+    case 'REMOVE_BLOG':
+      return state.filter(blog => blog.id !== action.payload)
     case 'SET_BLOGS':
       return action.payload
     default:
@@ -44,10 +46,18 @@ export const addBlog = newBlog => async dispatch => {
 
 export const likeBlog = (id, targetBlog) => async dispatch => {
   const response = await blogService.like(id, targetBlog)
-  console.log(`likeBlog dispatching: ${response}`)
   dispatch({
     type: 'LIKE_BLOG',
     payload: response,
+  })
+}
+
+export const removeBlog = id => async dispatch => {
+  const response = await blogService.remove(id)
+  console.log('blogReducer.removeBlog', id, response)
+  dispatch({
+    type: 'REMOVE_BLOG',
+    payload: id,
   })
 }
 
