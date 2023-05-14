@@ -23,6 +23,8 @@ const notificationReducer = (state = initialState, action) => {
       return state.messageId === action.payload.timeoutId
         ? { ...state, message: null }
         : state
+    case 'FORCE_HIDE':
+      return { ...state, message: null }
     case 'TIMEOUT':
       return {
         ...state,
@@ -56,12 +58,18 @@ export const setNotification = message => {
   }
 }
 
-export const hideNotification = timeoutId => {
-  return {
-    type: 'HIDE',
-    payload: {
-      timeoutId,
-    },
+export const hideNotification = (timeoutId, force = false) => {
+  if (force) {
+    return {
+      type: 'FORCE_HIDE',
+    }
+  } else {
+    return {
+      type: 'HIDE',
+      payload: {
+        timeoutId,
+      },
+    }
   }
 }
 

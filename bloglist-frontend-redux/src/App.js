@@ -30,6 +30,7 @@ const App = () => {
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.message)
   const errorMessage = useSelector(state => state.errorMessage)
+  // const notificationMessageId = useSelector(state => state.messageId)
 
   const showNotification = (message, duration = 5000) => {
     dispatch(setNotification(message))
@@ -157,22 +158,17 @@ const App = () => {
       showNotification(`${user.name} liked the blog ${result.title}! 👍`)
     } catch (exception) {
       console.log('Liking blog failed')
-      console.log('piilotetaan redux notifikaatio')
-      dispatch(hideNotification())
+      // pakotetaan tykkäysilmoitus piiloon force=true
+      dispatch(hideNotification(null, true)) // params: timeoutId, force
       console.log(exception)
       if (exception.response.data.error) {
-        dispatch(
-          setError(`Failed to like blog: ${exception.response.data.error}`)
-        )
+        showError(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
-        dispatch(setError('Blog was already removed from the server'))
+        showError('Blog was already removed from the server')
         setBlogs(await blogService.getAll())
       } else {
-        dispatch(setError(`Failed to like blog: ${exception}`))
+        showError(`Failed to like blog: ${exception}`)
       }
-      setTimeout(() => {
-        dispatch(hideError())
-      }, 5000)
     }
   }
 
