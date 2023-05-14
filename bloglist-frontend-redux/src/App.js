@@ -142,7 +142,9 @@ const App = () => {
   const handleLike = async id => {
     try {
       const blog = blogs.find(b => b.id === id)
-      const likedBlog = { ...blog, likes: blog.likes + 1 }
+      // + 1 servicen hoidettavaksi
+      //const likedBlog = { ...blog, likes: blog.likes + 1 }
+      const likedBlog = { ...blog }
 
       // näytetään alustava notifikaatio
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)

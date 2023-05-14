@@ -38,7 +38,13 @@ const like = async (id, blogObject) => {
   console.log(`blogs.js -like : ${JSON.stringify(blogObject)}`)
 
   try {
-    const response = await axios.put(`${baseUrl}/${id}`, blogObject, config)
+    const checkLikes = await get(id)
+    if (checkLikes.likes !== blogObject.likes) {
+      console.log('frontend and backend likes differ, using backend value!')
+      blogObject.likes = checkLikes.likes
+    }
+    const likedObject = { ...blogObject, likes: blogObject.likes + 1 }
+    const response = await axios.put(`${baseUrl}/${id}`, likedObject, config)
     return response.data
   } catch (error) {
     if (error.response.status === 404) {
