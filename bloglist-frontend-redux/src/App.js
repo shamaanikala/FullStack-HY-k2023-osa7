@@ -21,7 +21,6 @@ import {
 import { addBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -50,7 +49,6 @@ const App = () => {
   const blogs = useSelector(state => state.blogs)
 
   useEffect(() => {
-    // blogService.getAll().then(blogs => setBlogs(blogs))
     dispatch(initializeBlogs())
   }, [dispatch])
 
@@ -115,19 +113,17 @@ const App = () => {
 
   const createBlog = async blogObject => {
     try {
-      //const newBlog = await blogService.create(blogObject)
       const newBlog = { ...blogObject }
-      dispatch(addBlog(blogObject))
-      blogFormRef.current.toggleVisibility()
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
         10000
       )
-      // const updatedBlogs = await blogService.getAll()
-      // setBlogs(updatedBlogs)
-      showNotification(
-        `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
-      )
+      dispatch(addBlog(blogObject))
+      blogFormRef.current.toggleVisibility()
+      // tätä ei enää tarvitse
+      // showNotification(
+      //   `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
+      // )
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
@@ -193,8 +189,6 @@ const App = () => {
       }
     }
   }
-
-  // console.log(blogsRedux)
 
   return (
     <div>
