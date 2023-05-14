@@ -21,7 +21,7 @@ import {
 import { addBlog, initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -47,12 +47,12 @@ const App = () => {
     dispatch(setErrorTimeout(timeoutId))
   }
 
-  // const blogsRedux = useSelector(state => state.blogs)
+  const blogs = useSelector(state => state.blogs)
 
   //const
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
+    // blogService.getAll().then(blogs => setBlogs(blogs))
     dispatch(initializeBlogs())
   }, [dispatch])
 
@@ -125,8 +125,8 @@ const App = () => {
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
         10000
       )
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs)
+      // const updatedBlogs = await blogService.getAll()
+      // setBlogs(updatedBlogs)
       showNotification(
         `a new blog ${newBlog.title} by ${newBlog.author} added ➕️`
       )
@@ -152,7 +152,8 @@ const App = () => {
       // näytetään alustava notifikaatio
       showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
       const result = await blogService.like(id, likedBlog)
-      setBlogs(await blogService.getAll())
+      console.log(blogs)
+      // setBlogs(await blogService.getAll())
       // tällä tavalla tulee bugi, jossa lisääjän nimi ei näy
       //setBlogs(blogs.map(b => b.id !== id ? b : result))
       showNotification(`${user.name} liked the blog ${result.title}! 👍`)
@@ -165,7 +166,7 @@ const App = () => {
         showError(`Failed to like blog: ${exception.response.data.error}`)
       } else if (exception.response.status === 404) {
         showError('Blog was already removed from the server')
-        setBlogs(await blogService.getAll())
+        // setBlogs(await blogService.getAll())
       } else {
         showError(`Failed to like blog: ${exception}`)
       }
@@ -178,7 +179,7 @@ const App = () => {
         console.log(`Yritetään poistaa blogi ${id}`)
         const result = await blogService.remove(id)
 
-        setBlogs(await blogService.getAll())
+        // setBlogs(await blogService.getAll())
 
         showNotification(`Removed the blog ${result}`)
       } catch (exception) {
@@ -187,7 +188,7 @@ const App = () => {
           showError(`Failed to remove blog: ${exception.response.data.error}`)
         } else if (exception.response.status === 404) {
           showError('Blog was already removed from the server')
-          setBlogs(await blogService.getAll())
+          // setBlogs(await blogService.getAll())
         } else {
           showError(`Failed to remove blog: ${exception}`)
         }

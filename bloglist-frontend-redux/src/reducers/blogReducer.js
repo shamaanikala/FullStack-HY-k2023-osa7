@@ -26,11 +26,12 @@ export const initializeBlogs = () => async dispatch => {
 
 export const addBlog = newBlog => async dispatch => {
   console.log('appendBlogs', newBlog)
+  console.log('lähetetään', newBlog)
   const response = await blogService.create(newBlog)
-
+  console.log('response: ', response)
   dispatch({
     type: 'NEW_BLOG',
-    payload: response.data,
+    payload: response,
   })
 }
 
