@@ -33,11 +33,6 @@ export const initializeBlogs = () => async dispatch => {
 export const addBlog = newBlog => async dispatch => {
   const response = await blogService.create(newBlog)
   const addedBlog = await blogService.get(response.id)
-  // const addedBlog = await blogService.get(
-  //   (
-  //     await blogService.create(newBlog)
-  //   ).id
-  // )
   dispatch({
     type: 'NEW_BLOG',
     payload: addedBlog,
@@ -45,10 +40,11 @@ export const addBlog = newBlog => async dispatch => {
 }
 
 export const likeBlog = (id, targetBlog) => async dispatch => {
-  const response = await blogService.like(id, targetBlog)
+  await blogService.like(id, targetBlog)
+  const likedBlog = await blogService.get(id)
   dispatch({
     type: 'LIKE_BLOG',
-    payload: response,
+    payload: likedBlog,
   })
 }
 
