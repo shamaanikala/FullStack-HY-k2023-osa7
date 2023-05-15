@@ -1,3 +1,7 @@
+// Viestit listaan.
+// Nykyisessä muodossaan siitä ei ole hyötyä, mutta jos
+// SHOW reducer ei käytä tail, lisätään ilmoitukset listaan,
+// joita voi piirtää useamman esim. state.messages.map avulla.
 const initialState = {
   messages: [null],
   errorMessages: [null],
