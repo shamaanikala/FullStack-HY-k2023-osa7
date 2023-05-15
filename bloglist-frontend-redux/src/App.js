@@ -25,7 +25,17 @@ const App = () => {
   const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
 
-  const blogs = useSelector(state => state.blogs)
+  // mallia täältä:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects
+  const sortByTitle = (a, b) => {
+    const title_a = a.title.toUpperCase()
+    const title_b = b.title.toUpperCase()
+    return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
+  }
+
+  const blogs = useSelector(state =>
+    state.blogs.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
+  )
   const user = useSelector(state => state.user)
 
   useEffect(() => {
@@ -188,17 +198,9 @@ const App = () => {
           {
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
             // listan järjestämisen vertailufunktio tuon avulla
-            blogs
-              .sort((a, b) => b.likes - a.likes)
-              .map(blog => (
-                <Blog
-                  key={blog.id}
-                  user={user}
-                  blog={blog}
-                  like={handleLike}
-                  remove={handleRemove}
-                />
-              ))
+            blogs.map(blog => (
+              <Blog key={blog.id} user={user} blog={blog} like={handleLike} remove={handleRemove} />
+            ))
           }
         </div>
       )}
