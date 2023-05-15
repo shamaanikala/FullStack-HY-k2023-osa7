@@ -15,8 +15,6 @@ import {
   hideNotification,
   setError,
   hideError,
-  //setNotificationTimeout,
-  //setErrorTimeout,
 } from './reducers/notificationReducer'
 import {
   addBlog,
@@ -42,13 +40,11 @@ const App = () => {
   const showNotification = (message, duration = 5000) => {
     dispatch(setNotification(message))
     setTimeout(() => dispatch(hideNotification()), duration)
-    //dispatch(setNotificationTimeout(timeoutId))
   }
 
   const showError = (message, duration = 5000) => {
     dispatch(setError(message))
     setTimeout(() => dispatch(hideError()), duration)
-    //dispatch(setErrorTimeout(timeoutId))
   }
 
   const blogs = useSelector(state => state.blogs)

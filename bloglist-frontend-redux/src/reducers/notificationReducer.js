@@ -1,8 +1,6 @@
 const initialState = {
   messages: [null],
   errorMessages: [null],
-  messageId: 0,
-  errorId: 0,
 }
 
 // oma häntä
@@ -33,14 +31,9 @@ const notificationReducer = (state = initialState, action) => {
         ],
       }
     case 'HIDE_ERROR':
-      return state.errorMessages === 1
+      return state.errorMessages.length === 1
         ? { ...state, errorMessages: [null] }
         : { ...state, errorMessages: tail(state.errorMessages) }
-    case 'TIMEOUT_ERROR':
-      return {
-        ...state,
-        errorId: action.payload.timeout,
-      }
     default:
       return state
   }
@@ -55,7 +48,7 @@ export const setNotification = message => {
   }
 }
 
-export const hideNotification = (timeoutId, force = false) => {
+export const hideNotification = (force = false) => {
   if (force) {
     return {
       type: 'FORCE_HIDE',
@@ -63,9 +56,6 @@ export const hideNotification = (timeoutId, force = false) => {
   } else {
     return {
       type: 'HIDE',
-      payload: {
-        timeoutId,
-      },
     }
   }
 }
@@ -79,32 +69,9 @@ export const setError = errorMessage => {
   }
 }
 
-export const hideError = timeoutId => {
+export const hideError = () => {
   return {
     type: 'HIDE_ERROR',
-    payload: {
-      timeoutId,
-    },
-  }
-}
-
-export const setNotificationTimeout = timeout => {
-  //console.log('setNotificationTimeout', timeout)
-  return {
-    type: 'TIMEOUT',
-    payload: {
-      timeout,
-    },
-  }
-}
-
-export const setErrorTimeout = timeout => {
-  //console.log('setErrorTimeOut', timeout)
-  return {
-    type: 'TIMEOUT_ERROR',
-    payload: {
-      timeout,
-    },
   }
 }
 
