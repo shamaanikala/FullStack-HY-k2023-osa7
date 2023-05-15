@@ -11,17 +11,14 @@ import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  setNotification,
+  // setNotification,
   hideNotification,
-  setError,
-  hideError,
+  // setError,
+  // hideError,
+  showNotification,
+  showError,
 } from './reducers/notificationReducer'
-import {
-  addBlog,
-  initializeBlogs,
-  likeBlog,
-  removeBlog,
-} from './reducers/blogReducer'
+import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
 
@@ -32,20 +29,20 @@ const App = () => {
   const blogFormRef = useRef()
 
   const dispatch = useDispatch()
-  const notificationMessage = useSelector(
-    state => state.notification.messages[0]
-  )
+  const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
 
-  const showNotification = (message, duration = 5000) => {
-    dispatch(setNotification(message))
-    setTimeout(() => dispatch(hideNotification()), duration)
-  }
+  //const showError (message, duration) => dispatch(showError(message,duration))
 
-  const showError = (message, duration = 5000) => {
-    dispatch(setError(message))
-    setTimeout(() => dispatch(hideError()), duration)
-  }
+  // const showNotification = (message, duration = 5000) => {
+  //   dispatch(setNotification(message))
+  //   setTimeout(() => dispatch(hideNotification()), duration)
+  // }
+
+  // const showError = (message, duration = 5000) => {
+  //   dispatch(setError(message))
+  //   setTimeout(() => dispatch(hideError()), duration)
+  // }
 
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
@@ -95,7 +92,7 @@ const App = () => {
     } catch (exception) {
       console.log(exception)
       console.log('wrong credentials')
-      showError('wrong username or password')
+      dispatch(showError('wrong username or password'))
     }
   }
 
@@ -110,27 +107,24 @@ const App = () => {
   const handleLogout = event => {
     event.preventDefault()
     logout(setUser)
-    showNotification('user logged out', 1500)
+    dispatch(showNotification('user logged out', 1500))
   }
 
   const createBlog = async blogObject => {
     try {
       const newBlog = { ...blogObject }
-      showNotification(
-        `a new blog ${newBlog.title} by ${newBlog.author} added`,
-        5000
-      )
+      dispatch(showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5000))
       await dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
       dispatch(hideNotification(null, true)) // params: timeoutId, force
-      showError(`Failed to add a new blog: ${exception}`)
+      dispatch(showError(`Failed to add a new blog: ${exception}`))
       if (exception.response.data.error) {
-        showError(`Failed to add a new blog: ${exception.response.data.error}`)
+        dispatch(showError(`Failed to add a new blog: ${exception.response.data.error}`))
       } else {
-        showError(`Failed to add a new blog: ${exception}`)
+        dispatch(showError(`Failed to add a new blog: ${exception}`))
       }
       throw exception
     }
@@ -142,20 +136,20 @@ const App = () => {
       const likedBlog = { ...blog }
 
       // näytetään alustava notifikaatio
-      showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000)
+      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000))
       await dispatch(likeBlog(id, likedBlog))
-      showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`)
+      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
     } catch (exception) {
       console.log('Liking blog failed')
       // pakotetaan tykkäysilmoitus piiloon force=true
       dispatch(hideNotification(null, true)) // params: timeoutId, force
       console.log(exception)
       if (exception.response.data.error) {
-        showError(`Failed to like blog: ${exception.response.data.error}`)
+        dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))
       } else if (exception.response.status === 404) {
-        showError('Blog was already removed from the server')
+        dispatch(showError('Blog was already removed from the server'))
       } else {
-        showError(`Failed to like blog: ${exception}`)
+        dispatch(showError(`Failed to like blog: ${exception}`))
       }
     }
   }
@@ -165,15 +159,15 @@ const App = () => {
       try {
         console.log(`Yritetään poistaa blogi ${id}`)
         await dispatch(removeBlog(id))
-        showNotification(`Removed the blog ${title}`)
+        dispatch(showNotification(`Removed the blog ${title}`))
       } catch (exception) {
         console.log(exception)
         if (exception.response.data.error) {
-          showError(`Failed to remove blog: ${exception.response.data.error}`)
+          dispatch(showError(`Failed to remove blog: ${exception.response.data.error}`))
         } else if (exception.response.status === 404) {
-          showError('Blog was already removed from the server')
+          dispatch(showError('Blog was already removed from the server'))
         } else {
-          showError(`Failed to remove blog: ${exception}`)
+          dispatch(showError(`Failed to remove blog: ${exception}`))
         }
       }
     }

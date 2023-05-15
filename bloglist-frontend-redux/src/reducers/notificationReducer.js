@@ -4,8 +4,7 @@ const initialState = {
 }
 
 // oma häntä
-const tail = arr =>
-  arr.length > 0 ? arr.filter((elem, ind) => ind > 0) : [null]
+const tail = arr => (arr.length > 0 ? arr.filter((elem, ind) => ind > 0) : [null])
 
 const notificationReducer = (state = initialState, action) => {
   console.log(`notificationReducer: ${action.type}`)
@@ -25,10 +24,7 @@ const notificationReducer = (state = initialState, action) => {
     case 'SHOW_ERROR':
       return {
         ...state,
-        errorMessages: [
-          action.payload.errorMessage,
-          ...tail(state.errorMessages),
-        ],
+        errorMessages: [action.payload.errorMessage, ...tail(state.errorMessages)],
       }
     case 'HIDE_ERROR':
       return state.errorMessages.length === 1
@@ -73,6 +69,20 @@ export const hideError = () => {
   return {
     type: 'HIDE_ERROR',
   }
+}
+
+// prettier-ignore
+export const showNotification =
+  (message, duration = 5000) =>
+    dispatch => {
+      dispatch(setNotification(message))
+      setTimeout(() => dispatch(hideNotification()), duration)
+    }
+
+// prettier-ignore
+export const showError = (message, duration = 5000) => dispatch => {
+  dispatch(setError(message))
+  setTimeout(() => dispatch(hideError()), duration)
 }
 
 export default notificationReducer
