@@ -125,7 +125,7 @@ const App = () => {
         `a new blog ${newBlog.title} by ${newBlog.author} added`,
         5000
       )
-      dispatch(addBlog(blogObject))
+      await dispatch(addBlog(blogObject))
       blogFormRef.current.toggleVisibility()
     } catch (exception) {
       console.log('Adding new blog failed')
