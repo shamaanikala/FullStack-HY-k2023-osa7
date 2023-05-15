@@ -1,28 +1,29 @@
 // Viestit listaan.
-// Nykyisessä muodossaan siitä ei ole hyötyä, mutta jos
-// SHOW reducer ei käytä tail, lisätään ilmoitukset listaan,
-// joita voi piirtää useamman esim. state.messages.map avulla.
+// Näytetään [0], poistetaan viimeinen kun HIDE
 const initialState = {
   messages: [null],
   errorMessages: [null],
 }
 
-// oma häntä
+// oma häntä ja alku
 const tail = arr => (arr.length > 0 ? arr.filter((elem, ind) => ind > 0) : [null])
+const init = arr => (arr.length > 0 ? arr.filter((elem, ind) => ind < arr.length - 1) : [null])
 
 const notificationReducer = (state = initialState, action) => {
   console.log(`notificationReducer: ${action.type}`)
+  console.log(state.messages)
   switch (action.type) {
     case 'SHOW':
+      console.log('tail(state.messages): ', tail(state.messages))
       // ensin ...state, jos on { ...state }, niin tuo ylikirjoittaa kaikki staten arvoilla
-      return {
-        ...state,
-        messages: [action.payload.message, ...tail(state.messages)],
-      }
+      return state.messages[0] === null
+        ? { ...state, messages: [action.payload.message] }
+        : { ...state, messages: [action.payload.message, ...state.messages] }
     case 'HIDE':
+      console.log('init(state.messages): ', init(state.messages))
       return state.messages.length === 1
         ? { ...state, messages: [null] }
-        : { ...state, messages: tail(state.messages) }
+        : { ...state, messages: init(state.messages) }
     case 'FORCE_HIDE':
       return { ...state, messages: [null] }
     case 'SHOW_ERROR':

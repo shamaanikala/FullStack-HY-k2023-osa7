@@ -32,18 +32,6 @@ const App = () => {
   const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
 
-  //const showError (message, duration) => dispatch(showError(message,duration))
-
-  // const showNotification = (message, duration = 5000) => {
-  //   dispatch(setNotification(message))
-  //   setTimeout(() => dispatch(hideNotification()), duration)
-  // }
-
-  // const showError = (message, duration = 5000) => {
-  //   dispatch(setError(message))
-  //   setTimeout(() => dispatch(hideError()), duration)
-  // }
-
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
 
@@ -172,6 +160,8 @@ const App = () => {
       }
     }
   }
+
+  console.log(useSelector(state => state.notification.messages))
 
   return (
     <div>
