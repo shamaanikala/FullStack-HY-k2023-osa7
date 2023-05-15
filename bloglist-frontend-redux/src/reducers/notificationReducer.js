@@ -1,9 +1,13 @@
 const initialState = {
-  message: null,
+  messages: [null],
   errorMessage: null,
   messageId: 0,
   errorId: 0,
 }
+
+// oma häntä
+const tail = arr =>
+  arr.length > 0 ? arr.filter((elem, ind) => ind > 0) : [null]
 
 const notificationReducer = (state = initialState, action) => {
   console.log(`notificationReducer: ${action.type}`)
@@ -12,14 +16,17 @@ const notificationReducer = (state = initialState, action) => {
       // ensin ...state, jos on { ...state }, niin tuo ylikirjoittaa kaikki staten arvoilla
       return {
         ...state,
-        message: action.payload.message,
+        messages: [action.payload.message, ...tail(state.messages)],
       }
     case 'HIDE':
-      return state.messageId === action.payload.timeoutId
-        ? { ...state, message: null }
-        : state
+      // return state.messageId === action.payload.timeoutId
+      //   ? { ...state, message: null }
+      //   : state
+      return state.messages.length === 1
+        ? { ...state, messages: [null] }
+        : { ...state, messages: tail(state.messages) }
     case 'FORCE_HIDE':
-      return { ...state, message: null }
+      return { ...state, messages: [null] }
     case 'TIMEOUT':
       return {
         ...state,

@@ -34,7 +34,9 @@ const App = () => {
   const blogFormRef = useRef()
 
   const dispatch = useDispatch()
-  const notificationMessage = useSelector(state => state.notification.message)
+  const notificationMessage = useSelector(
+    state => state.notification.messages[0]
+  )
   const errorMessage = useSelector(state => state.notification.errorMessage)
 
   const showNotification = (message, duration = 5000) => {
