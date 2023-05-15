@@ -30,7 +30,6 @@ import { setUser } from './reducers/userReducer'
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  //const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
@@ -145,8 +144,6 @@ const App = () => {
   const handleLike = async id => {
     try {
       const blog = blogs.find(b => b.id === id)
-      // + 1 servicen hoidettavaksi
-      //const likedBlog = { ...blog, likes: blog.likes + 1 }
       const likedBlog = { ...blog }
 
       // näytetään alustava notifikaatio
@@ -186,8 +183,6 @@ const App = () => {
       }
     }
   }
-
-  console.log(user)
 
   return (
     <div>
