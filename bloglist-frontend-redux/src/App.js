@@ -25,10 +25,12 @@ import {
   removeBlog,
 } from './reducers/blogReducer'
 
+import { setUser } from './reducers/userReducer'
+
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  //const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
@@ -52,6 +54,7 @@ const App = () => {
   }
 
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -69,7 +72,7 @@ const App = () => {
         }
         try {
           await loginService.verify({ username: user.username }, config)
-          setUser(user)
+          dispatch(setUser(user))
           blogService.setToken(user.token)
         } catch (exception) {
           console.log(exception)
@@ -92,7 +95,7 @@ const App = () => {
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -106,7 +109,7 @@ const App = () => {
     if (window.localStorage.getItem('loggedBloglistUser')) {
       window.localStorage.removeItem('loggedBloglistUser')
     }
-    setUser(null)
+    dispatch(setUser(null))
     console.log('Käyttäjä kirjattu ulos')
   }
 
@@ -183,6 +186,8 @@ const App = () => {
       }
     }
   }
+
+  console.log(user)
 
   return (
     <div>
