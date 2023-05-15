@@ -1,7 +1,6 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-  console.log(`blogReducer: type: ${action.type}`)
   switch (action.type) {
     case 'NEW_BLOG':
       return [...state, action.payload]
@@ -41,7 +40,7 @@ export const addBlog = newBlog => async dispatch => {
 
 export const likeBlog = (id, targetBlog) => async dispatch => {
   await blogService.like(id, targetBlog).catch(error => {
-    console.error('likeBlog', error)
+    // console.error('likeBlog', error)
     if (error.response.status === 404) {
       dispatch(initializeBlogs())
     }

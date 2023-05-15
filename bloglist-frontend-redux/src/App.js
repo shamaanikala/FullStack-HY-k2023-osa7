@@ -10,14 +10,7 @@ import Notification from './components/Notification'
 import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  // setNotification,
-  hideNotification,
-  // setError,
-  // hideError,
-  showNotification,
-  showError,
-} from './reducers/notificationReducer'
+import { hideNotification, showNotification, showError } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
@@ -160,8 +153,6 @@ const App = () => {
       }
     }
   }
-
-  console.log(useSelector(state => state.notification.messages))
 
   return (
     <div>

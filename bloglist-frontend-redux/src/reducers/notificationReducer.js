@@ -10,17 +10,12 @@ const tail = arr => (arr.length > 0 ? arr.filter((elem, ind) => ind > 0) : [null
 const init = arr => (arr.length > 0 ? arr.filter((elem, ind) => ind < arr.length - 1) : [null])
 
 const notificationReducer = (state = initialState, action) => {
-  console.log(`notificationReducer: ${action.type}`)
-  console.log(state.messages)
   switch (action.type) {
     case 'SHOW':
-      console.log('tail(state.messages): ', tail(state.messages))
-      // ensin ...state, jos on { ...state }, niin tuo ylikirjoittaa kaikki staten arvoilla
       return state.messages[0] === null
         ? { ...state, messages: [action.payload.message] }
         : { ...state, messages: [action.payload.message, ...state.messages] }
     case 'HIDE':
-      console.log('init(state.messages): ', init(state.messages))
       return state.messages.length === 1
         ? { ...state, messages: [null] }
         : { ...state, messages: init(state.messages) }
