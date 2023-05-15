@@ -1,6 +1,6 @@
 const initialState = {
   messages: [null],
-  errorMessage: null,
+  errorMessages: [null],
   messageId: 0,
   errorId: 0,
 }
@@ -19,28 +19,23 @@ const notificationReducer = (state = initialState, action) => {
         messages: [action.payload.message, ...tail(state.messages)],
       }
     case 'HIDE':
-      // return state.messageId === action.payload.timeoutId
-      //   ? { ...state, message: null }
-      //   : state
       return state.messages.length === 1
         ? { ...state, messages: [null] }
         : { ...state, messages: tail(state.messages) }
     case 'FORCE_HIDE':
       return { ...state, messages: [null] }
-    case 'TIMEOUT':
-      return {
-        ...state,
-        messageId: action.payload.timeout,
-      }
     case 'SHOW_ERROR':
       return {
         ...state,
-        errorMessage: action.payload.errorMessage,
+        errorMessages: [
+          action.payload.errorMessage,
+          ...tail(state.errorMessages),
+        ],
       }
     case 'HIDE_ERROR':
-      return state.errorId === action.payload.timeoutId
-        ? { ...state, errorMessage: null }
-        : state
+      return state.errorMessages === 1
+        ? { ...state, errorMessages: [null] }
+        : { ...state, errorMessages: tail(state.errorMessages) }
     case 'TIMEOUT_ERROR':
       return {
         ...state,
