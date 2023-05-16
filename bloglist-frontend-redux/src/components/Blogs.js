@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
 import { addBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
   const blogFormRef = useRef()
   const dispatch = useDispatch()
+
+  const user = useSelector(state => state.user)
 
   const sortByTitle = (a, b) => {
     const title_a = a.title.toUpperCase()

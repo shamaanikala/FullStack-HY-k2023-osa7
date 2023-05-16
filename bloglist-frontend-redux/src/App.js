@@ -117,7 +117,7 @@ const App = () => {
               {user.name} logged in <Logout handleLogout={handleLogout} />
             </p>
             <Routes>
-              <Route path="/" element={<Blogs user={user} />} />
+              <Route path="/" element={<Blogs />} />
               <Route path="/users" element={<Users />} />
             </Routes>
           </div>
