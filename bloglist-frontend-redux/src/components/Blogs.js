@@ -4,9 +4,9 @@ import BlogForm from './BlogForm'
 import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
-import { addBlog, likeBlog } from '../reducers/blogReducer'
+import { addBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ blogs, handleRemove, user }) => {
+const Blogs = ({ blogs, user }) => {
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
@@ -50,6 +50,25 @@ const Blogs = ({ blogs, handleRemove, user }) => {
         dispatch(showError('Blog was already removed from the server'))
       } else {
         dispatch(showError(`Failed to like blog: ${exception}`))
+      }
+    }
+  }
+
+  const handleRemove = async (id, title, author) => {
+    if (window.confirm(`Remove blog ${title} by ${author}`)) {
+      try {
+        console.log(`Yritetään poistaa blogi ${id}`)
+        await dispatch(removeBlog(id))
+        dispatch(showNotification(`Removed the blog ${title}`))
+      } catch (exception) {
+        console.log(exception)
+        if (exception.response.data.error) {
+          dispatch(showError(`Failed to remove blog: ${exception.response.data.error}`))
+        } else if (exception.response.status === 404) {
+          dispatch(showError('Blog was already removed from the server'))
+        } else {
+          dispatch(showError(`Failed to remove blog: ${exception}`))
+        }
       }
     }
   }

@@ -11,7 +11,7 @@ import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { showNotification, showError } from './reducers/notificationReducer'
-import { initializeBlogs, removeBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
 
@@ -104,49 +104,6 @@ const App = () => {
     dispatch(showNotification('user logged out', 1500))
   }
 
-  // const handleLike = async id => {
-  //   try {
-  //     const blog = blogs.find(b => b.id === id)
-  //     const likedBlog = { ...blog }
-
-  //     // näytetään alustava notifikaatio
-  //     dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000))
-  //     await dispatch(likeBlog(id, likedBlog))
-  //     dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
-  //   } catch (exception) {
-  //     console.log('Liking blog failed')
-  //     // pakotetaan tykkäysilmoitus piiloon force=true
-  //     dispatch(hideNotification(null, true)) // params: timeoutId, force
-  //     console.log(exception)
-  //     if (exception.response.data.error) {
-  //       dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))
-  //     } else if (exception.response.status === 404) {
-  //       dispatch(showError('Blog was already removed from the server'))
-  //     } else {
-  //       dispatch(showError(`Failed to like blog: ${exception}`))
-  //     }
-  //   }
-  // }
-
-  const handleRemove = async (id, title, author) => {
-    if (window.confirm(`Remove blog ${title} by ${author}`)) {
-      try {
-        console.log(`Yritetään poistaa blogi ${id}`)
-        await dispatch(removeBlog(id))
-        dispatch(showNotification(`Removed the blog ${title}`))
-      } catch (exception) {
-        console.log(exception)
-        if (exception.response.data.error) {
-          dispatch(showError(`Failed to remove blog: ${exception.response.data.error}`))
-        } else if (exception.response.status === 404) {
-          dispatch(showError('Blog was already removed from the server'))
-        } else {
-          dispatch(showError(`Failed to remove blog: ${exception}`))
-        }
-      }
-    }
-  }
-
   return (
     <Router>
       <div>
@@ -164,27 +121,29 @@ const App = () => {
             />
           </div>
         )}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              user && (
-                <div>
-                  <h2>blogs</h2>
-                  <div className="notificationBox">
-                    <Notification message={errorMessage} type={'error'} />
-                    <Notification message={notificationMessage} type={'blogAdded'} />
+        {user && (
+          <div>
+            <h2>blogs</h2>
+            <div className="notificationBox">
+              <Notification message={errorMessage} type={'error'} />
+              <Notification message={notificationMessage} type={'blogAdded'} />
+            </div>
+            <p>
+              {user.name} logged in <Logout handleLogout={handleLogout} />
+            </p>
+            <Routes>
+              <Route path="/" element={<Blogs blogs={blogs} user={user} />} />
+              <Route
+                path="/users"
+                element={
+                  <div>
+                    <h2>Users</h2>😸
                   </div>
-                  <p>
-                    {user.name} logged in <Logout handleLogout={handleLogout} />
-                  </p>
-
-                  <Blogs blogs={blogs} handleRemove={handleRemove} user={user} />
-                </div>
-              )
-            }
-          />
-        </Routes>
+                }
+              />
+            </Routes>
+          </div>
+        )}
       </div>
     </Router>
   )
