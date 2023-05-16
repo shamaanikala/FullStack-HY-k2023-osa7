@@ -154,11 +154,6 @@ describe('Blog app', function () {
             .and('have.css', 'color', 'rgb(0, 128, 0)')
             .and('have.css', 'border-style', 'solid')
 
-          // cy.get('html')
-          //   .not('.notificationBox') // ei toimi
-          //   .should('not.contain', 'Blog title')
-          //   .and('not.contain', 'Blog author')
-          //   .and('not.contain', 'view')
           cy.get('div.blogBox').should('not.exist')
         })
 
