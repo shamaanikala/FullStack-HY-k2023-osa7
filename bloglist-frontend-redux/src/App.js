@@ -15,6 +15,8 @@ import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogR
 
 import { setUser } from './reducers/userReducer'
 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -165,46 +167,61 @@ const App = () => {
   }
 
   return (
-    <div>
-      {!user && (
-        <div>
-          <Notification message={notificationMessage} type={'logout'} />
-          <h2>log in to application</h2>
-          <Notification message={errorMessage} type={'error'} />
-          <LoginForm
-            handleLogin={handleLogin}
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-          />
-        </div>
-      )}
-      {user && (
-        <div>
-          <h2>blogs</h2>
-          <div className="notificationBox">
+    <Router>
+      <div>
+        {!user && (
+          <div>
+            <Notification message={notificationMessage} type={'logout'} />
+            <h2>log in to application</h2>
             <Notification message={errorMessage} type={'error'} />
-            <Notification message={notificationMessage} type={'blogAdded'} />
+            <LoginForm
+              handleLogin={handleLogin}
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+            />
           </div>
-          <p>
-            {user.name} logged in <Logout handleLogout={handleLogout} />
-          </p>
+        )}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user && (
+                <div>
+                  <h2>blogs</h2>
+                  <div className="notificationBox">
+                    <Notification message={errorMessage} type={'error'} />
+                    <Notification message={notificationMessage} type={'blogAdded'} />
+                  </div>
+                  <p>
+                    {user.name} logged in <Logout handleLogout={handleLogout} />
+                  </p>
 
-          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-            <BlogForm createBlog={createBlog} />
-          </Togglable>
+                  <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+                    <BlogForm createBlog={createBlog} />
+                  </Togglable>
 
-          {
-            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
-            // listan järjestämisen vertailufunktio tuon avulla
-            blogs.map(blog => (
-              <Blog key={blog.id} user={user} blog={blog} like={handleLike} remove={handleRemove} />
-            ))
-          }
-        </div>
-      )}
-    </div>
+                  {
+                    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
+                    // listan järjestämisen vertailufunktio tuon avulla
+                    blogs.map(blog => (
+                      <Blog
+                        key={blog.id}
+                        user={user}
+                        blog={blog}
+                        like={handleLike}
+                        remove={handleRemove}
+                      />
+                    ))
+                  }
+                </div>
+              )
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
