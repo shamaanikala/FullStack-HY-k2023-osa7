@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+//import Blog from './components/Blog'
 import blogService from './services/blogs' // token tulee myös täältä vielä!
 import loginService from './services/login'
 import './index.css'
@@ -16,6 +16,7 @@ import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogR
 import { setUser } from './reducers/userReducer'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Blogs from './components/Blogs'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -201,20 +202,12 @@ const App = () => {
                   <Togglable buttonLabel="create new blog" ref={blogFormRef}>
                     <BlogForm createBlog={createBlog} />
                   </Togglable>
-
-                  {
-                    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#creating_displaying_and_sorting_an_array
-                    // listan järjestämisen vertailufunktio tuon avulla
-                    blogs.map(blog => (
-                      <Blog
-                        key={blog.id}
-                        user={user}
-                        blog={blog}
-                        like={handleLike}
-                        remove={handleRemove}
-                      />
-                    ))
-                  }
+                  <Blogs
+                    blogs={blogs}
+                    handleLike={handleLike}
+                    handleRemove={handleRemove}
+                    user={user}
+                  />
                 </div>
               )
             }
