@@ -2,13 +2,23 @@ import Blog from './Blog'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
 import { useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
 import { addBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ blogs, user }) => {
+const Blogs = ({ user }) => {
   const blogFormRef = useRef()
   const dispatch = useDispatch()
+
+  const sortByTitle = (a, b) => {
+    const title_a = a.title.toUpperCase()
+    const title_b = b.title.toUpperCase()
+    return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
+  }
+
+  const blogs = useSelector(state =>
+    state.blogs.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
+  )
 
   const createBlog = async blogObject => {
     try {

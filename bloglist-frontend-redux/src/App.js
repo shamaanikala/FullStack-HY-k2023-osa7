@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react'
-//import Blog from './components/Blog'
 import blogService from './services/blogs' // token tulee myös täältä vielä!
 import loginService from './services/login'
 import './index.css'
-// import Togglable from './components/Togglable'
-// import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm.js'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
@@ -22,23 +19,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // const blogFormRef = useRef()
-
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
 
-  // mallia täältä:
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects
-  const sortByTitle = (a, b) => {
-    const title_a = a.title.toUpperCase()
-    const title_b = b.title.toUpperCase()
-    return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
-  }
-
-  const blogs = useSelector(state =>
-    state.blogs.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
-  )
   const user = useSelector(state => state.user)
 
   useEffect(() => {
@@ -132,7 +116,7 @@ const App = () => {
               {user.name} logged in <Logout handleLogout={handleLogout} />
             </p>
             <Routes>
-              <Route path="/" element={<Blogs blogs={blogs} user={user} />} />
+              <Route path="/" element={<Blogs user={user} />} />
               <Route
                 path="/users"
                 element={
