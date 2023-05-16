@@ -12,7 +12,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 
@@ -90,40 +90,38 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>
-        {!user && (
-          <div>
-            <Notification message={notificationMessage} type={'logout'} />
-            <h2>log in to application</h2>
+    <div>
+      {!user && (
+        <div>
+          <Notification message={notificationMessage} type={'logout'} />
+          <h2>log in to application</h2>
+          <Notification message={errorMessage} type={'error'} />
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+          />
+        </div>
+      )}
+      {user && (
+        <div>
+          <h2>blogs</h2>
+          <div className="notificationBox">
             <Notification message={errorMessage} type={'error'} />
-            <LoginForm
-              handleLogin={handleLogin}
-              username={username}
-              setUsername={setUsername}
-              password={password}
-              setPassword={setPassword}
-            />
+            <Notification message={notificationMessage} type={'blogAdded'} />
           </div>
-        )}
-        {user && (
-          <div>
-            <h2>blogs</h2>
-            <div className="notificationBox">
-              <Notification message={errorMessage} type={'error'} />
-              <Notification message={notificationMessage} type={'blogAdded'} />
-            </div>
-            <p>
-              {user.name} logged in <Logout handleLogout={handleLogout} />
-            </p>
-            <Routes>
-              <Route path="/" element={<Blogs />} />
-              <Route path="/users" element={<Users />} />
-            </Routes>
-          </div>
-        )}
-      </div>
-    </Router>
+          <p>
+            {user.name} logged in <Logout handleLogout={handleLogout} />
+          </p>
+          <Routes>
+            <Route path="/" element={<Blogs />} />
+            <Route path="/users" element={<Users />} />
+          </Routes>
+        </div>
+      )}
+    </div>
   )
 }
 
