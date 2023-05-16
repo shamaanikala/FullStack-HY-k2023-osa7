@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 //import Blog from './components/Blog'
 import blogService from './services/blogs' // token tulee myös täältä vielä!
 import loginService from './services/login'
 import './index.css'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
+// import Togglable from './components/Togglable'
+// import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm.js'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { hideNotification, showNotification, showError } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
+import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
 
@@ -22,7 +22,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const blogFormRef = useRef()
+  // const blogFormRef = useRef()
 
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.notification.messages[0])
@@ -104,25 +104,25 @@ const App = () => {
     dispatch(showNotification('user logged out', 1500))
   }
 
-  const createBlog = async blogObject => {
-    try {
-      const newBlog = { ...blogObject }
-      dispatch(showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5000))
-      await dispatch(addBlog(blogObject))
-      blogFormRef.current.toggleVisibility()
-    } catch (exception) {
-      console.log('Adding new blog failed')
-      console.log(exception)
-      dispatch(hideNotification(null, true)) // params: timeoutId, force
-      dispatch(showError(`Failed to add a new blog: ${exception}`))
-      if (exception.response.data.error) {
-        dispatch(showError(`Failed to add a new blog: ${exception.response.data.error}`))
-      } else {
-        dispatch(showError(`Failed to add a new blog: ${exception}`))
-      }
-      throw exception
-    }
-  }
+  // const createBlog = async blogObject => {
+  //   try {
+  //     const newBlog = { ...blogObject }
+  //     dispatch(showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5000))
+  //     await dispatch(addBlog(blogObject))
+  //     blogFormRef.current.toggleVisibility()
+  //   } catch (exception) {
+  //     console.log('Adding new blog failed')
+  //     console.log(exception)
+  //     dispatch(hideNotification(null, true)) // params: timeoutId, force
+  //     dispatch(showError(`Failed to add a new blog: ${exception}`))
+  //     if (exception.response.data.error) {
+  //       dispatch(showError(`Failed to add a new blog: ${exception.response.data.error}`))
+  //     } else {
+  //       dispatch(showError(`Failed to add a new blog: ${exception}`))
+  //     }
+  //     throw exception
+  //   }
+  // }
 
   const handleLike = async id => {
     try {
@@ -199,16 +199,11 @@ const App = () => {
                     {user.name} logged in <Logout handleLogout={handleLogout} />
                   </p>
 
-                  <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-                    <BlogForm createBlog={createBlog} />
-                  </Togglable>
                   <Blogs
                     blogs={blogs}
                     handleLike={handleLike}
                     handleRemove={handleRemove}
                     user={user}
-                    createBlog={createBlog}
-                    ref={blogFormRef}
                   />
                 </div>
               )
