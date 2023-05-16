@@ -1,5 +1,27 @@
 import { useQuery } from 'react-query'
 import usersService from '../services/users'
+// import { Route, Link } from 'react-router-dom'
+
+const UsersTable = ({ result }) => {
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+          <td>
+            <b>blogs created</b>
+          </td>
+        </tr>
+        {result.data.map(user => (
+          <tr key={user.id}>
+            <td>{user.name}</td>
+            <td>{user.blogs.length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
 
 const Users = () => {
   const result = useQuery(
@@ -12,24 +34,7 @@ const Users = () => {
     <div>
       <h2>Users 😸</h2>
       {result.isLoading && <div>loading...</div>}
-      {result.isSuccess && (
-        <table>
-          <tbody>
-            <tr>
-              <td></td>
-              <td>
-                <b>blogs created</b>
-              </td>
-            </tr>
-            {result.data.map(user => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.blogs.length}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {result.isSuccess && <UsersTable result={result} />}
     </div>
   )
 }
