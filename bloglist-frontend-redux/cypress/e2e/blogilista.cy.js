@@ -154,10 +154,32 @@ describe('Blog app', function () {
             .and('have.css', 'color', 'rgb(0, 128, 0)')
             .and('have.css', 'border-style', 'solid')
 
-          cy.get('html')
-            .should('not.contain', 'Blog title')
-            .and('not.contain', 'Blog author')
-            .and('not.contain', 'view')
+          // cy.get('html')
+          //   .not('.notificationBox') // ei toimi
+          //   .should('not.contain', 'Blog title')
+          //   .and('not.contain', 'Blog author')
+          //   .and('not.contain', 'view')
+          cy.get('div.blogBox').should('not.exist')
+        })
+
+        it('can be removed by the user (2 blogs)', function () {
+          cy.createBlog({
+            title: 'An another Blog',
+            author: 'Blog author 2',
+            url: 'http://localhost:3000',
+          })
+          // needs to click view again
+          cy.contains('Blog title').parent().find('button').contains('view').click()
+
+          cy.get('.removeButton').click()
+
+          cy.get('.blogAdded')
+            .should('contain', 'Removed the blog')
+            .and('have.css', 'color', 'rgb(0, 128, 0)')
+            .and('have.css', 'border-style', 'solid')
+
+          cy.contains('Blog title').should('not.have.class', '.blogBox')
+          cy.get('div.blogBox').should('exist')
         })
 
         it('can only be removed by the user who created it', function () {
