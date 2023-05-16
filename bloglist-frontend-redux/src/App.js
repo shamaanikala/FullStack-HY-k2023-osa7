@@ -207,6 +207,8 @@ const App = () => {
                     handleLike={handleLike}
                     handleRemove={handleRemove}
                     user={user}
+                    createBlog={createBlog}
+                    ref={blogFormRef}
                   />
                 </div>
               )
