@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import usersService from '../services/users'
-import { Link, useMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const UsersTable = ({ users }) => {
   return (
@@ -32,10 +32,6 @@ const Users = () => {
   )
   console.log(result)
   const users = result.data
-  const match = useMatch('/user/:id')
-  console.log('match:', match)
-  // console.log('match.params.id:', match.params.id)
-  // const user = match && result.isSuccess ? users.find(user => user.id === match.params.id) : null
 
   return (
     <div>
