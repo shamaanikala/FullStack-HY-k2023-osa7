@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import blogService from './services/blogs' // token tulee myös täältä vielä!
 import loginService from './services/login'
 import './index.css'
-import LoginForm from './components/LoginForm.js'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { showNotification, showError } from './reducers/notificationReducer'
+import { showNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
@@ -16,11 +15,9 @@ import { Routes, Route } from 'react-router-dom'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import User from './components/User'
+import LoginHeader from './components/LoginHeader'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
   const dispatch = useDispatch()
   const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
@@ -31,6 +28,7 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
+  // tämän useEffectin sisältö services/login/verify.js ?
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
@@ -55,27 +53,6 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async event => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      dispatch(setUser(user))
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      console.log(exception)
-      console.log('wrong credentials')
-      dispatch(showError('wrong username or password'))
-    }
-  }
-
   const logout = setUser => {
     if (window.localStorage.getItem('loggedBloglistUser')) {
       window.localStorage.removeItem('loggedBloglistUser')
@@ -92,20 +69,7 @@ const App = () => {
 
   return (
     <div>
-      {!user && (
-        <div>
-          <Notification message={notificationMessage} type={'logout'} />
-          <h2>log in to application</h2>
-          <Notification message={errorMessage} type={'error'} />
-          <LoginForm
-            handleLogin={handleLogin}
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-          />
-        </div>
-      )}
+      {!user && <LoginHeader />}
       {user && (
         <div>
           <h2>blogs</h2>
