@@ -30,7 +30,6 @@ const Users = () => {
     'users',
     () => usersService.getAll().then(res => res) // getAll antaa .data
   )
-  console.log(result)
   const users = result.data
 
   return (
