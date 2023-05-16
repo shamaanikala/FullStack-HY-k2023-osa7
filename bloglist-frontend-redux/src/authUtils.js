@@ -2,9 +2,7 @@ import loginService from './services/login'
 import { setUser } from './reducers/userReducer'
 import blogService from './services/blogs'
 
-// const dispatch = useDispatch()
-
-const authUtils = () => {}
+const authUtils = () => {} // onko tässä mitään järkeä? mikä olisi oikea tapa?
 
 export const verifyUserToken = async (loggedUserJSON, dispatch) => {
   const user = JSON.parse(loggedUserJSON)
