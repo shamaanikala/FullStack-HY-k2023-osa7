@@ -4,9 +4,9 @@ import BlogForm from './BlogForm'
 import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
-import { addBlog } from '../reducers/blogReducer'
+import { addBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blogs = ({ blogs, handleLike, handleRemove, user }) => {
+const Blogs = ({ blogs, handleRemove, user }) => {
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
@@ -27,6 +27,30 @@ const Blogs = ({ blogs, handleLike, handleRemove, user }) => {
         dispatch(showError(`Failed to add a new blog: ${exception}`))
       }
       throw exception
+    }
+  }
+
+  const handleLike = async id => {
+    try {
+      const blog = blogs.find(b => b.id === id)
+      const likedBlog = { ...blog }
+
+      // näytetään alustava notifikaatio
+      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 5000))
+      await dispatch(likeBlog(id, likedBlog))
+      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
+    } catch (exception) {
+      console.log('Liking blog failed')
+      // pakotetaan tykkäysilmoitus piiloon force=true
+      dispatch(hideNotification(null, true)) // params: timeoutId, force
+      console.log(exception)
+      if (exception.response.data.error) {
+        dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))
+      } else if (exception.response.status === 404) {
+        dispatch(showError('Blog was already removed from the server'))
+      } else {
+        dispatch(showError(`Failed to like blog: ${exception}`))
+      }
     }
   }
 

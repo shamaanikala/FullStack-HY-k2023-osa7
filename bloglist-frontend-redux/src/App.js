@@ -10,8 +10,8 @@ import Notification from './components/Notification'
 import Logout from './components/Logout'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { hideNotification, showNotification, showError } from './reducers/notificationReducer'
-import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
+import { showNotification, showError } from './reducers/notificationReducer'
+import { initializeBlogs, removeBlog } from './reducers/blogReducer'
 
 import { setUser } from './reducers/userReducer'
 
@@ -104,49 +104,29 @@ const App = () => {
     dispatch(showNotification('user logged out', 1500))
   }
 
-  // const createBlog = async blogObject => {
+  // const handleLike = async id => {
   //   try {
-  //     const newBlog = { ...blogObject }
-  //     dispatch(showNotification(`a new blog ${newBlog.title} by ${newBlog.author} added`, 5000))
-  //     await dispatch(addBlog(blogObject))
-  //     blogFormRef.current.toggleVisibility()
+  //     const blog = blogs.find(b => b.id === id)
+  //     const likedBlog = { ...blog }
+
+  //     // näytetään alustava notifikaatio
+  //     dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000))
+  //     await dispatch(likeBlog(id, likedBlog))
+  //     dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
   //   } catch (exception) {
-  //     console.log('Adding new blog failed')
-  //     console.log(exception)
+  //     console.log('Liking blog failed')
+  //     // pakotetaan tykkäysilmoitus piiloon force=true
   //     dispatch(hideNotification(null, true)) // params: timeoutId, force
-  //     dispatch(showError(`Failed to add a new blog: ${exception}`))
+  //     console.log(exception)
   //     if (exception.response.data.error) {
-  //       dispatch(showError(`Failed to add a new blog: ${exception.response.data.error}`))
+  //       dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))
+  //     } else if (exception.response.status === 404) {
+  //       dispatch(showError('Blog was already removed from the server'))
   //     } else {
-  //       dispatch(showError(`Failed to add a new blog: ${exception}`))
+  //       dispatch(showError(`Failed to like blog: ${exception}`))
   //     }
-  //     throw exception
   //   }
   // }
-
-  const handleLike = async id => {
-    try {
-      const blog = blogs.find(b => b.id === id)
-      const likedBlog = { ...blog }
-
-      // näytetään alustava notifikaatio
-      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}!`, 10000))
-      await dispatch(likeBlog(id, likedBlog))
-      dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
-    } catch (exception) {
-      console.log('Liking blog failed')
-      // pakotetaan tykkäysilmoitus piiloon force=true
-      dispatch(hideNotification(null, true)) // params: timeoutId, force
-      console.log(exception)
-      if (exception.response.data.error) {
-        dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))
-      } else if (exception.response.status === 404) {
-        dispatch(showError('Blog was already removed from the server'))
-      } else {
-        dispatch(showError(`Failed to like blog: ${exception}`))
-      }
-    }
-  }
 
   const handleRemove = async (id, title, author) => {
     if (window.confirm(`Remove blog ${title} by ${author}`)) {
@@ -199,12 +179,7 @@ const App = () => {
                     {user.name} logged in <Logout handleLogout={handleLogout} />
                   </p>
 
-                  <Blogs
-                    blogs={blogs}
-                    handleLike={handleLike}
-                    handleRemove={handleRemove}
-                    user={user}
-                  />
+                  <Blogs blogs={blogs} handleRemove={handleRemove} user={user} />
                 </div>
               )
             }
