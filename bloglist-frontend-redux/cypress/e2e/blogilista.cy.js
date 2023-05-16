@@ -1,12 +1,15 @@
+const sortByTitle = (a, b) => {
+  const title_a = a.title.toUpperCase()
+  const title_b = b.title.toUpperCase()
+  return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
+}
+
 const checkLikesOrder = function () {
   cy.request('GET', `${Cypress.env('BACKEND')}/blogs`).then(response => {
-    const blogsInLikesOrder = response.body.sort((a, b) => b.likes - a.likes)
+    const blogsInLikesOrder = response.body.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
     cy.log(blogsInLikesOrder)
     for (let i = 0; i < blogsInLikesOrder.length; i++) {
-      cy.get('.blogTitle')
-        .eq(i)
-        .invoke('text')
-        .should('equal', blogsInLikesOrder[i].title)
+      cy.get('.blogTitle').eq(i).invoke('text').should('equal', blogsInLikesOrder[i].title)
     }
   })
 }
@@ -73,15 +76,11 @@ describe('Blog app', function () {
 
       cy.get('#title').type('Parsing Html The Cthulhu Way')
       cy.get('#author').type('Jeff Atwood')
-      cy.get('#url').type(
-        'https://blog.codinghorror.com/parsing-html-the-cthulhu-way/'
-      )
+      cy.get('#url').type('https://blog.codinghorror.com/parsing-html-the-cthulhu-way/')
 
       cy.get('#createButton').click()
 
-      cy.contains(
-        'a new blog Parsing Html The Cthulhu Way by Jeff Atwood added'
-      )
+      cy.contains('a new blog Parsing Html The Cthulhu Way by Jeff Atwood added')
       cy.contains('Parsing Html The Cthulhu Way')
 
       cy.get('.closed').should('have.descendants', 'span').as('titleSpan')
@@ -215,11 +214,7 @@ describe('Blog app', function () {
           cy.likeBlog('The Best Blog')
           cy.contains('hide').click()
 
-          cy.contains('A Better Blog')
-            .parent()
-            .find('button')
-            .contains('view')
-            .click()
+          cy.contains('A Better Blog').parent().find('button').contains('view').click()
 
           cy.likeBlog('A Better Blog')
           cy.likeBlog('A Better Blog')
@@ -244,12 +239,7 @@ describe('Blog app', function () {
             cy.likeBlog('The Best Blog')
           }
 
-          const predefinedOrder = [
-            'The Best Blog',
-            'A Better Blog',
-            'A Good Blog',
-            'Blog title',
-          ]
+          const predefinedOrder = ['The Best Blog', 'A Better Blog', 'A Good Blog', 'Blog title']
 
           for (let i = 0; i < predefinedOrder.length; i++) {
             cy.get('.blogTitle').eq(i).should('contain', predefinedOrder[i])
@@ -272,34 +262,30 @@ describe('Blog app', function () {
             return Math.floor(Math.random() * (max - min + 1) + min) // The maximum is inclusive and the minimum is inclusive
           }
 
-          cy.request('GET', `${Cypress.env('BACKEND')}/blogs`).then(
-            response => {
-              const blogTitles = response.body.map(b => b.title)
-              for (let title of blogTitles) {
-                for (let n = 0; n < getRandomIntInclusive(0, 13); n++) {
-                  cy.likeBlog(title)
-                  // tarkistetaan järjrestys saman tien
-                  checkLikesOrder()
-                }
+          cy.request('GET', `${Cypress.env('BACKEND')}/blogs`).then(response => {
+            const blogTitles = response.body.map(b => b.title)
+            for (let title of blogTitles) {
+              for (let n = 0; n < getRandomIntInclusive(0, 13); n++) {
+                cy.likeBlog(title)
+                // tarkistetaan järjrestys saman tien
+                checkLikesOrder()
               }
             }
-          )
+          })
           // haetaan blogit palvelimelta ja järjestetään niiden otsikot tykkäysten mukaan
           // tarkistetaan järjestys
           checkLikesOrder()
 
-          cy.request('GET', `${Cypress.env('BACKEND')}/blogs`).then(
-            response => {
-              const blogTitles = response.body.map(b => b.title)
-              for (let title of blogTitles) {
-                for (let n = 0; n < getRandomIntInclusive(0, 13); n++) {
-                  cy.likeBlog(title)
-                  // tarkistetaan järjrestys saman tien
-                  checkLikesOrder()
-                }
+          cy.request('GET', `${Cypress.env('BACKEND')}/blogs`).then(response => {
+            const blogTitles = response.body.map(b => b.title)
+            for (let title of blogTitles) {
+              for (let n = 0; n < getRandomIntInclusive(0, 13); n++) {
+                cy.likeBlog(title)
+                // tarkistetaan järjrestys saman tien
+                checkLikesOrder()
               }
             }
-          )
+          })
           checkLikesOrder()
         })
       })
