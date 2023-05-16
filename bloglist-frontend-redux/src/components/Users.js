@@ -2,13 +2,6 @@ import { useQuery } from 'react-query'
 import usersService from '../services/users'
 
 const Users = () => {
-  // dummy dataa
-  // const userData = [
-  //   { name: 'Arto Hellas', aggregatedBlogNumber: 6 },
-  //   { name: 'Matti Luukkainen', aggregatedBlogNumber: 2 },
-  //   { name: 'Venla Ruuska', aggregatedBlogNumber: 0 },
-  // ]
-
   const result = useQuery(
     'users',
     () => usersService.getAll().then(res => res) // getAll antaa .data
