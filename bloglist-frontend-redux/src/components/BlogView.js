@@ -1,5 +1,10 @@
+import { useBlogs } from '../hooks/useBlogs'
+import { useSelector } from 'react-redux'
+
 const BlogView = ({ blog }) => {
-  const like = id => console.log('Blog-sivu tykkäys', id)
+  const user = useSelector(state => state.user)
+  const blogsHook = useBlogs()
+  const like = async id => blogsHook.handleLike(id, user)
 
   if (!blog) {
     return null
