@@ -8,7 +8,6 @@ import LoginHeader from './components/LoginHeader'
 import Header from './components/Header'
 import { useAuth } from './hooks/useAuth'
 import { useBlogs } from './hooks/useBlogs'
-import { useUsers } from './hooks/useUsers'
 import AppRouter from './components/AppRouter'
 
 const App = () => {
@@ -16,9 +15,9 @@ const App = () => {
   const auth = useAuth()
 
   const blogs = useBlogs()
-  const users = useUsers()
+  // const users = useUsers()
 
-  users.query.isSuccess ? console.log(users.data) : console.log('loading users data...')
+  // users.query.isSuccess ? console.log(users.data) : console.log('loading users data...')
 
   blogs.initBlogs()
   auth.checkLoggedUser() // onko käyttäjä kirjautunut sisään localStoragessa?

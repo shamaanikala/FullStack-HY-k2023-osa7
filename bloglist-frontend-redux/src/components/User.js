@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom'
-import { useQuery } from 'react-query'
-import usersService from '../services/users'
+// import { useParams } from 'react-router-dom'
+// import { useQuery } from 'react-query'
+// import usersService from '../services/users'
 
 const BlogTitleList = ({ blogs }) => {
   return (
@@ -14,18 +14,10 @@ const BlogTitleList = ({ blogs }) => {
   )
 }
 
-const User = () => {
-  const id = useParams().id
-  const result = useQuery(
-    'users',
-    () => usersService.getAll().then(res => res) // getAll antaa .data
-  )
-
-  // User sivun uudelleenlatausbugin välttäminen:
-  if (!result.data) {
-    return null
+const User = ({ user }) => {
+  if (!user) {
+    return <div>loading user information...</div>
   }
-  const user = result.data.find(user => user.id === id)
 
   return (
     <div>
