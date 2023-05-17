@@ -3,17 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import Logout from './Logout'
 import { showNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
-import { logout } from '../authUtils'
+import { useAuth } from '../hooks/useAuth'
 
 const Header = () => {
   const dispatch = useDispatch()
+  const auth = useAuth()
   const notificationMessage = useSelector(state => state.notification.messages[0])
   const errorMessage = useSelector(state => state.notification.errorMessages[0])
   const user = useSelector(state => state.user)
 
   const handleLogout = event => {
     event.preventDefault()
-    logout(setUser, dispatch)
+    auth.logout(setUser)
     dispatch(showNotification('user logged out', 1500))
   }
 
