@@ -21,7 +21,7 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  auth.verifyUser() // onko käyttäjä kirjautunut sisään localStoragessa?
+  auth.checkLoggedUser() // onko käyttäjä kirjautunut sisään localStoragessa?
 
   return (
     <div>

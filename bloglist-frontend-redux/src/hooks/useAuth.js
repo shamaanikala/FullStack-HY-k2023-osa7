@@ -43,7 +43,7 @@ export const useAuth = () => {
   }
 
   return {
-    verifyUser,
+    checkLoggedUser: verifyUser,
     logout,
   }
 }
