@@ -9,11 +9,10 @@ import AppRouter from './components/AppRouter'
 const App = () => {
   const user = useSelector(state => state.user)
   const auth = useAuth()
-
   const blogs = useBlogs()
 
-  blogs.initBlogs()
   auth.checkLoggedUser() // onko käyttäjä kirjautunut sisään localStoragessa?
+  blogs.initBlogs()
 
   return (
     <div>

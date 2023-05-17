@@ -1,3 +1,9 @@
+#menu {
+  background-color: lightsteelblue;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+
 .notificationBox {
   display: flex;
   flex-direction: column;
