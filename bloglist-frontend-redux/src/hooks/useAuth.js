@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import loginService from '../services/login'
 import { setUser } from '../reducers/userReducer'
 import blogService from '../services/blogs'
@@ -24,6 +25,15 @@ export const useAuth = () => {
     }
   }
 
+  const verifyUser = () => {
+    useEffect(() => {
+      const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+      if (loggedUserJSON) {
+        verifyUserToken(loggedUserJSON)
+      }
+    }, [])
+  }
+
   const logout = setUser => {
     if (window.localStorage.getItem('loggedBloglistUser')) {
       window.localStorage.removeItem('loggedBloglistUser')
@@ -33,7 +43,7 @@ export const useAuth = () => {
   }
 
   return {
-    verifyUserToken,
+    verifyUser,
     logout,
   }
 }

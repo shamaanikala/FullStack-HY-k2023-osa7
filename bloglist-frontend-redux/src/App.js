@@ -10,8 +10,6 @@ import Users from './components/Users'
 import User from './components/User'
 import LoginHeader from './components/LoginHeader'
 import Header from './components/Header'
-
-//import { verifyUserToken } from './authUtils'
 import { useAuth } from './hooks/useAuth'
 
 const App = () => {
@@ -23,12 +21,7 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-    if (loggedUserJSON) {
-      auth.verifyUserToken(loggedUserJSON)
-    }
-  }, [])
+  auth.verifyUser() // onko käyttäjä kirjautunut sisään localStoragessa?
 
   return (
     <div>
