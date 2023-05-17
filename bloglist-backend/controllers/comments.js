@@ -33,4 +33,11 @@ commentsRouter.delete('/:id', requestLogger, async (request, response) => {
 // TODO jos blogi poistetaan, niin kommentit pois myös?
 // vai orpojen kommenttien siivous aina ajoittain?
 
+commentsRouter.get('/:blogId', requestLogger, async (request, response) => {
+  const blogId = request.params.blogId
+  const comments = await Comment.find({ blog: { $eq: blogId } })
+
+  response.json(comments)
+})
+
 module.exports = commentsRouter
