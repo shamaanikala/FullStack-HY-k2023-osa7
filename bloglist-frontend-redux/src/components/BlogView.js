@@ -1,14 +1,32 @@
 import { useBlogs } from '../hooks/useBlogs'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
   const blogsHook = useBlogs()
+  const navigate = useNavigate()
+
   // likessa on pakko antaa parametrit, sillä se tarvitsee
   // user myös
   const like = async id => blogsHook.handleLike(id, user)
   // remove menee suoraan näin
-  const remove = blogsHook.handleRemove
+  // const remove = blogsHook.handleRemove
+  // mutta navigate mukaan
+  const remove = async (id, title, author) => {
+    try {
+      await blogsHook.handleRemove(id, title, author)
+    } catch (error) {
+      if (error.message === 'Blog removal cancelled by user!') {
+        //console.log(error.message)
+        return // ei mennä navigateen
+      } else {
+        console.log(error)
+        return
+      }
+    }
+    navigate('/')
+  }
 
   if (!blog) {
     return null

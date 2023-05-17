@@ -66,6 +66,8 @@ export const useBlogs = () => {
           dispatch(showError(`Failed to remove blog: ${exception}`))
         }
       }
+    } else {
+      throw new Error('Blog removal cancelled by user!')
     }
   }
 
