@@ -7,7 +7,6 @@ export const useUsers = () => {
     () => usersService.getAll().then(res => res) // getAll antaa .data
   )
 
-  console.log(query)
   const data = query.isLoading ? null : query.isSuccess ? query.data : null
 
   return {
