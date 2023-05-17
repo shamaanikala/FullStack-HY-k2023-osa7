@@ -1,4 +1,6 @@
 const BlogView = ({ blog }) => {
+  const like = id => console.log('Blog-sivu tykkäys', id)
+
   if (!blog) {
     return <div>loading blog information...</div>
   }
@@ -16,7 +18,10 @@ const BlogView = ({ blog }) => {
           </a>
         </div>
         <div>
-          {blog.likes} likes <button>like</button>
+          likes <span id="likes">{blog.likes}</span>{' '}
+          <button className="likeBUtton" onClick={() => like(blog.id)}>
+            like
+          </button>
         </div>
         <div>added by {blog.user.name}</div>
       </div>
