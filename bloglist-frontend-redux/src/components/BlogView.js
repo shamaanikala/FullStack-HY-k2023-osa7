@@ -4,7 +4,11 @@ import { useSelector } from 'react-redux'
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
   const blogsHook = useBlogs()
+  // likessa on pakko antaa parametrit, sillä se tarvitsee
+  // user myös
   const like = async id => blogsHook.handleLike(id, user)
+  // remove menee suoraan näin
+  const remove = blogsHook.handleRemove
 
   if (!blog) {
     return null
@@ -29,6 +33,18 @@ const BlogView = ({ blog }) => {
           </button>
         </div>
         <div>added by {blog.user.name}</div>
+      </div>
+      <div>
+        {(!blog.user || user.username === blog.user.username) && (
+          <div className="removeDiv">
+            <button
+              className="removeButton"
+              onClick={() => remove(blog.id, blog.title, blog.author)}
+            >
+              remove
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
