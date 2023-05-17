@@ -1,6 +1,5 @@
-import { useQuery } from 'react-query'
-import usersService from '../services/users'
 import { Link } from 'react-router-dom'
+import { useUsers } from '../hooks/useUsers'
 
 const UsersTable = ({ users }) => {
   return (
@@ -26,19 +25,15 @@ const UsersTable = ({ users }) => {
 }
 
 const Users = () => {
-  const result = useQuery(
-    'users',
-    () => usersService.getAll().then(res => res) // getAll antaa .data
-  )
-  const users = result.data
+  const users = useUsers()
 
   return (
     <div>
       <h2>Users 😸</h2>
-      {result.isLoading && <div>loading...</div>}
-      {result.isSuccess && (
+      {users.query.isLoading && <div>loading...</div>}
+      {users.query.isSuccess && (
         <>
-          <UsersTable users={users} />
+          <UsersTable users={users.data} />
         </>
       )}
     </div>

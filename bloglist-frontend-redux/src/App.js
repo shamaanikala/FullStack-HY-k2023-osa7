@@ -15,7 +15,6 @@ const App = () => {
 
   const blogs = useBlogs()
   blogs.initBlogs()
-
   auth.checkLoggedUser() // onko käyttäjä kirjautunut sisään localStoragessa?
 
   return (
