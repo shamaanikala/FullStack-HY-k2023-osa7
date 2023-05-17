@@ -10,7 +10,11 @@ const BlogView = ({ blog }) => {
       </div>
       <br />
       <div>
-        <div>{blog.url}</div>
+        <div>
+          <a href={blog.url} target="_blank" rel="noreferrer">
+            {blog.url}
+          </a>
+        </div>
         <div>
           {blog.likes} likes <button>like</button>
         </div>
