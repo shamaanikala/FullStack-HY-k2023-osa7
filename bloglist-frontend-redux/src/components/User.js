@@ -1,18 +1,4 @@
-// import { useParams } from 'react-router-dom'
-// import { useQuery } from 'react-query'
-// import usersService from '../services/users'
-
-const BlogTitleList = ({ blogs }) => {
-  return (
-    <>
-      <ul>
-        {blogs.map(blog => (
-          <li key={blog.title}>{blog.title}</li>
-        ))}
-      </ul>
-    </>
-  )
-}
+import BlogTitleList from './BlogTitleList'
 
 const User = ({ user }) => {
   if (!user) {
