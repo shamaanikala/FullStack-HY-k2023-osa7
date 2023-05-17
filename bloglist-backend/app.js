@@ -10,9 +10,9 @@ const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
+const commentsRouter = require('./controllers/comments')
 
-
-mongoose.set('strictQuery',false)
+mongoose.set('strictQuery', false)
 // TODO Virheenkäsittely tälle
 mongoose.connect(config.mongoUrl)
 
@@ -23,11 +23,12 @@ app.use(middleware.requestLogger)
 
 app.use(middleware.tokenExtractor)
 
-app.use('/api/blogs',blogsRouter)
+app.use('/api/blogs', blogsRouter)
 // ei toimi näin, koska myös get haluaa tokenin
-//app.use('/api/blogs', middleware.userExtractor,blogsRouter) 
+//app.use('/api/blogs', middleware.userExtractor,blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/comments', commentsRouter)
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
