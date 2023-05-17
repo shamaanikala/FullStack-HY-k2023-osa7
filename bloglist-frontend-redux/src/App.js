@@ -11,11 +11,13 @@ import User from './components/User'
 import LoginHeader from './components/LoginHeader'
 import Header from './components/Header'
 
-import { verifyUserToken } from './authUtils'
+//import { verifyUserToken } from './authUtils'
+import { useAuth } from './hooks/useAuth'
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+  const auth = useAuth()
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -24,9 +26,9 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
-      verifyUserToken(loggedUserJSON, dispatch)
+      auth.verifyUserToken(loggedUserJSON)
     }
-  }, [dispatch])
+  }, [])
 
   return (
     <div>
