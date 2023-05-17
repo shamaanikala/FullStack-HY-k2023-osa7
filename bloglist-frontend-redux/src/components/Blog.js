@@ -1,4 +1,27 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+
+const blogTitle = {
+  textDecoration: 'underline',
+  fontWeight: 'bold',
+}
+
+const BlogTitle = ({ blog, toggleBlog, blogOpen }) => {
+  return (
+    <>
+      <span onClick={toggleBlog} style={blogTitle} className="blogTitle">
+        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+      </span>{' '}
+      <span className="blogAuthor"> {blog.author}</span>
+      {!blogOpen && (
+        <button id="viewBlogButton" onClick={toggleBlog}>
+          view
+        </button>
+      )}
+      {blogOpen && <button onClick={toggleBlog}>hide</button>}
+    </>
+  )
+}
 
 const Blog = ({ user, blog, like, remove }) => {
   const [blogOpen, setBlogOpen] = useState(false)
@@ -20,13 +43,6 @@ const Blog = ({ user, blog, like, remove }) => {
     marginBottom: 5,
   }
 
-  // :hover voisi tehdä tämän avulla
-  // https://stackoverflow.com/questions/32125708/how-can-i-access-a-hover-state-in-reactjs
-  const blogTitle = {
-    textDecoration: 'underline',
-    fontWeight: 'bold',
-  }
-
   const anonymousStyle = {
     color: 'grey',
     fontStyle: 'italic',
@@ -44,22 +60,12 @@ const Blog = ({ user, blog, like, remove }) => {
     <div className="blogBox" style={blogStyle}>
       {!blogOpen && (
         <div className="closed">
-          <span onClick={toggleBlog} style={blogTitle} className="blogTitle">
-            {blog.title}
-          </span>{' '}
-          <span className="blogAuthor"> {blog.author}</span>
-          <button id="viewBlogButton" onClick={toggleBlog}>
-            view
-          </button>
+          <BlogTitle blog={blog} toggleBlog={toggleBlog} blogOpen={blogOpen} />
         </div>
       )}
       {blogOpen && (
         <div className="opened" style={opened}>
-          <span onClick={toggleBlog} style={blogTitle} className="blogTitle">
-            {blog.title}
-          </span>{' '}
-          <span className="blogAuthor">{blog.author}</span>
-          <button onClick={toggleBlog}>hide</button>
+          <BlogTitle blog={blog} toggleBlog={toggleBlog} blogOpen={blogOpen} />
           <div className="blogUrl">
             <a href={blog.url} target="_blank" rel="noreferrer">
               {blog.url}
