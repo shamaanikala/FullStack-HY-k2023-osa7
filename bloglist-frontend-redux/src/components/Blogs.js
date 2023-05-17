@@ -31,7 +31,7 @@ const Blogs = () => {
     } catch (exception) {
       console.log('Adding new blog failed')
       console.log(exception)
-      dispatch(hideNotification(null, true)) // params: timeoutId, force
+      dispatch(hideNotification(true)) // params: force
       dispatch(showError(`Failed to add a new blog: ${exception}`))
       if (exception.response.data.error) {
         dispatch(showError(`Failed to add a new blog: ${exception.response.data.error}`))
@@ -54,7 +54,7 @@ const Blogs = () => {
     } catch (exception) {
       console.log('Liking blog failed')
       // pakotetaan tykkäysilmoitus piiloon force=true
-      dispatch(hideNotification(null, true)) // params: timeoutId, force
+      dispatch(hideNotification(true)) // params: force
       console.log(exception)
       if (exception.response.data.error) {
         dispatch(showError(`Failed to like blog: ${exception.response.data.error}`))

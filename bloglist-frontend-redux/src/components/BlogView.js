@@ -4,14 +4,17 @@ const BlogView = ({ blog }) => {
   }
   return (
     <div>
-      <h2>{blog.title}</h2>
-      <em>by {blog.author}</em>
       <div>
-        <p>{blog.url}</p>
-        <p>
+        <h2>{blog.title}</h2>
+        <em>by {blog.author}</em>
+      </div>
+      <br />
+      <div>
+        <div>{blog.url}</div>
+        <div>
           {blog.likes} likes <button>like</button>
-        </p>
-        <p>added by {blog.user.name}</p>
+        </div>
+        <div>added by {blog.user.name}</div>
       </div>
     </div>
   )
