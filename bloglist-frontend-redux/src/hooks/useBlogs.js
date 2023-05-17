@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from '../reducers/blogReducer'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
-import { likeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
 export const useBlogs = () => {
   const dispatch = useDispatch()
@@ -50,10 +50,30 @@ export const useBlogs = () => {
     }
   }
 
+  const handleRemove = async (id, title, author) => {
+    if (window.confirm(`Remove blog ${title} by ${author}`)) {
+      try {
+        console.log(`Yritetään poistaa blogi ${id}`)
+        await dispatch(removeBlog(id))
+        dispatch(showNotification(`Removed the blog ${title}`))
+      } catch (exception) {
+        console.log(exception)
+        if (exception.response.data.error) {
+          dispatch(showError(`Failed to remove blog: ${exception.response.data.error}`))
+        } else if (exception.response.status === 404) {
+          dispatch(showError('Blog was already removed from the server'))
+        } else {
+          dispatch(showError(`Failed to remove blog: ${exception}`))
+        }
+      }
+    }
+  }
+
   return {
     blogs,
     initBlogs,
     blogsSorted,
     handleLike,
+    handleRemove,
   }
 }
