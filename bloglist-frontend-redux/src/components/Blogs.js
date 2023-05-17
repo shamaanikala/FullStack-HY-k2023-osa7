@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showNotification, hideNotification, showError } from '../reducers/notificationReducer'
 import { addBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
+import { useBlogs } from '../hooks/useBlogs'
 
 const Blogs = () => {
   const blogFormRef = useRef()
@@ -12,15 +13,8 @@ const Blogs = () => {
 
   const user = useSelector(state => state.user)
 
-  const sortByTitle = (a, b) => {
-    const title_a = a.title.toUpperCase()
-    const title_b = b.title.toUpperCase()
-    return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
-  }
-
-  const blogs = useSelector(state =>
-    state.blogs.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
-  )
+  const blogsHook = useBlogs()
+  const blogs = blogsHook.blogsSorted
 
   const createBlog = async blogObject => {
     try {

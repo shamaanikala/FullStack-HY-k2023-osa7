@@ -13,8 +13,19 @@ export const useBlogs = () => {
     }, [dispatch])
   }
 
+  const sortByTitle = (a, b) => {
+    const title_a = a.title.toUpperCase()
+    const title_b = b.title.toUpperCase()
+    return title_a < title_b ? -1 : title_a > title_b ? 1 : 0
+  }
+
+  const blogsSorted = useSelector(state =>
+    state.blogs.sort(sortByTitle).sort((a, b) => b.likes - a.likes)
+  )
+
   return {
     blogs,
     initBlogs,
+    blogsSorted,
   }
 }
