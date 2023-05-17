@@ -2,7 +2,7 @@ const BlogView = ({ blog }) => {
   const like = id => console.log('Blog-sivu tykkäys', id)
 
   if (!blog) {
-    return <div>loading blog information...</div>
+    return null
   }
   return (
     <div>
