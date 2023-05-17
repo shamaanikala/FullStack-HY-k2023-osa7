@@ -5,3 +5,6 @@ Content-Type: application/json
     "content": "Testikommentti",
     "blog": "6447e1207796cbd59ea48f06"
 }
+
+###
+DELETE http://localhost:3003/api/comments/6465160bf9ffd1e26156cbe5
