@@ -25,7 +25,7 @@ export const useAuth = () => {
     }
   }
 
-  const verifyUser = () => {
+  const checkLoggedUser = () => {
     useEffect(() => {
       const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
       if (loggedUserJSON) {
@@ -43,7 +43,7 @@ export const useAuth = () => {
   }
 
   return {
-    checkLoggedUser: verifyUser,
+    checkLoggedUser,
     logout,
   }
 }
