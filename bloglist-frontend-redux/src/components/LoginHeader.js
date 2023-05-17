@@ -30,9 +30,16 @@ const LoginHeader = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log(exception)
-      console.log('wrong credentials')
-      dispatch(showError('wrong username or password'))
+      if (exception.name === 'AxiosError' && exception.code === 'ERR_BAD_RESPONSE') {
+        console.log(exception)
+        const errorMessage = 'Unable to log in. Server probably down'
+        console.log(errorMessage)
+        dispatch(showError(errorMessage))
+      } else {
+        console.log(exception)
+        console.log('wrong credentials')
+        dispatch(showError('wrong username or password'))
+      }
     }
   }
 
