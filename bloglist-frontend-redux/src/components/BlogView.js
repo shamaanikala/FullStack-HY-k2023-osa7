@@ -1,11 +1,14 @@
 import { useBlogs } from '../hooks/useBlogs'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useComments } from '../hooks/useComments'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
   const blogsHook = useBlogs()
   const navigate = useNavigate()
+
+  const comments = useComments(blog)
 
   // likessa on pakko antaa parametrit, sillä se tarvitsee
   // user myös
@@ -31,6 +34,7 @@ const BlogView = ({ blog }) => {
   if (!blog) {
     return null
   }
+
   return (
     <div>
       <div>
@@ -53,6 +57,19 @@ const BlogView = ({ blog }) => {
         <div>added by {blog.user.name}</div>
       </div>
       <div>
+        <div>
+          <h3>comments</h3>
+          {comments.query.isLoading && <div>loading...</div>}
+          {comments.query.isSuccess && comments.data.length === 0 && <em>no comments</em>}
+          {comments.query.isSuccess && comments.data.length > 0 && (
+            <ul>
+              {comments.data.map(com => (
+                <li key={com.content}>{com.content}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         {(!blog.user || user.username === blog.user.username) && (
           <div className="removeDiv">
             <button

@@ -10,10 +10,10 @@ export const useBlogs = () => {
   // annetaan tämän kautta Routerille blogit
   const blogs = useSelector(state => state.blogs) // tuskin tarvitsee sort tässä
 
-  const initBlogs = () => {
+  const useBlogsInit = () => {
     useEffect(() => {
       dispatch(initializeBlogs())
-    }, [dispatch])
+    }, [])
   }
 
   const sortByTitle = (a, b) => {
@@ -73,7 +73,7 @@ export const useBlogs = () => {
 
   return {
     blogs,
-    initBlogs,
+    useBlogsInit,
     blogsSorted,
     handleLike,
     handleRemove,
