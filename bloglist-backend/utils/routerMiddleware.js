@@ -5,7 +5,7 @@ commentsRouter.use('/api/blogs/:id/comments', (request, response, next) => {
   next()
 })
 
-commentsRouter.get('/api/blogs/:id/comments', (request, response, next) => {
+commentsRouter.use('/api/blogs/:id/comments', (request, response, next) => {
   const blogId = request.params.id
   console.log(`Redirecting /api/blogs/${blogId}/comments -> /api/comments/${blogId}`)
   return response.redirect(`/api/comments/${blogId}`)
