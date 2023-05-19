@@ -30,8 +30,8 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
-app.use('/', routerMiddleware)
-app.use('/api/comments', commentsRouter) // frontille uudelleenohjaus
+app.use('/', routerMiddleware) // frontille uudelleenohjaus
+app.use('/api/comments', commentsRouter)
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
