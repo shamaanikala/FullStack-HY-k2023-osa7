@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useComments } from '../hooks/useComments'
 
 const blogTitle = {
   textDecoration: 'underline',
@@ -20,6 +21,19 @@ const BlogTitle = ({ blog, toggleBlog, blogOpen }) => {
       )}
       {blogOpen && <button onClick={toggleBlog}>hide</button>}
     </>
+  )
+}
+
+const CommentStatus = ({ blog }) => {
+  const comments = useComments(blog)
+  return (
+    <div>
+      {comments.query.isLoading && <div>loading...</div>}
+      {comments.query.isSuccess && comments.data.length === 0 && <em>no comments</em>}
+      {comments.query.isSuccess && comments.data.length > 0 && (
+        <em>{comments.data.length} comments</em>
+      )}
+    </div>
   )
 }
 
@@ -79,6 +93,7 @@ const Blog = ({ user, blog, like, remove }) => {
           </div>
           {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
           {blog.user && <span className="blogUser">{blog.user.name}</span>}
+          <CommentStatus blog={blog} />
           {(!blog.user || user.username === blog.user.username) && (
             <div className="removeDiv">
               <button
