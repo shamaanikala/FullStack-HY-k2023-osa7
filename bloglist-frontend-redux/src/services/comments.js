@@ -1,5 +1,4 @@
 import axios from 'axios'
-//const baseUrl = '/api/comments'
 const baseUrl = '/api/blogs'
 
 const getByBlogId = async blogId => {
