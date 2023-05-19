@@ -29,6 +29,7 @@ app.use('/api/blogs', blogsRouter)
 //app.use('/api/blogs', middleware.userExtractor,blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+
 app.use('/', routerMiddleware)
 app.use('/api/comments', commentsRouter) // frontille uudelleenohjaus
 
@@ -36,6 +37,15 @@ if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
   app.use('/api/testing', testingRouter)
 }
+
+const testaajaMiddleware = (req, res, next) => {
+  console.log('testaajaMiddleware')
+  //console.log(req)
+  //console.log(res)
+  next()
+}
+// testimiddleware, mennäänkö tänne ilman commentsRouter next()
+app.use(testaajaMiddleware)
 
 app.use(middleware.errorHandler)
 
