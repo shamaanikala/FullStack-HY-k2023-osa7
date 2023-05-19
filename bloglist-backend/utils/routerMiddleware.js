@@ -2,13 +2,12 @@
 const commentsRouter = require('express').Router()
 
 commentsRouter.use('/api/blogs/:id/comments', (request, response, next) => {
-  console.log('yritetään /api/blogs/:id/comments')
   next()
 })
 
 commentsRouter.get('/api/blogs/:id/comments', (request, response, next) => {
-  console.log(request.params.id)
   const blogId = request.params.id
+  console.log(`Redirecting /api/blogs/${blogId}/comments -> /api/comments/${blogId}`)
   return response.redirect(`/api/comments/${blogId}`)
 })
 
