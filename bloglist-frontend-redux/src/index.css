@@ -1,3 +1,8 @@
+html {
+  background-color: darkslategrey;
+  color: darkblue;
+}
+
 #menu {
   background-color: lightsteelblue;
   padding-top: 0.25em;

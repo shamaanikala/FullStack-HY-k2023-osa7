@@ -6,6 +6,7 @@ import { useAuth } from './hooks/useAuth'
 import { useBlogs } from './hooks/useBlogs'
 import AppRouter from './components/AppRouter'
 import { useQueryClient } from 'react-query'
+import { Page } from './styles'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -20,7 +21,7 @@ const App = () => {
   queryClient.invalidateQueries('comments')
 
   return (
-    <div>
+    <Page>
       {!user && <LoginHeader />}
       {user && (
         <div>
@@ -28,7 +29,7 @@ const App = () => {
           <AppRouter />
         </div>
       )}
-    </div>
+    </Page>
   )
 }
 
