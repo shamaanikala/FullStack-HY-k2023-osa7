@@ -34,11 +34,12 @@ const CommentStatus = ({ blog }) => {
     load()
   }, [blog.id])
 
-  if (!comments) return <div></div>
+  if (!comments) return null
   return (
     <div title="Click blog title to add comments">
       {comments.length === 0 && <em>no comments</em>}
-      {comments.length > 0 && <em>{comments.length} comments</em>}
+      {comments.length === 1 && <em>1 comment</em>}
+      {comments.length > 1 && <em>{comments.length} comments</em>}
     </div>
   )
 }
