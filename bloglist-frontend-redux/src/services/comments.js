@@ -7,4 +7,13 @@ const getByBlogId = async blogId => {
   return response.data
 }
 
-export default { getByBlogId }
+const create = async commentObject => {
+  console.log(`comments.js -create : ${JSON.stringify(commentObject)}`)
+
+  const blogId = commentObject.blog
+
+  const response = await axios.post(`${baseUrl}/${blogId}/comments`, commentObject)
+  return response.data
+}
+
+export default { getByBlogId, create }

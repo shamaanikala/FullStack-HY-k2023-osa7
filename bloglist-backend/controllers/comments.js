@@ -24,6 +24,21 @@ commentsRouter.post('/', requestLogger, async (request, response) => {
   response.status(201).json(savedComment)
 })
 
+commentsRouter.post('/:blogId/comments', requestLogger, async (request, response) => {
+  const body = request.body
+
+  console.log('/:blogId post')
+
+  const comment = new Comment({
+    content: body.content,
+    blog: request.params.blogId,
+  })
+
+  const savedComment = await comment.save()
+
+  response.status(201).json(savedComment)
+})
+
 commentsRouter.delete('/:id', requestLogger, async (request, response) => {
   const commentId = request.params.id
   await Comment.findByIdAndRemove(commentId)
@@ -34,6 +49,13 @@ commentsRouter.delete('/:id', requestLogger, async (request, response) => {
 // vai orpojen kommenttien siivous aina ajoittain?
 
 commentsRouter.get('/:blogId', requestLogger, async (request, response) => {
+  const blogId = request.params.blogId
+  const comments = await Comment.find({ blog: { $eq: blogId } })
+
+  response.json(comments)
+})
+
+commentsRouter.get('/:blogId/comments', requestLogger, async (request, response) => {
   const blogId = request.params.blogId
   const comments = await Comment.find({ blog: { $eq: blogId } })
 

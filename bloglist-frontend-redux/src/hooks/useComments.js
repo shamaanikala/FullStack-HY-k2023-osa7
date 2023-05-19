@@ -5,6 +5,11 @@ import { useLocation } from 'react-router-dom'
 export const useComments = blog => {
   const getComments = async id => commentsService.getByBlogId(id)
 
+  const addComment = async (id, comment) => {
+    const newComment = { content: comment, blog: id }
+    await commentsService.create(newComment)
+  }
+
   // sivu ei toimi sivun päivityksen jälkeen, koska blogin id hukkuu
   // käytetään avuksi react-router-dom useLocation
   const location = useLocation()
@@ -19,5 +24,6 @@ export const useComments = blog => {
   return {
     query,
     data,
+    addComment,
   }
 }

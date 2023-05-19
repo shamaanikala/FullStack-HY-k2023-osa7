@@ -3,6 +3,31 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useComments } from '../hooks/useComments'
 
+const CommentForm = ({ blog }) => {
+  const commentHook = useComments()
+
+  const createNewComment = async event => {
+    event.preventDefault()
+    const content = event.target.comment.value
+    event.target.comment.value = ''
+    console.log(content)
+    try {
+      await commentHook.addComment(blog.id, content)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  return (
+    <div>
+      <form onSubmit={createNewComment}>
+        <input name="comment" />
+        <button type="submit">add comment</button>
+      </form>
+    </div>
+  )
+}
+
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
   const blogsHook = useBlogs()
@@ -59,12 +84,13 @@ const BlogView = ({ blog }) => {
       <div>
         <div>
           <h3>comments</h3>
+          <CommentForm blog={blog} />
           {comments.query.isLoading && <div>loading...</div>}
           {comments.query.isSuccess && comments.data.length === 0 && <em>no comments</em>}
           {comments.query.isSuccess && comments.data.length > 0 && (
             <ul>
               {comments.data.map(com => (
-                <li key={com.content}>{com.content}</li>
+                <li key={com.id}>{com.content}</li>
               ))}
             </ul>
           )}

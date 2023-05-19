@@ -11,7 +11,6 @@ const mongoose = require('mongoose')
 const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const commentsRouter = require('./controllers/comments')
-const routerMiddleware = require('./utils/routerMiddleware')
 
 mongoose.set('strictQuery', false)
 // TODO Virheenkäsittely tälle
@@ -30,8 +29,7 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
-app.use('/', routerMiddleware) // frontille uudelleenohjaus
-app.use('/api/comments', commentsRouter)
+app.use('/api/blogs/', commentsRouter)
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
