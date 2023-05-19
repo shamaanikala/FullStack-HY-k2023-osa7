@@ -10,7 +10,12 @@ const blogTitle = {
 const BlogTitle = ({ blog, toggleBlog, blogOpen }) => {
   return (
     <>
-      <span onClick={toggleBlog} style={blogTitle} className="blogTitle">
+      <span
+        title="View and comment blog"
+        onClick={toggleBlog}
+        style={blogTitle}
+        className="blogTitle"
+      >
         <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
       </span>{' '}
       <span className="blogAuthor"> {blog.author}</span>
