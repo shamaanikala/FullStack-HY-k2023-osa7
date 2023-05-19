@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useComments } from '../hooks/useComments'
+import commentService from '../services/comments'
 
 const blogTitle = {
   textDecoration: 'underline',
@@ -25,14 +25,20 @@ const BlogTitle = ({ blog, toggleBlog, blogOpen }) => {
 }
 
 const CommentStatus = ({ blog }) => {
-  const comments = useComments(blog)
+  const [comments, setComments] = useState([])
+  useEffect(() => {
+    const load = async () => {
+      const comms = await commentService.getByBlogId(blog.id)
+      setComments(comms)
+    }
+    load()
+  }, [blog.id])
+
+  if (!comments) return <div></div>
   return (
-    <div>
-      {comments.query.isLoading && <div>loading...</div>}
-      {comments.query.isSuccess && comments.data.length === 0 && <em>no comments</em>}
-      {comments.query.isSuccess && comments.data.length > 0 && (
-        <em>{comments.data.length} comments</em>
-      )}
+    <div title="Click blog title to add comments">
+      {comments.length === 0 && <em>no comments</em>}
+      {comments.length > 0 && <em>{comments.length} comments</em>}
     </div>
   )
 }
