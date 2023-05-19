@@ -1,16 +1,17 @@
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import commentsService from '../services/comments'
 import { useLocation } from 'react-router-dom'
 
 export const useComments = blog => {
+  const queryClient = useQueryClient()
+
   const getComments = async id => commentsService.getByBlogId(id)
 
-  const commentMutation = useMutation(commentsService.create)
-
-  // const addComment = async (id, comment) => {
-  //   const newComment = { content: comment, blog: id }
-  //   await commentsService.create(newComment)
-  // }
+  const commentMutation = useMutation(commentsService.create, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments')
+    },
+  })
 
   // sivu ei toimi sivun päivityksen jälkeen, koska blogin id hukkuu
   // käytetään avuksi react-router-dom useLocation
