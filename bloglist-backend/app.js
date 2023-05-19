@@ -38,15 +38,6 @@ if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', testingRouter)
 }
 
-const testaajaMiddleware = (req, res, next) => {
-  console.log('testaajaMiddleware')
-  //console.log(req)
-  //console.log(res)
-  next()
-}
-// testimiddleware, mennäänkö tänne ilman commentsRouter next()
-app.use(testaajaMiddleware)
-
 app.use(middleware.errorHandler)
 
 module.exports = app
