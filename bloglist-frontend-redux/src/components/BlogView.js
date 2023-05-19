@@ -2,31 +2,7 @@ import { useBlogs } from '../hooks/useBlogs'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useComments } from '../hooks/useComments'
-
-const CommentForm = ({ blog }) => {
-  const commentHook = useComments()
-
-  const createNewComment = async event => {
-    event.preventDefault()
-    const content = event.target.comment.value
-    event.target.comment.value = ''
-    console.log(content)
-    try {
-      await commentHook.addComment(blog.id, content)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  return (
-    <div>
-      <form onSubmit={createNewComment}>
-        <input name="comment" />
-        <button type="submit">add comment</button>
-      </form>
-    </div>
-  )
-}
+import CommentForm from './CommentForm'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
