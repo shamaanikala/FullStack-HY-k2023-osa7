@@ -9,7 +9,7 @@ const CommentForm = ({ blog }) => {
     event.target.comment.value = ''
     console.log(content)
     try {
-      await commentHook.addComment(blog.id, content)
+      await commentHook.commentMutation.mutate({ blog: blog.id, content })
     } catch (err) {
       console.log(err)
     }
