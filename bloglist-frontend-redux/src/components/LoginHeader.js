@@ -5,7 +5,7 @@ import LoginForm from './LoginForm'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { setUser } from '../reducers/userReducer'
-import { showError } from '../reducers/notificationReducer'
+import { showError, showNotification } from '../reducers/notificationReducer'
 
 const LoginHeader = () => {
   const [username, setUsername] = useState('')
@@ -29,6 +29,7 @@ const LoginHeader = () => {
       dispatch(setUser(user))
       setUsername('')
       setPassword('')
+      dispatch(showNotification('Login succesful!'))
     } catch (exception) {
       if (exception.name === 'AxiosError' && exception.code === 'ERR_BAD_RESPONSE') {
         console.log(exception)

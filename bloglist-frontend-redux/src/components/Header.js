@@ -35,7 +35,7 @@ const Header = () => {
       <h2>blog app</h2>
       <div>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        {notificationMessage && <Alert severity="info">{notificationMessage}</Alert>}
+        {notificationMessage && <Alert severity="success">{notificationMessage}</Alert>}
       </div>
     </div>
   )
