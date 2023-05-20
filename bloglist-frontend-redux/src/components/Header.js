@@ -1,11 +1,11 @@
-// import Notification from './Notification'
+import Notification from './Notification'
 import { useDispatch, useSelector } from 'react-redux'
 import Logout from './Logout'
 import { showNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import { useAuth } from '../hooks/useAuth'
 import { Link } from 'react-router-dom'
-import { Alert } from '@mui/material'
+// import { Alert } from '@mui/material'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -34,16 +34,17 @@ const Header = () => {
       </div>
       <h2>blog app</h2>
       <div>
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        {notificationMessage && <Alert severity="success">{notificationMessage}</Alert>}
+        <Notification message={errorMessage} type={'error'} />
+        <Notification message={notificationMessage} type={'blogAdded'} />
       </div>
     </div>
   )
 }
-{
-  /* <div className="notificationBox">
+// {{errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+// {notificationMessage && <Alert severity="success">{notificationMessage}</Alert>}
+/* <div className="notificationBox">
         <Notification message={errorMessage} type={'error'} />
         <Notification message={notificationMessage} type={'blogAdded'} />
       </div> */
-}
+// }
 export default Header
