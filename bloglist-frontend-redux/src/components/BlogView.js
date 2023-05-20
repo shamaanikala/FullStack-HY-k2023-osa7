@@ -11,18 +11,15 @@ const BlogView = ({ blog }) => {
 
   const comments = useComments(blog)
 
-  // likessa on pakko antaa parametrit, sillä se tarvitsee
-  // user myös
+  // likessa on pakko antaa parametrit, sillä se tarvitsee user myös
   const like = async id => blogsHook.handleLike(id, user)
-  // remove menee suoraan näin
-  // const remove = blogsHook.handleRemove
-  // mutta navigate mukaan
+  // remove menisi myös suoraan näin: const remove = blogsHook.handleRemove
+  // mutta, koska nyt halutaan navigate('/') mukaan, niin parametrit eksplisiittisesti
   const remove = async (id, title, author) => {
     try {
       await blogsHook.handleRemove(id, title, author)
     } catch (error) {
       if (error.message === 'Blog removal cancelled by user!') {
-        //console.log(error.message)
         return // ei mennä navigateen
       } else {
         console.log(error)
