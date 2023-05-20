@@ -8,7 +8,6 @@ import AppRouter from './components/AppRouter'
 import { useQueryClient } from 'react-query'
 import { Page } from './styles'
 import { Container } from '@mui/material'
-import SimpleSnackbar from './MUI_components/snackbars'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -32,7 +31,6 @@ const App = () => {
             <AppRouter />
           </div>
         )}
-        <SimpleSnackbar />
       </Page>
     </Container>
   )
