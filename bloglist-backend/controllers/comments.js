@@ -26,9 +26,6 @@ commentsRouter.post('/', requestLogger, async (request, response) => {
 
 commentsRouter.post('/:blogId/comments', requestLogger, async (request, response) => {
   const body = request.body
-
-  console.log('/:blogId post')
-
   const comment = new Comment({
     content: body.content,
     blog: request.params.blogId,
