@@ -4,6 +4,7 @@ import { showNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import { useAuth } from '../hooks/useAuth'
 import NavigationMenu from './MUI-components/NavigationMenu'
+import { Typography } from '@mui/material'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -23,7 +24,7 @@ const Header = () => {
       <div>
         <NavigationMenu user={user} handleLogout={handleLogout} />
       </div>
-      <h2>blog app</h2>
+      <Typography variant="h2">blog app</Typography>
       <div>
         <Notification message={errorMessage} type={'error'} />
         <Notification message={notificationMessage} type={'blogAdded'} />
