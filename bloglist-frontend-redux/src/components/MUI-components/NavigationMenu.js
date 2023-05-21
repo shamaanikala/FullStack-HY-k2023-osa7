@@ -23,7 +23,7 @@ const NavigationMenu = ({ user, handleLogout }) => {
 
   useEffect(() => {
     window.onresize = () => {
-      window.innerWidth <= 450
+      window.innerWidth <= 440
         ? setButtonGroupOrientation('vertical')
         : setButtonGroupOrientation('horizontal')
     }
@@ -41,7 +41,11 @@ const NavigationMenu = ({ user, handleLogout }) => {
           </Button>
         </ButtonGroup>
         <Box sx={{ flexGrow: 1 }} />
-        <Typography align="right" fontSize="small">
+        <Typography
+          align="right"
+          fontSize="small"
+          sx={{ display: buttonGroupOrientation === 'horizontal' ? '' : 'none' }}
+        >
           {user.name}
           <br /> logged in
         </Typography>
@@ -69,6 +73,14 @@ const NavigationMenu = ({ user, handleLogout }) => {
           open={Boolean(menuPosition)}
           onClose={handleMenuClose}
         >
+          <MenuItem
+            divider={true}
+            fontSize="small"
+            onClick={handleMenuClose}
+            sx={{ display: buttonGroupOrientation === 'vertical' ? '' : 'none' }}
+          >
+            <em>{user.name}</em>
+          </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
