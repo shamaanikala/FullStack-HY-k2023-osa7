@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useComments } from '../hooks/useComments'
 import CommentForm from './CommentForm'
+import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material'
+import { Comment } from '@mui/icons-material'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
@@ -61,11 +63,16 @@ const BlogView = ({ blog }) => {
           {comments.query.isLoading && <div>loading...</div>}
           {comments.query.isSuccess && comments.data.length === 0 && <em>no comments</em>}
           {comments.query.isSuccess && comments.data.length > 0 && (
-            <ul>
+            <List sx={{ width: '50%', bgcolor: 'paper' }}>
               {comments.data.map(com => (
-                <li key={com.id}>{com.content}</li>
+                <ListItem key={com.id} alignItems="flex-start" divider>
+                  <ListItemIcon>
+                    <Comment color="action" fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>{com.content}</ListItemText>
+                </ListItem>
               ))}
-            </ul>
+            </List>
           )}
         </div>
 
