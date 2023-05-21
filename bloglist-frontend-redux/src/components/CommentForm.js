@@ -51,7 +51,7 @@ const CommentForm = ({ blog }) => {
       </div>
       <form onSubmit={createNewComment}>
         <div>
-          <Input name="comment" label="comment" variant="outlined" size="small" />
+          <Input name="comment" label="comment" placeholder="Type in your comment" size="small" />
           <Button variant="standard" size="small" color="primary" type="submit">
             add comment
           </Button>
