@@ -18,7 +18,6 @@ const App = () => {
   blogs.useBlogsInit()
 
   const queryClient = useQueryClient()
-
   queryClient.invalidateQueries('comments')
 
   return (
