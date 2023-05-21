@@ -6,6 +6,7 @@ import CommentForm from './CommentForm'
 import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material'
 import { Comment } from '@mui/icons-material'
 import RemoveBlogButton from './MUI-components/RemoveBlogButton'
+import LikeButton from './MUI-components/LikeButton'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
@@ -50,10 +51,7 @@ const BlogView = ({ blog }) => {
           </a>
         </div>
         <div>
-          likes <span id="likes">{blog.likes}</span>{' '}
-          <button className="likeBUtton" onClick={() => like(blog.id)}>
-            like
-          </button>
+          likes <span id="likes">{blog.likes}</span> <LikeButton handleLike={() => like(blog.id)} />
         </div>
         <div>added by {blog.user.name}</div>
       </div>

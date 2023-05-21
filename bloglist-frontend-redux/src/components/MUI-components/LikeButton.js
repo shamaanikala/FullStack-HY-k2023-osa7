@@ -4,6 +4,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp'
 const LikeButton = ({ handleLike }) => {
   return (
     <Button
+      title="Like the blog!"
       variant="outlined"
       className="likeButton"
       endIcon={<ArrowCircleUpIcon />}
