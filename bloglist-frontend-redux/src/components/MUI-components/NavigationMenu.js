@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Button, Typography, Menu, MenuItem } from '@mui/material'
+import { AppBar, Toolbar, Button, Typography, Menu, MenuItem, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { IconButton } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle'
@@ -19,7 +19,11 @@ const NavigationMenu = ({ user, handleLogout }) => {
         <Button color="inherit" component={Link} to="/users">
           users
         </Button>
-        <Typography sx={{ flexGrow: 1 }}>{user.name} logged in</Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Typography>
+          {user.name}
+          <br /> logged in
+        </Typography>
         <IconButton
           aria-label="user account"
           aria-controls="menu-appbar"
