@@ -6,8 +6,6 @@ const Notification = ({ message, type }) => {
     return null
   }
 
-  console.log('Notification:', message, type)
-  //return <div className={type}>{message}</div>
   return (
     <>
       {type === 'error' && <Alert severity="error">{message}</Alert>}

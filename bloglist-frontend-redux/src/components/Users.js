@@ -1,26 +1,39 @@
 import { Link } from 'react-router-dom'
 import { useUsers } from '../hooks/useUsers'
+import {
+  Card,
+  CardContent,
+  TableContainer,
+  Paper,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Typography,
+} from '@mui/material'
 
 const UsersTable = ({ users }) => {
   return (
-    <table>
-      <tbody>
-        <tr>
-          <td></td>
-          <td>
-            <b>blogs created</b>
-          </td>
-        </tr>
-        {users.map(user => (
-          <tr key={user.id}>
-            <td>
-              <Link to={`/users/${user.id}`}>{user.name}</Link>
-            </td>
-            <td>{user.blogs.length}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell>
+              <b>blogs created</b>
+            </TableCell>
+          </TableRow>
+          {users.map(user => (
+            <TableRow key={user.id}>
+              <TableCell>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </TableCell>
+              <TableCell>{user.blogs.length}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 
@@ -29,13 +42,17 @@ const Users = () => {
 
   return (
     <div>
-      <h2>Users 😸</h2>
-      {users.query.isLoading && <div>loading...</div>}
-      {users.query.isSuccess && (
-        <>
-          <UsersTable users={users.data} />
-        </>
-      )}
+      <Card>
+        <Typography variant="h4">Users 😸</Typography>
+        <CardContent>
+          {users.query.isLoading && <div>loading...</div>}
+          {users.query.isSuccess && (
+            <>
+              <UsersTable users={users.data} />
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
