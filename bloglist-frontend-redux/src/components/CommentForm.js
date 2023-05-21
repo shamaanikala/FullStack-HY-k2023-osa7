@@ -1,7 +1,11 @@
-import { Snackbar, Alert, TextField, Button } from '@mui/material'
+import { Snackbar, Alert, Button } from '@mui/material'
 import { useComments } from '../hooks/useComments'
 import { useState } from 'react'
 import AddCommentIcon from '@mui/icons-material/AddComment'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Input from '@mui/material/Input'
+import FormHelperText from '@mui/material/FormHelperText'
 
 const CommentForm = ({ blog }) => {
   const commentHook = useComments()
@@ -10,6 +14,7 @@ const CommentForm = ({ blog }) => {
     event.preventDefault()
     const content = event.target.comment.value
     event.target.comment.value = ''
+    setError(false)
     try {
       // https://tanstack.com/query/v4/docs/react/guides/mutations#promises
       // eslint-disable-next-line no-unused-vars
@@ -17,6 +22,7 @@ const CommentForm = ({ blog }) => {
     } catch (err) {
       setErrorMessage(err.message)
       setCommentSuccesful(false)
+      setError(true) // TextField & form
     } finally {
       setOpen(true)
     }
@@ -26,6 +32,7 @@ const CommentForm = ({ blog }) => {
   const [open, setOpen] = useState(false)
   const [commentSuccesful, setCommentSuccesful] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [error, setError] = useState(false)
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -52,13 +59,34 @@ const CommentForm = ({ blog }) => {
       </div>
       <form onSubmit={createNewComment}>
         <div>
-          <TextField
-            multiline
-            name="comment"
-            label="Comment (multiline)"
-            placeholder="Type in your comment"
-            size="small"
-          />
+          {!error && (
+            <Input
+              multiline
+              name="comment"
+              label="Comment (multiline)"
+              placeholder="Type in your comment"
+              size="small"
+            />
+          )}
+          {error && (
+            <FormControl error={error}>
+              <InputLabel error={error} htmlFor="validation-error">
+                Content missing!
+              </InputLabel>
+              <Input
+                id="validation-error"
+                error={error}
+                multiline
+                name="comment"
+                label="Comment (multiline)"
+                placeholder="Type in your comment"
+                size="small"
+              />
+              <FormHelperText id="validation-error-text">
+                Comment content is required!
+              </FormHelperText>
+            </FormControl>
+          )}
           <Button
             variant="standard"
             size="small"
