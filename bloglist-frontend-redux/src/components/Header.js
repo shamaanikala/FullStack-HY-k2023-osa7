@@ -5,7 +5,7 @@ import { showNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import { useAuth } from '../hooks/useAuth'
 import { Link } from 'react-router-dom'
-// import { Alert } from '@mui/material'
+import NavigationMenu from './MUI-components/NavigationMenu'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -23,6 +23,9 @@ const Header = () => {
   const padding = { padding: 5 }
   return (
     <div>
+      <div>
+        <NavigationMenu />
+      </div>
       <div id="menu">
         <Link style={padding} to="/">
           blogs
