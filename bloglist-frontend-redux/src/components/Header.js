@@ -24,7 +24,7 @@ const Header = () => {
   return (
     <div>
       <div>
-        <NavigationMenu />
+        <NavigationMenu user={user} handleLogout={handleLogout} />
       </div>
       <div id="menu">
         <Link style={padding} to="/">
