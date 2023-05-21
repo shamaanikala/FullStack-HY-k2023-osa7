@@ -1,7 +1,7 @@
 // Osan 5 materiaalista
 import { useState, useImperativeHandle, forwardRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from '@mui/material'
+import { Button, Card, CardContent, CardActions } from '@mui/material'
 
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -41,10 +41,14 @@ const Togglable = forwardRef((props, ref) => {
         </Button>
       </div>
       <div style={showWhenVisible}>
-        {props.children}
-        <Button variant="contained" size="small" onClick={toggleVisibility}>
-          cancel
-        </Button>
+        <Card sx={{ width: 'fit-content' }}>
+          <CardContent>{props.children}</CardContent>
+          <CardActions>
+            <Button variant="contained" size="small" onClick={toggleVisibility}>
+              cancel
+            </Button>
+          </CardActions>
+        </Card>
       </div>
     </div>
   )
