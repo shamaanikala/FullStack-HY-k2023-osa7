@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useComments } from '../hooks/useComments'
 import CommentForm from './CommentForm'
-import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material'
+import { List, ListItem, ListItemText, ListItemIcon, Button } from '@mui/material'
 import { Comment } from '@mui/icons-material'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 const BlogView = ({ blog }) => {
   const user = useSelector(state => state.user)
@@ -78,12 +79,13 @@ const BlogView = ({ blog }) => {
 
         {(!blog.user || user.username === blog.user.username) && (
           <div className="removeDiv">
-            <button
+            <Button
               className="removeButton"
+              startIcon={<DeleteIcon />}
               onClick={() => remove(blog.id, blog.title, blog.author)}
             >
-              remove
-            </button>
+              remove blog
+            </Button>
           </div>
         )}
       </div>
