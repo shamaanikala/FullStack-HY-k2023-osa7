@@ -21,7 +21,7 @@ const App = () => {
   queryClient.invalidateQueries('comments')
 
   return (
-    <Container>
+    <Container maxWidth="sm">
       <Page>
         {!user && <LoginHeader />}
         {user && (
