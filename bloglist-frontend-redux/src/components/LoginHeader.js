@@ -6,6 +6,7 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { setUser } from '../reducers/userReducer'
 import { showError, showNotification } from '../reducers/notificationReducer'
+import { AppBar, Toolbar } from '@mui/material'
 
 const LoginHeader = () => {
   const [username, setUsername] = useState('')
@@ -46,6 +47,9 @@ const LoginHeader = () => {
 
   return (
     <div>
+      <AppBar position="static">
+        <Toolbar></Toolbar>
+      </AppBar>
       <Notification message={notificationMessage} type={'logout'} />
       <h2>log in to application</h2>
       <Notification message={errorMessage} type={'error'} />
