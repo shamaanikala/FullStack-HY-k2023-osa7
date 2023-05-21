@@ -7,7 +7,7 @@ import { useBlogs } from './hooks/useBlogs'
 import AppRouter from './components/AppRouter'
 import { useQueryClient } from 'react-query'
 import { Page } from './styles'
-import { Container } from '@mui/material'
+import { Container, Paper } from '@mui/material'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -23,13 +23,15 @@ const App = () => {
   return (
     <Container maxWidth="sm">
       <Page>
-        {!user && <LoginHeader />}
-        {user && (
-          <div>
-            <Header />
-            <AppRouter />
-          </div>
-        )}
+        <Paper>
+          {!user && <LoginHeader />}
+          {user && (
+            <div>
+              <Header />
+              <AppRouter />
+            </div>
+          )}
+        </Paper>
       </Page>
     </Container>
   )
