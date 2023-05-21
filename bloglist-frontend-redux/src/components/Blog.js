@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import commentService from '../services/comments'
 import RemoveBlogButton from './MUI-components/RemoveBlogButton'
+import { IconButton } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 
 const blogTitle = {
   textDecoration: 'underline',
@@ -21,11 +24,15 @@ const BlogTitle = ({ blog, toggleBlog, blogOpen }) => {
       </span>{' '}
       <span className="blogAuthor"> {blog.author}</span>
       {!blogOpen && (
-        <button id="viewBlogButton" onClick={toggleBlog}>
-          view
-        </button>
+        <IconButton aria-label="view" size="small" id="viewBlogButton" onClick={toggleBlog}>
+          <ExpandMoreIcon />
+        </IconButton>
       )}
-      {blogOpen && <button onClick={toggleBlog}>hide</button>}
+      {blogOpen && (
+        <IconButton aria-label="hide" size="small" variant="outlined" onClick={toggleBlog}>
+          <ExpandLessIcon />
+        </IconButton>
+      )}
     </>
   )
 }
