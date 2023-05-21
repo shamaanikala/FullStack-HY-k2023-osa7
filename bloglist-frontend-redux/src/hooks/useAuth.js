@@ -39,7 +39,7 @@ export const useAuth = () => {
       window.localStorage.removeItem('loggedBloglistUser')
     }
     dispatch(setUser(null))
-    console.log('Käyttäjä kirjattu ulos')
+    // console.log('Käyttäjä kirjattu ulos')
   }
 
   return {

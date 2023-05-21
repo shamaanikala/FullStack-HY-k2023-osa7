@@ -36,7 +36,7 @@ export const useBlogs = () => {
       await dispatch(likeBlog(id, likedBlog))
       dispatch(showNotification(`${user.name} liked the blog ${likedBlog.title}! 👍`))
     } catch (exception) {
-      console.log('Liking blog failed')
+      // console.log('Liking blog failed')
       // pakotetaan tykkäysilmoitus piiloon force=true
       dispatch(hideNotification(true)) // params: force
       console.log(exception)
@@ -53,7 +53,7 @@ export const useBlogs = () => {
   const handleRemove = async (id, title, author) => {
     if (window.confirm(`Remove blog ${title} by ${author}`)) {
       try {
-        console.log(`Yritetään poistaa blogi ${id}`)
+        // console.log(`Yritetään poistaa blogi ${id}`)
         await dispatch(removeBlog(id))
         dispatch(showNotification(`Removed the blog ${title}`))
       } catch (exception) {

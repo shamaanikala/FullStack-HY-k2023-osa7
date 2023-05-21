@@ -20,7 +20,7 @@ const blogReducer = (state = [], action) => {
 // HUOM! kaksi nuolta, jotta tulee return
 // https://redux.js.org/usage/writing-logic-thunks#writing-thunks
 export const initializeBlogs = () => async dispatch => {
-  console.log('initializeBlogs')
+  // console.log('initializeBlogs')
   const blogs = await blogService.getAll().catch(error => {
     console.log(error)
     console.log(`Unable to initialize blog data: ${JSON.stringify(error.response)}`)
