@@ -1,8 +1,15 @@
-import { AppBar, Toolbar, Button, Typography } from '@mui/material'
+import { AppBar, Toolbar, Button, Typography, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
-import Logout from '../Logout'
+import { IconButton } from '@mui/material'
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import { useState } from 'react'
 
+// mallia https://mui.com/material-ui/react-app-bar/
 const NavigationMenu = ({ user, handleLogout }) => {
+  const [menuPosition, setMenuPosition] = useState(null)
+  const openMenu = event => setMenuPosition(event.currentTarget)
+  const handleMenuClose = () => setMenuPosition(null)
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -12,8 +19,33 @@ const NavigationMenu = ({ user, handleLogout }) => {
         <Button color="inherit" component={Link} to="/users">
           users
         </Button>
-        <Typography>{user.name} logged in</Typography>
-        <Logout handleLogout={handleLogout} />
+        <Typography sx={{ flexGrow: 1 }}>{user.name} logged in</Typography>
+        <IconButton
+          aria-label="user account"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={openMenu}
+        >
+          <AccountCircle />
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={menuPosition}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(menuPosition)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   )
