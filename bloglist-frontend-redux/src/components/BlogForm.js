@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { TextField, Button } from '@mui/material'
+import { TextField } from '@mui/material'
+import AddBlogButton from './MUI-components/AddBlogButton'
 
 const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -70,9 +71,7 @@ const BlogForm = ({ createBlog }) => {
             placeholder="Type blog url..."
           />
         </div>
-        <Button variant="contained" size="small" id="createButton" type="submit">
-          create
-        </Button>
+        <AddBlogButton id="createButton">create</AddBlogButton>
       </form>
     </div>
   )
