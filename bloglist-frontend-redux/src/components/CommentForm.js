@@ -12,13 +12,10 @@ const CommentForm = ({ blog }) => {
     console.log(content)
     try {
       // https://tanstack.com/query/v4/docs/react/guides/mutations#promises
+      // eslint-disable-next-line no-unused-vars
       const comment = await commentHook.commentMutation.mutateAsync({ blog: blog.id, content })
-      console.log(comment)
     } catch (err) {
-      console.log(err)
-      console.log(err.message)
-      console.log(err.response.data.message)
-      setErrorMessage(err.response.data.message)
+      setErrorMessage(err.message)
       setCommentSuccesful(false)
     } finally {
       setOpen(true)
@@ -35,19 +32,19 @@ const CommentForm = ({ blog }) => {
       return
     }
     setOpen(false)
-    !commentSuccesful ? setCommentSuccesful(true) : setCommentSuccesful(false)
+    setCommentSuccesful(true)
     setErrorMessage(null)
   }
 
   return (
     <div>
       <div>
-        <Snackbar open={open && commentSuccesful} autoHideDuration={5000} onClose={handleClose}>
+        <Snackbar open={open && commentSuccesful} autoHideDuration={2000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success">
             Comment added!
           </Alert>
         </Snackbar>
-        <Snackbar open={open && !commentSuccesful} autoHideDuration={5000} onClose={handleClose}>
+        <Snackbar open={open && !commentSuccesful} autoHideDuration={2000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error">
             Failed to add comment! ({errorMessage})
           </Alert>

@@ -11,7 +11,13 @@ const create = async commentObject => {
 
   const blogId = commentObject.blog
 
-  const response = await axios.post(`${baseUrl}/${blogId}/comments`, commentObject)
+  // prettier-ignore
+  const response = await axios.post(`${baseUrl}/${blogId}/comments`, commentObject).catch(error => {
+    // jos tässä laittaa throw eikä return, niin tulee react_devtools_backend_compact.js:2367 konsoliin, joka katoaa, jos tässä laittaa return
+    throw error.response.data.name === 'ValidationError'
+      ? new Error(error.response.data.message)
+      : error
+  })
   return response.data
 }
 

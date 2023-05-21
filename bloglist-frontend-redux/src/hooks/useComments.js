@@ -11,6 +11,10 @@ export const useComments = blog => {
     onSuccess: () => {
       queryClient.invalidateQueries('comments')
     },
+    onError: error => {
+      console.log('commentMutation: onError:', error)
+      throw error
+    },
   })
 
   // sivu ei toimi sivun päivityksen jälkeen, koska blogin id hukkuu
