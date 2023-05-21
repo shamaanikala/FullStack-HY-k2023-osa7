@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import commentService from '../services/comments'
+import RemoveBlogButton from './MUI-components/RemoveBlogButton'
 
 const blogTitle = {
   textDecoration: 'underline',
@@ -108,12 +109,7 @@ const Blog = ({ user, blog, like, remove }) => {
           <CommentStatus blog={blog} />
           {(!blog.user || user.username === blog.user.username) && (
             <div className="removeDiv">
-              <button
-                className="removeButton"
-                onClick={() => remove(blog.id, blog.title, blog.author)}
-              >
-                remove
-              </button>
+              <RemoveBlogButton blog={blog} remove={remove} />
             </div>
           )}
         </div>
