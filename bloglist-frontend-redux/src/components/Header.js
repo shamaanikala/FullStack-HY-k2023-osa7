@@ -1,10 +1,8 @@
 import Notification from './Notification'
 import { useDispatch, useSelector } from 'react-redux'
-import Logout from './Logout'
 import { showNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import { useAuth } from '../hooks/useAuth'
-import { Link } from 'react-router-dom'
 import NavigationMenu from './MUI-components/NavigationMenu'
 
 const Header = () => {
@@ -20,20 +18,10 @@ const Header = () => {
     dispatch(showNotification('user logged out', 1500))
   }
 
-  const padding = { padding: 5 }
   return (
     <div>
       <div>
         <NavigationMenu user={user} handleLogout={handleLogout} />
-      </div>
-      <div id="menu">
-        <Link style={padding} to="/">
-          blogs
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
-        {user.name} logged in <Logout handleLogout={handleLogout} />
       </div>
       <h2>blog app</h2>
       <div>
