@@ -1,4 +1,4 @@
-import { Snackbar, Alert } from '@mui/material'
+import { Snackbar, Alert, Input, Button } from '@mui/material'
 import { useComments } from '../hooks/useComments'
 import { useState } from 'react'
 
@@ -9,7 +9,6 @@ const CommentForm = ({ blog }) => {
     event.preventDefault()
     const content = event.target.comment.value
     event.target.comment.value = ''
-    console.log(content)
     try {
       // https://tanstack.com/query/v4/docs/react/guides/mutations#promises
       // eslint-disable-next-line no-unused-vars
@@ -51,8 +50,12 @@ const CommentForm = ({ blog }) => {
         </Snackbar>
       </div>
       <form onSubmit={createNewComment}>
-        <input name="comment" />
-        <button type="submit">add comment</button>
+        <div>
+          <Input name="comment" label="comment" variant="outlined" size="small" />
+          <Button variant="standard" size="small" color="primary" type="submit">
+            add comment
+          </Button>
+        </div>
       </form>
     </div>
   )
