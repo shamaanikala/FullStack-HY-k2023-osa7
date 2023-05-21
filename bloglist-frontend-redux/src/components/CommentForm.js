@@ -1,6 +1,7 @@
 import { Snackbar, Alert, Input, Button } from '@mui/material'
 import { useComments } from '../hooks/useComments'
 import { useState } from 'react'
+import AddCommentIcon from '@mui/icons-material/AddComment'
 
 const CommentForm = ({ blog }) => {
   const commentHook = useComments()
@@ -52,7 +53,13 @@ const CommentForm = ({ blog }) => {
       <form onSubmit={createNewComment}>
         <div>
           <Input name="comment" label="comment" placeholder="Type in your comment" size="small" />
-          <Button variant="standard" size="small" color="primary" type="submit">
+          <Button
+            variant="standard"
+            size="small"
+            color="primary"
+            type="submit"
+            endIcon={<AddCommentIcon />}
+          >
             add comment
           </Button>
         </div>
