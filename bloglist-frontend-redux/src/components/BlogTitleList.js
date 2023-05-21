@@ -1,16 +1,21 @@
 import { Link } from 'react-router-dom'
+import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material'
+import BookIcon from '@mui/icons-material/Book'
 
 const BlogTitleList = ({ blogs }) => {
   return (
-    <>
-      <ul>
-        {blogs.map(blog => (
-          <li key={blog.title}>
+    <List>
+      {blogs.map(blog => (
+        <ListItem key={blog.title} divider>
+          <ListItemIcon>
+            <BookIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText>
             <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </>
+          </ListItemText>
+        </ListItem>
+      ))}
+    </List>
   )
 }
 
