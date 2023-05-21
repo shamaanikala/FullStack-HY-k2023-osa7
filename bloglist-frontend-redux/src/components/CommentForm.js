@@ -1,4 +1,4 @@
-import { Snackbar, Alert, Input, Button } from '@mui/material'
+import { Snackbar, Alert, TextField, Button } from '@mui/material'
 import { useComments } from '../hooks/useComments'
 import { useState } from 'react'
 import AddCommentIcon from '@mui/icons-material/AddComment'
@@ -52,7 +52,13 @@ const CommentForm = ({ blog }) => {
       </div>
       <form onSubmit={createNewComment}>
         <div>
-          <Input name="comment" label="comment" placeholder="Type in your comment" size="small" />
+          <TextField
+            multiline
+            name="comment"
+            label="Comment (multiline)"
+            placeholder="Type in your comment"
+            size="small"
+          />
           <Button
             variant="standard"
             size="small"
