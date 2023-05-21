@@ -2,6 +2,7 @@
 import { useState, useImperativeHandle, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Card, CardContent, CardActions } from '@mui/material'
+import CancelIcon from '@mui/icons-material/Cancel'
 
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -44,7 +45,12 @@ const Togglable = forwardRef((props, ref) => {
         <Card sx={{ width: 'fit-content' }}>
           <CardContent>{props.children}</CardContent>
           <CardActions>
-            <Button variant="contained" size="small" onClick={toggleVisibility}>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<CancelIcon />}
+              onClick={toggleVisibility}
+            >
               cancel
             </Button>
           </CardActions>
