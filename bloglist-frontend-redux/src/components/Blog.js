@@ -5,6 +5,7 @@ import RemoveBlogButton from './MUI-components/RemoveBlogButton'
 import { IconButton } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import LikeButton from './MUI-components/LikeButton'
 
 const blogTitle = {
   textDecoration: 'underline',
@@ -107,9 +108,7 @@ const Blog = ({ user, blog, like, remove }) => {
           </div>
           <div>
             likes <span id="likes">{blog.likes}</span>{' '}
-            <button className="likeBUtton" onClick={() => like(blog.id)}>
-              like
-            </button>
+            <LikeButton handleLike={() => like(blog.id)} />
           </div>
           {!blog.user && <span style={anonymousStyle}>Anonymous</span>}
           {blog.user && <span className="blogUser">{blog.user.name}</span>}
